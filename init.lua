@@ -1012,5 +1012,13 @@ require('lazy').setup({
   },
 })
 
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
+-- Load custom configurations
+require('custom.init')
+
+-- Load custom plugins
+local custom_plugins = require('custom.plugins')
+for _, plugin in ipairs(custom_plugins) do
+  table.insert(lazy.plugins, plugin)
+end
+
+-- The line beneath this is called `modeline`. See `
