@@ -1,6 +1,3 @@
--- VSCode-like enhancements for Neovim
--- This file adds plugins and configurations to make Neovim more like VSCode
-
 return {
   -- VSCode-like color scheme
   {
