@@ -114,6 +114,23 @@ To switch between themes:
 - **Treesitter**: Better syntax highlighting
 - **Flash.nvim**: Enhanced search and navigation
 
+#### VSCode-like Import Handling
+The configuration includes VSCode-like import handling for various languages:
+
+- **TypeScript/JavaScript**: Auto-imports and organizes imports on save
+- **Go**: Automatic import management with `gopls`
+- **Python**: Auto-import completions with `pyright`
+- **Rust**: Granular import management with `rust-analyzer`
+- **Java**: Automatic import organization with `jdtls`
+
+To organize imports manually, use:
+- `<leader>i` - Organize imports in the current file
+- Imports are also automatically organized on save
+
+#### Line-based Indentation Visualization
+The configuration uses line-based indentation visualization instead of the default `>>` markers. This provides a cleaner and more intuitive way to see code structure.
+
+
 ## Tips for New Users
 
 1. Press `Space` and wait to see available commands

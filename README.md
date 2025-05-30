@@ -120,6 +120,24 @@ examples of adding popularly requested plugins.
 
 [The Only Video You Need to Get Started with Neovim](https://youtu.be/m8C0Cq9Uv9o)
 
+### Enhanced Features
+
+#### VSCode-like Import Handling
+The configuration includes VSCode-like import handling for various languages:
+
+- **TypeScript/JavaScript**: Auto-imports and organizes imports on save
+- **Go**: Automatic import management with `gopls`
+- **Python**: Auto-import completions with `pyright`
+- **Rust**: Granular import management with `rust-analyzer`
+- **Java**: Automatic import organization with `jdtls`
+
+To organize imports manually, use:
+- `<leader>i` - Organize imports in the current file
+- Imports are also automatically organized on save
+
+#### Line-based Indentation Visualization
+The configuration uses line-based indentation visualization instead of the default `>>` markers. This provides a cleaner and more intuitive way to see code structure.
+
 ### FAQ
 
 * What should I do if I already have a pre-existing Neovim configuration?
