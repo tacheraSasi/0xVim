@@ -209,4 +209,57 @@ return {
       })
     end,
   },
+  {
+    'neovim/nvim-lspconfig',
+    dependencies = {
+      'williamboman/mason.nvim',
+      'williamboman/mason-lspconfig.nvim',
+      'hrsh7th/cmp-nvim-lsp',
+      'folke/neodev.nvim',
+    },
+  },
+  {
+    'williamboman/mason.nvim',
+    build = ':MasonUpdate',
+    config = function()
+      require('mason').setup({
+        ui = {
+          border = 'rounded',
+          icons = {
+            package_installed = '✓',
+            package_pending = '➜',
+            package_uninstalled = '✗',
+          },
+        },
+      })
+    end,
+  },
+  {
+    'williamboman/mason-lspconfig.nvim',
+    config = function()
+      require('mason-lspconfig').setup({
+        ensure_installed = {
+          'tsserver',    -- TypeScript/JavaScript
+          'gopls',       -- Go
+          'pyright',     -- Python
+          'rust_analyzer', -- Rust
+          'jdtls',       -- Java
+          'lua_ls',      -- Lua
+          'html',        -- HTML
+          'cssls',       -- CSS
+          'jsonls',      -- JSON
+          'yamlls',      -- YAML
+          'bashls',      -- Bash
+          'clangd',      -- C/C++
+        },
+        automatic_installation = true,
+      })
+    end,
+  },
+  {
+    'folke/neodev.nvim',
+    config = function()
+      require('neodev').setup()
+    end,
+  },
 } 

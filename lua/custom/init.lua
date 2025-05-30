@@ -56,4 +56,7 @@ vim.opt.wildmenu = true -- Enable wildmenu
 vim.opt.wildignore = '*.o,*.obj,*.dylib,*.bin,*.dll,*.so,*.pyc,*.jpg,*.png,*.gif,*.zip,*.tar.gz,*.tar.bz2,*.tar.xz,*.tar' -- Ignore these files in wildmenu
 
 -- Load completion configuration
-require('custom.cmp') 
+require('custom.cmp')
+
+-- Load LSP configuration
+require('custom.lsp') 
