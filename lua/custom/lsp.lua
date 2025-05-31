@@ -12,7 +12,7 @@ local common_settings = {
 -- Language-specific settings
 local language_settings = {
   -- TypeScript/JavaScript
-  tsserver = {
+  ts_ls = {
     settings = {
       typescript = {
         suggest = {

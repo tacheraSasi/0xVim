@@ -239,7 +239,7 @@ return {
     config = function()
       require('mason-lspconfig').setup({
         ensure_installed = {
-          'tsserver',    -- TypeScript/JavaScript
+          'ts_ls',       -- TypeScript/JavaScript
           'gopls',       -- Go
           'pyright',     -- Python
           'rust_analyzer', -- Rust

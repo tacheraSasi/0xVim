@@ -113,7 +113,7 @@ To switch between themes:
 - **Telescope**: Powerful fuzzy finder
 - **Treesitter**: Better syntax highlighting
 - **Flash.nvim**: Enhanced search and navigation
-
+  
 #### VSCode-like Import Handling
 The configuration includes VSCode-like import handling for various languages:
 
