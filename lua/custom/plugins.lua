@@ -215,7 +215,6 @@ return {
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
       'hrsh7th/cmp-nvim-lsp',
-      'folke/neodev.nvim',
     },
   },
   {
@@ -254,12 +253,6 @@ return {
         },
         automatic_installation = true,
       })
-    end,
-  },
-  {
-    'folke/neodev.nvim',
-    config = function()
-      require('neodev').setup()
     end,
   },
 } 
