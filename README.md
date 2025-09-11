@@ -133,9 +133,10 @@ This configuration provides a comprehensive VSCode-like experience with the foll
 - **Command Palette**: `Ctrl+Shift+P` for command palette access
 
 **Editing Experience:**
+- **GitHub Copilot**: AI-powered code completion and suggestions (`Alt+L` to accept)
 - **Multi-cursor Support**: `Ctrl+D` to add selection to next find match
 - **Smart Auto-pairs**: Automatic bracket, quote, and tag pairing
-- **Auto-completion**: Intelligent code completion with snippets
+- **Auto-completion**: Intelligent code completion with snippets (less intrusive documentation)
 - **Line Operations**: Move lines with `Alt+Up/Down`, delete with `Ctrl+Shift+K`
 - **Comment Toggle**: `Ctrl+/` for line comments, `Ctrl+Shift+/` for block comments
 
@@ -249,6 +250,20 @@ This configuration provides a comprehensive VSCode-like experience with the foll
 - `<leader>mm` - Toggle minimap
 - `<leader>gg` - Open git interface
 - `<leader>gb` - Toggle git blame
+
+**GitHub Copilot:**
+- `Alt+L` - Accept Copilot suggestion
+- `Alt+]` - Next Copilot suggestion
+- `Alt+[` - Previous Copilot suggestion
+- `Ctrl+]` - Dismiss Copilot suggestion
+- `<leader>cp` - Open Copilot panel
+- `<leader>cs` - Show Copilot status
+- `<leader>ce` - Enable Copilot
+- `<leader>cd` - Disable Copilot
+
+**Completion & Documentation:**
+- `Ctrl+Space` - Show completion menu manually
+- `<leader>td` - Toggle documentation window
 
 #### VSCode-like Import Handling
 The configuration includes VSCode-like import handling for various languages:
