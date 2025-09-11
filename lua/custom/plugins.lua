@@ -129,6 +129,7 @@ return {
         'vim',
         'vimdoc',
         'yaml',
+        'zig',
       },
       auto_install = true,
       highlight = {
@@ -250,6 +251,7 @@ return {
           'yamlls',      -- YAML
           'bashls',      -- Bash
           'clangd',      -- C/C++
+          'zls',         -- Zig
         },
         automatic_installation = true,
       })

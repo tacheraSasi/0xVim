@@ -864,6 +864,23 @@ require('lazy').setup({
         -- Markdown
         marksman = {},
 
+        -- Zig
+        zls = {
+          settings = {
+            zls = {
+              enable_snippets = true,
+              enable_ast_check_diagnostics = true,
+              enable_autofix = true,
+              enable_import_embedfile_argument_completions = true,
+              warn_style = true,
+              enable_semantic_tokens = true,
+              operator_completions = true,
+              include_at_in_builtins = true,
+              max_detail_length = 1048576,
+            },
+          },
+        },
+
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -901,6 +918,7 @@ require('lazy').setup({
         'shfmt', -- Shell script formatter
         'gofumpt', -- Go formatter
         'rustfmt', -- Rust formatter
+        'zigfmt', -- Zig formatter
         'eslint_d', -- JavaScript/TypeScript linter
         'flake8', -- Python linter
         'mypy', -- Python type checker
@@ -975,6 +993,7 @@ require('lazy').setup({
         python = { 'black' },
         go = { 'gofumpt' },
         rust = { 'rustfmt' },
+        zig = { 'zigfmt' },
         sh = { 'shfmt' },
         bash = { 'shfmt' },
         zsh = { 'shfmt' },

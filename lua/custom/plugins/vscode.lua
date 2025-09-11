@@ -501,6 +501,7 @@ return {
           typescript = { 'prettier' },
           lua = { 'stylua' },
           python = { 'black' },
+          zig = { 'zigfmt' },
         },
       }
     end,
