@@ -1006,6 +1006,59 @@ require('lazy').setup({
     },
   },
 
+  -- GitHub Copilot integration
+  {
+    'zbirenbaum/copilot.lua',
+    cmd = 'Copilot',
+    event = 'InsertEnter',
+    config = function()
+      require('copilot').setup({
+        panel = {
+          enabled = true,
+          auto_refresh = false,
+          keymap = {
+            jump_prev = '[[',
+            jump_next = ']]',
+            accept = '<CR>',
+            refresh = 'gr',
+            open = '<M-CR>'
+          },
+          layout = {
+            position = 'bottom', -- | top | left | right
+            ratio = 0.4
+          },
+        },
+        suggestion = {
+          enabled = true,
+          auto_trigger = true,
+          hide_during_completion = true,
+          debounce = 75,
+          keymap = {
+            accept = '<M-l>',
+            accept_word = false,
+            accept_line = false,
+            next = '<M-]>',
+            prev = '<M-[>',
+            dismiss = '<C-]>',
+          },
+        },
+        filetypes = {
+          yaml = false,
+          markdown = false,
+          help = false,
+          gitcommit = false,
+          gitrebase = false,
+          hgcommit = false,
+          svn = false,
+          cvs = false,
+          ['.'] = false,
+        },
+        copilot_node_command = 'node', -- Node.js version must be > 18.x
+        server_opts_overrides = {},
+      })
+    end,
+  },
+
   { -- Autocompletion
     'saghen/blink.cmp',
     event = 'VimEnter',
@@ -1077,15 +1130,54 @@ require('lazy').setup({
       },
 
       completion = {
-        -- By default, you may press `<c-space>` to show the documentation.
-        -- Optionally, set `auto_show = true` to show the documentation after a delay.
-        documentation = { auto_show = false, auto_show_delay_ms = 500 },
+        -- Make documentation less intrusive
+        documentation = { 
+          auto_show = false, 
+          auto_show_delay_ms = 1000,
+          window = {
+            min_width = 10,
+            max_width = 60,
+            max_height = 20,
+            border = 'rounded',
+            winhighlight = 'Normal:BlinkCmpDoc,FloatBorder:BlinkCmpDocBorder,CursorLine:BlinkCmpDocCursorLine,Search:None',
+          },
+        },
+        -- Make completion menu less intrusive
+        menu = {
+          max_height = 10,
+          border = 'rounded',
+          cmdline_position = function()
+            if vim.g.ui_cmdline_pos ~= nil then
+              local pos = vim.g.ui_cmdline_pos
+              return { pos[1] - 1, pos[2] }
+            end
+            local height = (vim.o.cmdheight == 0) and 1 or vim.o.cmdheight
+            return { vim.o.lines - height, 0 }
+          end,
+          draw = {
+            treesitter = { 'lsp' },
+            columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 }, { 'source_name' } },
+          },
+        },
+        -- Trigger completion only when requested or after certain characters
+        trigger = {
+          prefetch_on_insert = false,
+          show_in_snippet = true,
+          show_on_keyword = true,
+          show_on_trigger_character = true,
+          show_on_accept_on_trigger_character = true,
+          show_on_insert_on_trigger_character = true,
+        },
       },
 
       sources = {
         default = { 'lsp', 'path', 'snippets', 'lazydev' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+        },
+        -- Set source priorities
+        cmdline = {
+          default = { 'path', 'cmdline' },
         },
       },
 
@@ -1101,7 +1193,22 @@ require('lazy').setup({
       fuzzy = { implementation = 'lua' },
 
       -- Shows a signature help window while you type arguments for a function
-      signature = { enabled = true },
+      -- Made less intrusive to avoid blocking the view
+      signature = { 
+        enabled = true,
+        trigger = {
+          blocked_trigger_characters = {},
+          blocked_retrigger_characters = {},
+          show_on_insert_on_trigger_character = true,
+        },
+        window = {
+          min_width = 1,
+          max_width = 80,
+          max_height = 4,
+          border = 'rounded',
+          winhighlight = 'Normal:BlinkCmpSignatureHelp,FloatBorder:BlinkCmpSignatureHelpBorder',
+        },
+      },
     },
   },
 
@@ -1272,6 +1379,43 @@ vim.api.nvim_create_autocmd('CursorHoldI', {
     vim.lsp.buf.signature_help()
   end,
 })
+
+-- GitHub Copilot keybindings and settings
+vim.keymap.set('n', '<leader>cp', '<cmd>Copilot panel<CR>', { desc = 'Open [C]opilot [P]anel' })
+vim.keymap.set('n', '<leader>cs', '<cmd>Copilot status<CR>', { desc = 'Show [C]opilot [S]tatus' })
+vim.keymap.set('n', '<leader>ce', '<cmd>Copilot enable<CR>', { desc = '[C]opilot [E]nable' })
+vim.keymap.set('n', '<leader>cd', '<cmd>Copilot disable<CR>', { desc = '[C]opilot [D]isable' })
+
+-- Better completion and documentation keybindings
+vim.keymap.set('i', '<C-Space>', function()
+  require('blink.cmp').show({ providers = { 'lsp', 'path', 'snippets' } })
+end, { desc = 'Show completion menu' })
+
+vim.keymap.set('i', '<C-j>', function()
+  if require('blink.cmp').is_visible() then
+    require('blink.cmp').select_next()
+  else
+    return '<C-j>'
+  end
+end, { expr = true, desc = 'Select next completion' })
+
+vim.keymap.set('i', '<C-k>', function()
+  if require('blink.cmp').is_visible() then
+    require('blink.cmp').select_prev()
+  else
+    return '<C-k>'
+  end
+end, { expr = true, desc = 'Select previous completion' })
+
+-- Toggle documentation window manually
+vim.keymap.set('n', '<leader>td', function()
+  local blink = require('blink.cmp')
+  if blink.is_visible() then
+    blink.hide_documentation()
+  else
+    blink.show_documentation()
+  end
+end, { desc = '[T]oggle [D]ocumentation' })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
