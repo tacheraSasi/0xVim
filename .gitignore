@@ -5,3 +5,30 @@ nvim
 
 spell/
 lazy-lock.json
+
+# Common development directories that should not be committed
+node_modules/
+dist/
+build/
+target/
+vendor/
+__pycache__/
+tmp/
+temp/
+.cache/
+
+# IDE and editor files
+.vscode/
+.idea/
+
+# OS specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and coverage
+*.log
+logs/
+coverage/
+.coverage
+htmlcov/
