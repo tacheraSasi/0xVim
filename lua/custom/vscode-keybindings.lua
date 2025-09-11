@@ -22,10 +22,13 @@ vim.keymap.set('c', '<C-v>', '<C-r>+', { desc = 'Paste (command mode)' })
 -- Select all
 vim.keymap.set('n', '<C-a>', 'ggVG', { desc = 'Select all' })
 
--- Quick Open (File finder)
+-- Quick Open (File finder) - improved to exclude unwanted directories
 vim.keymap.set('n', '<C-p>', function()
-  require('telescope.builtin').find_files()
-end, { desc = 'Quick Open Files' })
+  require('telescope.builtin').find_files({
+    -- Use the global Telescope configuration for find_files
+    -- The filters are already configured in the Telescope setup
+  })
+end, { desc = 'Quick Open Files (filtered)' })
 
 -- Command Palette
 vim.keymap.set('n', '<C-S-p>', function()

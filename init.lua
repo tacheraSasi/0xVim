@@ -414,12 +414,124 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
-        -- pickers = {}
+        defaults = {
+          -- Configure file ignore patterns for better search results
+          file_ignore_patterns = {
+            -- Version control
+            "%.git/",
+            "%.hg/",
+            "%.svn/",
+            
+            -- Dependencies and build outputs
+            "node_modules/",
+            "dist/",
+            "build/",
+            "target/",
+            "vendor/",
+            "%.min%.js$",
+            "%.min%.css$",
+            
+            -- IDE and editor files
+            "%.vscode/",
+            "%.idea/",
+            "%.settings/",
+            "%.project",
+            "%.classpath",
+            
+            -- Temporary and cache files
+            "__pycache__/",
+            "%.pyc$",
+            "%.pyo$",
+            "%.class$",
+            "%.cache/",
+            "tmp/",
+            "temp/",
+            "%.tmp$",
+            "%.temp$",
+            
+            -- OS specific files
+            "%.DS_Store$",
+            "Thumbs%.db$",
+            "desktop%.ini$",
+            
+            -- Logs and documentation builds
+            "%.log$",
+            "logs/",
+            "coverage/",
+            "%.coverage$",
+            "htmlcov/",
+            "%.tox/",
+            
+            -- Language specific
+            "%.egg%-info/",
+            "%.pytest_cache/",
+            "%.mypy_cache/",
+            "%.ruff_cache/",
+            "Cargo%.lock$",
+            "package%-lock%.json$",
+            "yarn%.lock$",
+            "pnpm%-lock%.yaml$",
+            "composer%.lock$",
+            "Pipfile%.lock$",
+            
+            -- Documentation builds
+            "_site/",
+            "%.jekyll%-cache/",
+            "docs/_build/",
+            "%.sphinx%-build/",
+            
+            -- Compiled binaries
+            "%.exe$",
+            "%.dll$",
+            "%.so$",
+            "%.dylib$",
+            "%.o$",
+            "%.obj$",
+            "%.a$",
+            "%.lib$",
+          },
+          -- mappings = {
+          --   i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+          -- },
+        },
+        pickers = {
+          find_files = {
+            -- Additional configuration for find_files picker
+            hidden = false,  -- Don't show hidden files by default
+            follow = false,  -- Don't follow symlinks
+            -- Use ripgrep with proper exclusion patterns
+            find_command = { 
+              "rg", "--files", "--hidden",
+              "-g", "!.git",
+              "-g", "!node_modules",
+              "-g", "!dist",
+              "-g", "!build", 
+              "-g", "!target",
+              "-g", "!vendor",
+              "-g", "!__pycache__",
+              "-g", "!*.pyc",
+              "-g", "!*.class",
+              "-g", "!*.o",
+              "-g", "!*.exe",
+              "-g", "!*.dll", 
+              "-g", "!*.so",
+              "-g", "!.DS_Store",
+              "-g", "!Thumbs.db",
+              "-g", "!*.log",
+              "-g", "!coverage",
+              "-g", "!*.min.js",
+              "-g", "!*.min.css",
+              "-g", "!package-lock.json",
+              "-g", "!yarn.lock",
+              "-g", "!Cargo.lock",
+              "-g", "!tmp",
+              "-g", "!temp",
+              "-g", "!.cache",
+              "-g", "!.vscode",
+              "-g", "!.idea"
+            },
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
