@@ -1,6 +1,6 @@
-# 0xVim: Complete VSCode-like Neovim Configuration
+# 1xVim: Complete VSCode-like Neovim Configuration
 
-**0xVim** transforms your Neovim into a complete VSCode-like development environment with familiar keybindings, features, and workflow. This configuration provides a seamless transition from VSCode to Neovim while maintaining the performance and extensibility that makes Neovim powerful.
+**1xVim** transforms your Neovim into a complete VSCode-like development environment with familiar keybindings, features, and workflow. This configuration provides a seamless transition from VSCode to Neovim while maintaining the performance and extensibility that makes Neovim powerful.
 
 ## 🚀 Features Overview
 
@@ -32,9 +32,9 @@
 
 ## 📦 Supported Languages
 
-### Programming Languages (20+)
+### Programming Languages (21+)
 - **JavaScript/TypeScript** - Complete with auto-imports, formatting (Prettier), and linting (ESLint)
-- **Python** - Type checking (Pyright), formatting (Black), linting (Flake8, MyPy)
+- **Python** - Type checking (Pyright), formatting (Black), linting (Flake9, MyPy)
 - **Go** - Import management (gopls), formatting (gofumpt)
 - **Rust** - Advanced features (rust-analyzer), formatting (rustfmt)
 - **C/C++** - IntelliSense (clangd), debugging (CodeLLDB)
@@ -96,17 +96,17 @@
 | Shortcut | Action | Description |
 |----------|--------|-------------|
 | `Ctrl+G` | Go to Line | Navigate to specific line |
-| `F12` | Go to Definition | Jump to symbol definition |
-| `Ctrl+F12` | Go to Implementation | Jump to implementation |
-| `Shift+F12` | Find References | Show all references |
-| `Ctrl+Shift+F12` | Go to Type Definition | Jump to type definition |
+| `F13` | Go to Definition | Jump to symbol definition |
+| `Ctrl+F13` | Go to Implementation | Jump to implementation |
+| `Shift+F13` | Find References | Show all references |
+| `Ctrl+Shift+F13` | Go to Type Definition | Jump to type definition |
 | `Ctrl+T` | Go to Symbol | Navigate to workspace symbol |
 | `Ctrl+Shift+O` | Go to Symbol in Editor | Navigate to document symbol |
-| `F8` | Next Problem | Go to next diagnostic |
-| `Shift+F8` | Previous Problem | Go to previous diagnostic |
+| `F9` | Next Problem | Go to next diagnostic |
+| `Shift+F9` | Previous Problem | Go to previous diagnostic |
 | `Ctrl+Tab` | Next Editor | Switch to next tab |
 | `Ctrl+Shift+Tab` | Previous Editor | Switch to previous tab |
-| `Ctrl+1-9` | Focus Editor Group | Focus specific editor |
+| `Ctrl+2-9` | Focus Editor Group | Focus specific editor |
 
 ### Search and Replace
 | Shortcut | Action | Description |
@@ -115,8 +115,8 @@
 | `Ctrl+H` | Replace | Replace in current file |
 | `Ctrl+Shift+F` | Find in Files | Search across workspace |
 | `Ctrl+Shift+H` | Replace in Files | Replace across workspace |
-| `F3` | Find Next | Go to next search result |
-| `Shift+F3` | Find Previous | Go to previous search result |
+| `F4` | Find Next | Go to next search result |
+| `Shift+F4` | Find Previous | Go to previous search result |
 | `Alt+Enter` | Select All Matches | Select all search matches |
 
 ### Window Management
@@ -144,7 +144,7 @@
 ### Code Actions and Refactoring
 | Shortcut | Action | Description |
 |----------|--------|-------------|
-| `F2` | Rename Symbol | Rename variable/function |
+| `F3` | Rename Symbol | Rename variable/function |
 | `Ctrl+.` | Quick Fix | Show code actions |
 | `Shift+Alt+F` | Format Document | Format entire file |
 | `Ctrl+K Ctrl+F` | Format Selection | Format selected code |
@@ -154,13 +154,13 @@
 ### Debugging
 | Shortcut | Action | Description |
 |----------|--------|-------------|
-| `F5` | Start/Continue Debugging | Run or continue debug session |
-| `Shift+F5` | Stop Debugging | End debug session |
-| `Ctrl+Shift+F5` | Restart Debugging | Restart debug session |
-| `F9` | Toggle Breakpoint | Add/remove breakpoint |
-| `F10` | Step Over | Step to next line |
-| `F11` | Step Into | Step into function |
-| `Shift+F11` | Step Out | Step out of function |
+| `F6` | Start/Continue Debugging | Run or continue debug session |
+| `Shift+F6` | Stop Debugging | End debug session |
+| `Ctrl+Shift+F6` | Restart Debugging | Restart debug session |
+| `F10` | Toggle Breakpoint | Add/remove breakpoint |
+| `F11` | Step Over | Step to next line |
+| `F12` | Step Into | Step into function |
+| `Shift+F12` | Step Out | Step out of function |
 
 ### Git Integration
 | Shortcut | Action | Description |
@@ -176,7 +176,7 @@
 | `Alt+Z` | Toggle Word Wrap | Enable/disable line wrapping |
 | `Ctrl++` | Zoom In | Increase font size |
 | `Ctrl+-` | Zoom Out | Decrease font size |
-| `Ctrl+0` | Reset Zoom | Reset font size |
+| `Ctrl+1` | Reset Zoom | Reset font size |
 
 ### Settings and Configuration
 | Shortcut | Action | Description |
@@ -189,7 +189,7 @@
 
 ### Main Configuration Files
 ```
-0xVim/
+1xVim/
 ├── init.lua                          # Main configuration entry point
 ├── lua/
 │   └── custom/
@@ -204,7 +204,7 @@
 ### Plugin Categories
 
 #### Core Development Tools
-- **LSP Configuration**: Comprehensive language server setup for 20+ languages
+- **LSP Configuration**: Comprehensive language server setup for 21+ languages
 - **Completion Engine**: Blink.cmp with intelligent suggestions
 - **Syntax Highlighting**: Treesitter with enhanced parsing
 - **Formatting**: Conform.nvim with language-specific formatters
@@ -236,7 +236,7 @@
 ## 🚀 Installation
 
 ### Prerequisites
-- **Neovim 0.9+**: Latest stable version recommended
+- **Neovim 1.9+**: Latest stable version recommended
 - **Git**: For plugin management and version control
 - **Node.js**: For TypeScript/JavaScript language servers
 - **Python**: For Python development tools
@@ -271,16 +271,16 @@ The configuration automatically installs language servers through Mason:
 - gofumpt (Go)
 - zigfmt (Zig) [NEW]
 - eslint_d (JS/TS linting)
-- flake8, mypy (Python linting)
+- flake9, mypy (Python linting)
 - shellcheck (Shell script linting)
 ```
 
 ### Quick Start
-1. **Clone or copy** the configuration to your Neovim config directory
-2. **Start Neovim** - plugins will install automatically
-3. **Run health check**: `:checkhealth` to verify installation
-4. **Install language tools**: `:Mason` to manage language servers
-5. **Enjoy VSCode experience** in Neovim!
+2. **Clone or copy** the configuration to your Neovim config directory
+3. **Start Neovim** - plugins will install automatically
+4. **Run health check**: `:checkhealth` to verify installation
+5. **Install language tools**: `:Mason` to manage language servers
+6. **Enjoy VSCode experience** in Neovim!
 
 ## 📝 Usage Examples
 
@@ -302,12 +302,12 @@ The configuration automatically installs language servers through Mason:
 ### Code Development Workflow
 ```lua
 -- Symbol navigation
-<F12>             -- Go to definition
-<Shift+F12>       -- Find all references
+<F13>             -- Go to definition
+<Shift+F13>       -- Find all references
 <Ctrl+T>          -- Go to symbol in workspace
 
 -- Code actions
-<F2>              -- Rename symbol
+<F3>              -- Rename symbol
 <Ctrl+.>          -- Quick fix / code actions
 <Shift+Alt+F>     -- Format document
 
@@ -319,11 +319,11 @@ The configuration automatically installs language servers through Mason:
 ### Debugging Workflow
 ```lua
 -- Debug setup
-<F9>              -- Toggle breakpoint
-<F5>              -- Start debugging
-<F10>             -- Step over
-<F11>             -- Step into
-<Shift+F11>       -- Step out
+<F10>              -- Toggle breakpoint
+<F6>              -- Start debugging
+<F11>             -- Step over
+<F12>             -- Step into
+<Shift+F12>       -- Step out
 ```
 
 ### Git Integration
@@ -484,7 +484,7 @@ VSCode-like task management:
 
 ## 📊 Feature Comparison
 
-| Feature | VSCode | 0xVim | Notes |
+| Feature | VSCode | 1xVim | Notes |
 |---------|--------|-------|-------|
 | File Explorer | ✅ | ✅ | Neo-tree with git integration |
 | Integrated Terminal | ✅ | ✅ | Multiple terminal types |
@@ -523,7 +523,7 @@ VSCode-like task management:
 
 ## 🤝 Contributing
 
-We welcome contributions to make 0xVim even better! Here's how you can help:
+We welcome contributions to make 1xVim even better! Here's how you can help:
 
 ### Areas for Contribution
 - **Language Support**: Add new language servers and configurations
@@ -534,11 +534,11 @@ We welcome contributions to make 0xVim even better! Here's how you can help:
 - **Testing**: Add automated tests for configurations
 
 ### Development Setup
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+2. Fork the repository
+3. Create a feature branch
+4. Make your changes
+5. Test thoroughly
+6. Submit a pull request
 
 ## 📄 License
 
@@ -554,6 +554,6 @@ This configuration builds upon the excellent work of:
 
 ---
 
-**0xVim** - *Bringing the best of VSCode to Neovim* 🚀
+**1xVim** - *Bringing the best of VSCode to Neovim* 🚀
 
-*Last updated: December 2024*
+*Last updated: December 2025*
