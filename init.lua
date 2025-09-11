@@ -498,6 +498,9 @@ require('lazy').setup({
 
       -- Allows extra capabilities provided by blink.cmp
       'saghen/blink.cmp',
+
+      -- JSON schemas for better JSON support
+      'b0o/schemastore.nvim',
     },
     config = function()
       -- Brief aside: **What is LSP?**
@@ -598,6 +601,15 @@ require('lazy').setup({
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
+
+          -- Setup breadcrumbs with nvim-navic if available
+          if client and client.server_capabilities.documentSymbolProvider then
+            local ok, navic = pcall(require, 'nvim-navic')
+            if ok then
+              navic.attach(client, event.buf)
+            end
+          end
+
           if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
@@ -678,18 +690,196 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
-        -- rust_analyzer = {},
-        -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-        --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
-        --
+        -- TypeScript/JavaScript
+        ts_ls = {
+          settings = {
+            typescript = {
+              suggest = {
+                completeFunctionCalls = true,
+              },
+              inlayHints = {
+                includeInlayParameterNameHints = "all",
+                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                includeInlayFunctionParameterTypeHints = true,
+                includeInlayVariableTypeHints = true,
+                includeInlayPropertyDeclarationTypeHints = true,
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayEnumMemberValueHints = true,
+              },
+            },
+            javascript = {
+              suggest = {
+                completeFunctionCalls = true,
+              },
+              inlayHints = {
+                includeInlayParameterNameHints = "all",
+                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                includeInlayFunctionParameterTypeHints = true,
+                includeInlayVariableTypeHints = true,
+                includeInlayPropertyDeclarationTypeHints = true,
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayEnumMemberValueHints = true,
+              },
+            },
+          },
+        },
+
+        -- Go
+        gopls = {
+          settings = {
+            gopls = {
+              completeUnimported = true,
+              usePlaceholders = true,
+              analyses = {
+                unusedparams = true,
+                shadow = true,
+              },
+              staticcheck = true,
+              gofumpt = true,
+            },
+          },
+        },
+
+        -- Python
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                autoImportCompletions = true,
+                typeCheckingMode = "basic",
+                useLibraryCodeForTypes = true,
+              },
+            },
+          },
+        },
+
+        -- Rust
+        rust_analyzer = {
+          settings = {
+            ["rust-analyzer"] = {
+              checkOnSave = {
+                command = "clippy",
+              },
+              imports = {
+                granularity = {
+                  group = "module",
+                },
+                prefix = "self",
+              },
+              cargo = {
+                buildScripts = {
+                  enable = true,
+                },
+              },
+              procMacro = {
+                enable = true,
+              },
+            },
+          },
+        },
+
+        -- C/C++
+        clangd = {
+          settings = {
+            clangd = {
+              compilationDatabase = "./build",
+              fallbackFlags = { "-std=c++17" },
+            },
+          },
+        },
+
+        -- Java (requires special setup)
+        jdtls = {
+          settings = {
+            java = {
+              configuration = {
+                updateBuildConfiguration = "automatic",
+              },
+              completion = {
+                favoriteStaticMembers = {
+                  "org.junit.Assert.*",
+                  "org.junit.Assume.*",
+                  "org.junit.jupiter.api.Assertions.*",
+                },
+                importOrder = {
+                  "java",
+                  "javax",
+                  "org",
+                  "com",
+                },
+              },
+            },
+          },
+        },
+
+        -- HTML/CSS
+        html = {},
+        cssls = {},
+
+        -- JSON
+        jsonls = {
+          settings = {
+            json = {
+              schemas = require('schemastore').json.schemas(),
+              validate = { enable = true },
+            },
+          },
+        },
+
+        -- YAML
+        yamlls = {
+          settings = {
+            yaml = {
+              schemas = {
+                ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+                ["https://json.schemastore.org/github-action.json"] = "/action.{yml,yaml}",
+                ["https://json.schemastore.org/ansible-stable-2.9.json"] = "/tasks/**/*.{yml,yaml}",
+                ["https://json.schemastore.org/prettierrc.json"] = "/.prettierrc.{yml,yaml}",
+                ["https://json.schemastore.org/kustomization.json"] = "/kustomization.{yml,yaml}",
+                ["https://json.schemastore.org/ansible-playbook.json"] = "/*play*.{yml,yaml}",
+                ["https://json.schemastore.org/chart.json"] = "/Chart.{yml,yaml}",
+                ["https://json.schemastore.org/dependabot-v2.json"] = "/.github/dependabot.{yml,yaml}",
+                ["https://json.schemastore.org/gitlab-ci.json"] = "/.gitlab-ci.{yml,yaml}",
+                ["https://json.schemastore.org/bamboo-spec.json"] = "/bamboo-specs/*.{yml,yaml}",
+                ["https://json.schemastore.org/bitbucket-pipelines.json"] = "/bitbucket-pipelines.{yml,yaml}",
+                ["https://json.schemastore.org/docker-compose.json"] = "/*docker-compose*.{yml,yaml}",
+                ["https://json.schemastore.org/drone.json"] = "/.drone.{yml,yaml}",
+                ["https://json.schemastore.org/appveyor.json"] = "/.appveyor.{yml,yaml}",
+                ["https://json.schemastore.org/travis.json"] = "/.travis.{yml,yaml}",
+                ["https://json.schemastore.org/cloudbuild.json"] = "/cloudbuild.{yml,yaml}",
+              },
+            },
+          },
+        },
+
+        -- XML
+        lemminx = {},
+
+        -- Dockerfile
+        dockerls = {},
+
+        -- Bash
+        bashls = {},
+
+        -- Markdown
+        marksman = {},
+
+        -- Zig
+        zls = {
+          settings = {
+            zls = {
+              enable_snippets = true,
+              enable_ast_check_diagnostics = true,
+              enable_autofix = true,
+              enable_import_embedfile_argument_completions = true,
+              warn_style = true,
+              enable_semantic_tokens = true,
+              operator_completions = true,
+              include_at_in_builtins = true,
+              max_detail_length = 1048576,
+            },
+          },
+        },
 
         lua_ls = {
           -- cmd = { ... },
@@ -723,6 +913,21 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'prettier', -- JavaScript/TypeScript formatter
+        'black', -- Python formatter
+        'shfmt', -- Shell script formatter
+        'gofumpt', -- Go formatter
+        'rustfmt', -- Rust formatter
+        'zigfmt', -- Zig formatter
+        'eslint_d', -- JavaScript/TypeScript linter
+        'flake8', -- Python linter
+        'mypy', -- Python type checker
+        'shellcheck', -- Shell script linter
+        'markdownlint', -- Markdown linter
+        'luacheck', -- Lua linter
+        'yamllint', -- YAML linter
+        'jsonlint', -- JSON linter
+        'hadolint', -- Dockerfile linter
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -775,6 +980,23 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        javascript = { 'prettier' },
+        typescript = { 'prettier' },
+        javascriptreact = { 'prettier' },
+        typescriptreact = { 'prettier' },
+        json = { 'prettier' },
+        yaml = { 'prettier' },
+        html = { 'prettier' },
+        css = { 'prettier' },
+        scss = { 'prettier' },
+        markdown = { 'prettier' },
+        python = { 'black' },
+        go = { 'gofumpt' },
+        rust = { 'rustfmt' },
+        zig = { 'zigfmt' },
+        sh = { 'shfmt' },
+        bash = { 'shfmt' },
+        zsh = { 'shfmt' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -1021,6 +1243,35 @@ require('lazy').setup({
 
 -- Load custom configurations
 require('custom.init')
+
+-- Auto-organize imports on save for supported filetypes
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = { '*.ts', '*.tsx', '*.js', '*.jsx', '*.py', '*.go', '*.rs', '*.java' },
+  callback = function()
+    local params = {
+      command = '_typescript.organizeImports',
+      arguments = { vim.api.nvim_buf_get_name(0) },
+    }
+    -- Try TypeScript organize imports first
+    vim.lsp.buf.execute_command(params)
+    -- Then try generic code actions for other languages
+    vim.lsp.buf.code_action({
+      apply = true,
+      context = {
+        only = { 'source.organizeImports' },
+        diagnostics = {},
+      },
+    })
+  end,
+})
+
+-- Automatically show function signatures while typing
+vim.api.nvim_create_autocmd('CursorHoldI', {
+  pattern = '*',
+  callback = function()
+    vim.lsp.buf.signature_help()
+  end,
+})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

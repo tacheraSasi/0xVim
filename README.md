@@ -122,6 +122,134 @@ examples of adding popularly requested plugins.
 
 ### Enhanced Features
 
+### Enhanced Features
+
+#### VSCode-like Features
+This configuration provides a comprehensive VSCode-like experience with the following features:
+
+**File Management:**
+- **File Explorer**: Neo-tree with `Ctrl+B` to toggle (like VSCode sidebar)
+- **Quick Open**: `Ctrl+P` for quick file finder (like VSCode Quick Open)
+- **Command Palette**: `Ctrl+Shift+P` for command palette access
+
+**Editing Experience:**
+- **Multi-cursor Support**: `Ctrl+D` to add selection to next find match
+- **Smart Auto-pairs**: Automatic bracket, quote, and tag pairing
+- **Auto-completion**: Intelligent code completion with snippets
+- **Line Operations**: Move lines with `Alt+Up/Down`, delete with `Ctrl+Shift+K`
+- **Comment Toggle**: `Ctrl+/` for line comments, `Ctrl+Shift+/` for block comments
+
+**Search and Replace:**
+- **Find in File**: `Ctrl+F` for current file search
+- **Replace in File**: `Ctrl+H` for current file replace
+- **Find in Files**: `Ctrl+Shift+F` for project-wide search
+- **Replace in Files**: `Ctrl+Shift+H` for project-wide replace with Spectre
+
+**Navigation:**
+- **Go to Line**: `Ctrl+G` for quick line navigation
+- **Go to Symbol**: `Ctrl+T` for workspace symbols
+- **Breadcrumbs**: File path and symbol navigation in status bar
+- **Minimap**: Code overview panel (toggle with `<leader>mm`)
+
+**Git Integration:**
+- **Git Status**: Integrated git signs in gutter
+- **Git Blame**: Line-by-line git blame information
+- **Git Operations**: Stage hunks, reset changes, view diffs
+- **Git UI**: Full git interface with Neogit (`<leader>gg`)
+
+**Language Support:**
+- **LSP Integration**: Full Language Server Protocol support for:
+  - TypeScript/JavaScript with import organization
+  - Python with auto-imports and type checking
+  - Go with import management
+  - Rust with advanced features
+  - Java with import organization
+  - HTML/CSS, JSON, YAML, Markdown, and more
+- **Auto-formatting**: Format on save with language-specific formatters
+- **Linting**: Real-time error detection and suggestions
+- **IntelliSense**: Smart code completion and suggestions
+
+**Terminal Integration:**
+- **Integrated Terminal**: `Ctrl+\`` to toggle floating terminal
+- **New Terminal**: `Ctrl+Shift+\`` for new terminal instance
+
+**UI/UX:**
+- **VSCode Theme**: Authentic VSCode color scheme
+- **Status Line**: Comprehensive status bar with git, diagnostics, and location
+- **Indentation Guides**: Visual indentation helpers
+- **Folding**: Smart code folding with preview
+- **Zen Mode**: Distraction-free coding mode (`Ctrl+K Z`)
+
+#### Complete VSCode Keybinding Reference
+
+**File Operations:**
+- `Ctrl+S` - Save file
+- `Ctrl+Shift+S` - Save all files
+- `Ctrl+P` - Quick Open Files
+- `Ctrl+Shift+P` - Command Palette
+- `Ctrl+W` - Close editor
+- `Ctrl+Shift+T` - Reopen closed editor
+- `Ctrl+Shift+N` - New window
+
+**Editing:**
+- `Ctrl+Z` - Undo
+- `Ctrl+Y` - Redo
+- `Ctrl+X` - Cut
+- `Ctrl+C` - Copy
+- `Ctrl+V` - Paste
+- `Ctrl+A` - Select all
+- `Ctrl+D` - Add selection to next find match
+- `Ctrl+Shift+K` - Delete line
+- `Ctrl+Enter` - Insert line below
+- `Ctrl+Shift+Enter` - Insert line above
+- `Alt+Up/Down` - Move line up/down
+
+**Search and Navigation:**
+- `Ctrl+F` - Find in current file
+- `Ctrl+H` - Replace in current file
+- `Ctrl+Shift+F` - Find in files
+- `Ctrl+Shift+H` - Replace in files
+- `Ctrl+G` - Go to line
+- `Ctrl+T` - Go to symbol in workspace
+- `F12` - Go to definition
+- `Shift+F12` - Find all references
+- `F2` - Rename symbol
+- `Alt+F12` - Peek definition
+
+**Code Actions:**
+- `Ctrl+.` - Quick fix
+- `Ctrl+/` - Toggle line comment
+- `Ctrl+Shift+/` - Toggle block comment
+- `Ctrl+]` - Indent
+- `Ctrl+[` - Outdent
+- `Alt+Shift+F` - Format document
+
+**Window Management:**
+- `Ctrl+B` - Toggle file explorer
+- `Ctrl+\`` - Toggle terminal
+- `Ctrl+Shift+\`` - New terminal
+- `Ctrl+\\` - Split editor right
+- `Ctrl+K Ctrl+\\` - Split editor down
+- `Ctrl+Tab` - Next editor
+- `Ctrl+Shift+Tab` - Previous editor
+
+**Problems and Diagnostics:**
+- `F8` - Next problem
+- `Shift+F8` - Previous problem
+- `Ctrl+Shift+M` - Show problems panel
+
+**Folding:**
+- `Ctrl+Shift+[` - Fold
+- `Ctrl+Shift+]` - Unfold
+- `Ctrl+K Ctrl+0` - Fold all
+- `Ctrl+K Ctrl+J` - Unfold all
+
+**Special Features:**
+- `Ctrl+K Z` - Toggle Zen mode
+- `<leader>mm` - Toggle minimap
+- `<leader>gg` - Open git interface
+- `<leader>gb` - Toggle git blame
+
 #### VSCode-like Import Handling
 The configuration includes VSCode-like import handling for various languages:
 
