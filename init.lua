@@ -1030,7 +1030,6 @@ require('lazy').setup({
         'shfmt', -- Shell script formatter
         'gofumpt', -- Go formatter
         'rustfmt', -- Rust formatter
-        'zigfmt', -- Zig formatter
         'eslint_d', -- JavaScript/TypeScript linter
         'flake8', -- Python linter
         'mypy', -- Python type checker
@@ -1105,7 +1104,6 @@ require('lazy').setup({
         python = { 'black' },
         go = { 'gofumpt' },
         rust = { 'rustfmt' },
-        zig = { 'zigfmt' },
         sh = { 'shfmt' },
         bash = { 'shfmt' },
         zsh = { 'shfmt' },
@@ -1287,8 +1285,11 @@ require('lazy').setup({
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         },
-        -- Set source priorities
-        cmdline = {
+      },
+
+      -- Set source priorities for command-line completion
+      cmdline = {
+        sources = {
           default = { 'path', 'cmdline' },
         },
       },
