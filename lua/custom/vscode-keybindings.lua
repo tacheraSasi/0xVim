@@ -257,13 +257,15 @@ vim.keymap.set('n', '<C-\\>', ':vs<CR>', { desc = 'Split Editor Right' })
 vim.keymap.set('n', '<C-k><C-\\>', ':split<CR>', { desc = 'Split Editor Down' })
 
 -- Explorer/File tree toggle (Ctrl+B or Ctrl+Shift+E)
+-- Note: These are also defined in the Neo-tree plugin keys configuration
+-- but we keep them here as a fallback and for documentation purposes
 vim.keymap.set('n', '<C-b>', function()
   vim.cmd('Neotree toggle')
-end, { desc = 'Toggle Sidebar Visibility' })
+end, { desc = 'Toggle Sidebar Visibility', silent = true })
 
 vim.keymap.set('n', '<C-S-e>', function()
   vim.cmd('Neotree toggle')
-end, { desc = 'Toggle Explorer' })
+end, { desc = 'Toggle Explorer', silent = true })
 
 -- Source Control (Ctrl+Shift+G)
 vim.keymap.set('n', '<C-S-g>', function()
