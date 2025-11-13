@@ -118,8 +118,10 @@ vim.keymap.set('n', '<C-Tab>', ':bnext<CR>', { desc = 'Next Editor' })
 vim.keymap.set('n', '<C-S-Tab>', ':bprevious<CR>', { desc = 'Previous Editor' })
 
 -- Close editor/tab
-vim.keymap.set('n', '<C-w>', ':bd<CR>', { desc = 'Close Editor' })
-vim.keymap.set('n', '<C-S-w>', ':bd!<CR>', { desc = 'Close Editor (force)' })
+-- NOTE: <C-w> conflicts with Vim's window command prefix (<C-w>h/j/k/l for navigation)
+-- Use :bd or <leader>bd instead, or use <C-S-w> as alternative
+vim.keymap.set('n', '<C-S-w>', ':bd<CR>', { desc = 'Close Editor' })
+vim.keymap.set('n', '<C-S-w><C-S-w>', ':bd!<CR>', { desc = 'Close Editor (force)' })
 
 -- New window
 vim.keymap.set('n', '<C-S-n>', ':tabnew<CR>', { desc = 'New Window' })
