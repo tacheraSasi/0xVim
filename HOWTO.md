@@ -2,11 +2,35 @@
 
 This is a comprehensive guide to help you get started with your Neovim configuration.
 
+## Quick Start: Getting Help
+
+**NEW**: Press `<leader>?` or `F1` at any time to open the **How-To Modal** - a comprehensive floating window with all available commands and shortcuts organized by category!
+
 ## Getting Started
 
 1. Start Neovim by typing `nvim` in your terminal
 2. The first time you start, plugins will automatically install (wait for this to complete)
 3. Use `Space` as your leader key for many commands
+
+## File Explorer Sidebar
+
+The sidebar file explorer (Neo-tree) can be toggled with:
+- `Ctrl+B` - Toggle sidebar (VSCode-style)
+- `Ctrl+Shift+E` - Toggle sidebar (alternative)
+
+**Inside Neo-tree:**
+- `<Enter>` - Open file
+- `<Space>` - Expand/collapse folder
+- `a` - Create new file
+- `A` - Create new directory
+- `d` - Delete file/folder
+- `r` - Rename file/folder
+- `y` - Copy to clipboard
+- `x` - Cut to clipboard
+- `p` - Paste from clipboard
+- `H` - Toggle hidden files
+- `R` - Refresh
+- `?` - Show help
 
 ## Essential Keybindings
 
@@ -39,6 +63,11 @@ This is a comprehensive guide to help you get started with your Neovim configura
 - `<leader>sr` - Resume last search
 - `<leader>s.` - Search recent files
 - `<leader><leader>` - Find existing buffers
+- `Ctrl+B` - Toggle file explorer sidebar
+- `Ctrl+Shift+E` - Toggle file explorer sidebar (alternative)
+- `Ctrl+P` - Quick open files (fuzzy finder)
+- `Ctrl+S` - Save current file
+- `Ctrl+Shift+S` - Save all files
 
 ### Code Navigation
 - `grn` - Rename symbol
@@ -133,9 +162,22 @@ The configuration uses line-based indentation visualization instead of the defau
 
 ## Tips for New Users
 
-1. Press `Space` and wait to see available commands
-2. Use `:help` for Neovim's built-in documentation
-3. Most modern editor keyboard shortcuts have equivalents
-4. For more details, see the full documentation in `lua/custom/README.md`
+1. **Forgotten a command?** Press `<leader>?` or `F1` to see the complete How-To guide
+2. Press `Space` and wait to see available commands (which-key)
+3. Use `:help` for Neovim's built-in documentation
+4. Most modern editor keyboard shortcuts have equivalents
+5. The sidebar file explorer opens with `Ctrl+B` (just like VSCode!)
+6. For more details, see the full documentation in `lua/custom/README.md`
+
+## Common Questions
+
+**Q: How do I open the sidebar/file explorer?**
+A: Press `Ctrl+B` or `Ctrl+Shift+E` - it will toggle the Neo-tree sidebar on the left.
+
+**Q: I forgot a keyboard shortcut, what do I do?**
+A: Press `<leader>?` (that's Space followed by ?) or simply press `F1` to see the comprehensive How-To guide.
+
+**Q: How do I close a floating window?**
+A: Most floating windows can be closed with `q` or `Esc`.
 
 Enjoy your enhanced Neovim experience!

@@ -128,13 +128,22 @@ examples of adding popularly requested plugins.
 This configuration provides a comprehensive VSCode-like experience with the following features:
 
 **File Management:**
-- **File Explorer**: Neo-tree with `Ctrl+B` to toggle (like VSCode sidebar)
+- **File Explorer**: Neo-tree with `Ctrl+B` or `Ctrl+Shift+E` to toggle (like VSCode sidebar)
+  - **Fixed**: Sidebar now opens reliably with immediate loading
+  - Simple, intuitive file tree navigation
+  - Git status indicators
+  - File operations (create, delete, rename, move)
 - **Quick Open**: `Ctrl+P` for quick file finder (like VSCode Quick Open) - **Enhanced with smart filtering**
   - Automatically excludes build artifacts (`dist/`, `build/`, `target/`)
   - Filters out dependencies (`node_modules/`, `vendor/`, `__pycache__/`)
   - Hides IDE/OS files (`.vscode/`, `.idea/`, `.DS_Store`, etc.)
   - Reduces noise by up to 65% while preserving access to relevant files
 - **Command Palette**: `Ctrl+Shift+P` for command palette access
+- **How-To Guide**: Press `<leader>?` or `F1` to open a comprehensive quick reference modal
+  - Beautiful floating window with all keybindings
+  - Organized by category (File, Edit, Search, Git, etc.)
+  - Perfect for when you forget a command
+  - Press `q` or `Esc` to close, `Space` to open which-key
 
 **Editing Experience:**
 - **GitHub Copilot**: AI-powered code completion and suggestions (`Alt+L` to accept)
@@ -230,13 +239,20 @@ This configuration provides a comprehensive VSCode-like experience with the foll
 - `Alt+Shift+F` - Format document
 
 **Window Management:**
-- `Ctrl+B` - Toggle file explorer
+- `Ctrl+B` - Toggle file explorer (Neo-tree sidebar)
+- `Ctrl+Shift+E` - Toggle file explorer (alternative)
 - `Ctrl+\`` - Toggle terminal
 - `Ctrl+Shift+\`` - New terminal
 - `Ctrl+\\` - Split editor right
 - `Ctrl+K Ctrl+\\` - Split editor down
 - `Ctrl+Tab` - Next editor
 - `Ctrl+Shift+Tab` - Previous editor
+
+**Help & Documentation:**
+- `<leader>?` - Open How-To guide (comprehensive command reference)
+- `F1` - Open How-To guide (alternative shortcut)
+- `<leader>sh` - Search help
+- `<leader>sk` - Search keymaps
 
 **Problems and Diagnostics:**
 - `F8` - Next problem
