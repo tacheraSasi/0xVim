@@ -30,7 +30,7 @@ vim.keymap.set('n', '<C-p>', function()
   })
 end, { desc = 'Quick Open Files (filtered)' })
 
--- Command Palette
+-- Command Palette (Ctrl+Shift+P)
 vim.keymap.set('n', '<C-S-p>', function()
   require('telescope.builtin').commands()
 end, { desc = 'Command Palette' })
@@ -43,14 +43,19 @@ vim.keymap.set('v', '<C-f>', '/', { desc = 'Find in current file' })
 vim.keymap.set('n', '<C-h>', ':s/', { desc = 'Replace in current file' })
 vim.keymap.set('v', '<C-h>', ':s/', { desc = 'Replace in selection' })
 
--- Find in files (project-wide search)
+-- Find in files (project-wide search) (Ctrl+Shift+F)
 vim.keymap.set('n', '<C-S-f>', function()
   require('telescope.builtin').live_grep()
 end, { desc = 'Find in Files' })
 
--- Replace in files (project-wide replace)
+-- Replace in files (project-wide replace) (Ctrl+Shift+H)
 vim.keymap.set('n', '<C-S-h>', function()
-  require('spectre').open()
+  local ok, spectre = pcall(require, 'spectre')
+  if ok then
+    spectre.open()
+  else
+    print('Spectre plugin not available')
+  end
 end, { desc = 'Replace in Files' })
 
 -- Go to line
@@ -68,20 +73,38 @@ vim.keymap.set('i', '<C-S-CR>', '<Esc>O', { desc = 'Insert Line Above (insert mo
 
 -- Line comments (requires Comment.nvim plugin)
 vim.keymap.set('n', '<C-/>', function()
-  require('Comment.api').toggle.linewise.current()
+  local ok, comment_api = pcall(require, 'Comment.api')
+  if ok then
+    comment_api.toggle.linewise.current()
+  else
+    -- Fallback to simple commenting
+    vim.cmd('normal gcc')
+  end
 end, { desc = 'Toggle Line Comment' })
 
 vim.keymap.set('v', '<C-/>', function()
-  local esc = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
-  vim.api.nvim_feedkeys(esc, 'nx', false)
-  require('Comment.api').toggle.linewise(vim.fn.visualmode())
+  local ok, comment_api = pcall(require, 'Comment.api')
+  if ok then
+    local esc = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
+    vim.api.nvim_feedkeys(esc, 'nx', false)
+    comment_api.toggle.linewise(vim.fn.visualmode())
+  else
+    -- Fallback to simple commenting
+    vim.cmd("'<,'>normal gcc")
+  end
 end, { desc = 'Toggle Line Comment' })
 
 -- Block comments
 vim.keymap.set('v', '<C-S-/>', function()
-  local esc = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
-  vim.api.nvim_feedkeys(esc, 'nx', false)
-  require('Comment.api').toggle.blockwise(vim.fn.visualmode())
+  local ok, comment_api = pcall(require, 'Comment.api')
+  if ok then
+    local esc = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
+    vim.api.nvim_feedkeys(esc, 'nx', false)
+    comment_api.toggle.blockwise(vim.fn.visualmode())
+  else
+    -- Fallback to simple commenting
+    vim.cmd("'<,'>normal gbc")
+  end
 end, { desc = 'Toggle Block Comment' })
 
 -- Indentation
@@ -104,11 +127,16 @@ vim.keymap.set('n', '<C-S-n>', ':tabnew<CR>', { desc = 'New Window' })
 -- Reopen closed editor (if available)
 vim.keymap.set('n', '<C-S-t>', ':e #<CR>', { desc = 'Reopen Last Closed Editor' })
 
--- Terminal
+-- Terminal (Ctrl+Shift+`)
 vim.keymap.set('n', '<C-S-`>', function()
-  vim.cmd('split')
-  vim.cmd('terminal')
-  vim.cmd('resize 15')
+  local ok, _ = pcall(require, 'toggleterm')
+  if ok then
+    vim.cmd('ToggleTerm direction=horizontal')
+  else
+    vim.cmd('split')
+    vim.cmd('terminal')
+    vim.cmd('resize 15')
+  end
 end, { desc = 'New Terminal' })
 
 -- Symbol navigation (LSP)
@@ -123,9 +151,14 @@ vim.keymap.set('n', '<C-t>', function()
   require('telescope.builtin').lsp_workspace_symbols()
 end, { desc = 'Go to Symbol in Workspace' })
 
--- Show problems/diagnostics panel
+-- Show problems/diagnostics panel (Ctrl+Shift+M)
 vim.keymap.set('n', '<C-S-m>', function()
-  require('telescope.builtin').diagnostics()
+  local ok, trouble = pcall(require, 'trouble')
+  if ok then
+    trouble.toggle('workspace_diagnostics')
+  else
+    require('telescope.builtin').diagnostics()
+  end
 end, { desc = 'Show Problems' })
 
 -- Format document
@@ -133,9 +166,26 @@ vim.keymap.set('n', '<A-S-f>', function()
   require('conform').format({ async = true, lsp_format = 'fallback' })
 end, { desc = 'Format Document' })
 
--- Multi-cursor selection (with vim-visual-multi)
-vim.keymap.set('n', '<C-d>', '<Plug>(VM-Find-Under)', { desc = 'Add Selection to Next Find Match' })
-vim.keymap.set('v', '<C-d>', '<Plug>(VM-Find-Subword-Under)', { desc = 'Add Selection to Next Find Match' })
+-- Multi-cursor selection (with vim-visual-multi if available)
+vim.keymap.set('n', '<C-d>', function()
+  -- Check if vim-visual-multi is available
+  if vim.fn.exists('*vm#commands#find_under') == 1 then
+    vim.cmd('call vm#commands#find_under(0, 1)')
+  else
+    -- Fallback to default behavior
+    vim.cmd('normal! viw')
+  end
+end, { desc = 'Add Selection to Next Find Match' })
+
+vim.keymap.set('v', '<C-d>', function()
+  -- Check if vim-visual-multi is available
+  if vim.fn.exists('*vm#commands#find_subword_under') == 1 then
+    vim.cmd('call vm#commands#find_subword_under(0, 1)')
+  else
+    -- Fallback to default behavior
+    vim.cmd('normal! gv')
+  end
+end, { desc = 'Add Selection to Next Find Match' })
 
 -- Peek definition
 vim.keymap.set('n', '<A-F12>', function()
@@ -204,60 +254,57 @@ end, { desc = 'Organize Imports' })
 vim.keymap.set('n', '<C-\\>', ':vs<CR>', { desc = 'Split Editor Right' })
 vim.keymap.set('n', '<C-k><C-\\>', ':split<CR>', { desc = 'Split Editor Down' })
 
--- Additional VSCode-like keybindings
+-- Explorer/File tree toggle (Ctrl+B or Ctrl+Shift+E)
+vim.keymap.set('n', '<C-b>', function()
+  vim.cmd('Neotree toggle')
+end, { desc = 'Toggle Sidebar Visibility' })
 
--- Explorer/File tree
 vim.keymap.set('n', '<C-S-e>', function()
   vim.cmd('Neotree toggle')
 end, { desc = 'Toggle Explorer' })
 
--- Search in workspace (global search)
-vim.keymap.set('n', '<C-S-f>', function()
-  require('telescope.builtin').live_grep()
-end, { desc = 'Search in Files' })
+-- Source Control (Ctrl+Shift+G)
+vim.keymap.set('n', '<C-S-g>', function()
+  local ok, _ = pcall(require, 'neogit')
+  if ok then
+    vim.cmd('Neogit')
+  else
+    print('Neogit plugin not available')
+  end
+end, { desc = 'Source Control' })
 
--- Go to Symbol in Workspace
+-- Run and Debug (Ctrl+Shift+D)
+vim.keymap.set('n', '<C-S-d>', function()
+  local ok, dap = pcall(require, 'dap')
+  if ok then
+    dap.continue()
+  else
+    print('DAP (debugger) not available')
+  end
+end, { desc = 'Start Debugging' })
+
+-- Show Extensions (plugins) (Ctrl+Shift+X)
+vim.keymap.set('n', '<C-S-x>', ':Lazy<CR>', { desc = 'Show Extensions (Plugins)' })
+
+-- Go to Symbol in Workspace (Ctrl+Shift+O)
 vim.keymap.set('n', '<C-S-o>', function()
   require('telescope.builtin').lsp_workspace_symbols()
 end, { desc = 'Go to Symbol in Workspace' })
 
--- Show Extensions (plugins)
-vim.keymap.set('n', '<C-S-x>', ':Lazy<CR>', { desc = 'Show Extensions (Plugins)' })
-
--- Source Control
-vim.keymap.set('n', '<C-S-g>', function()
-  vim.cmd('Neogit')
-end, { desc = 'Source Control' })
-
--- Run and Debug
-vim.keymap.set('n', '<C-S-d>', function()
-  require('dap').continue()
-end, { desc = 'Start Debugging' })
-
--- Terminal
-vim.keymap.set('n', '<C-S-`>', function()
-  vim.cmd('ToggleTerm direction=horizontal')
-end, { desc = 'New Terminal' })
-
--- Problems (diagnostics)
-vim.keymap.set('n', '<C-S-m>', function()
-  require('trouble').toggle('workspace_diagnostics')
-end, { desc = 'Problems Panel' })
-
--- Output panel
+-- Output panel (Ctrl+Shift+U)
 vim.keymap.set('n', '<C-S-u>', function()
-  require('trouble').toggle('quickfix')
+  local ok, trouble = pcall(require, 'trouble')
+  if ok then
+    trouble.toggle('quickfix')
+  else
+    vim.cmd('copen')
+  end
 end, { desc = 'Output Panel' })
 
--- Breadcrumb navigation
+-- Breadcrumb navigation (Ctrl+Shift+;)
 vim.keymap.set('n', '<C-S-;>', function()
   require('telescope.builtin').lsp_document_symbols()
 end, { desc = 'Go to Symbol in Editor' })
-
--- Show all commands
-vim.keymap.set('n', '<C-S-p>', function()
-  require('telescope.builtin').commands()
-end, { desc = 'Command Palette' })
 
 -- Recent files (like VSCode's Ctrl+R)
 vim.keymap.set('n', '<C-r>', function()
@@ -275,11 +322,30 @@ vim.keymap.set('v', '<A-Up>', ':m \'<-2<CR>gv=gv', { desc = 'Move Selection Up' 
 vim.keymap.set('v', '<A-Down>', ':m \'>+1<CR>gv=gv', { desc = 'Move Selection Down' })
 
 -- Add cursor above/below (multi-cursor like VSCode's Ctrl+Alt+Up/Down)
-vim.keymap.set('n', '<C-A-Up>', '<Plug>(VM-Add-Cursor-Up)', { desc = 'Add Cursor Above' })
-vim.keymap.set('n', '<C-A-Down>', '<Plug>(VM-Add-Cursor-Down)', { desc = 'Add Cursor Below' })
+vim.keymap.set('n', '<C-A-Up>', function()
+  if vim.fn.exists('*vm#commands#add_cursor_up') == 1 then
+    vim.cmd('call vm#commands#add_cursor_up(0, 1)')
+  else
+    print('Multi-cursor plugin not available')
+  end
+end, { desc = 'Add Cursor Above' })
+
+vim.keymap.set('n', '<C-A-Down>', function()
+  if vim.fn.exists('*vm#commands#add_cursor_down') == 1 then
+    vim.cmd('call vm#commands#add_cursor_down(0, 1)')
+  else
+    print('Multi-cursor plugin not available')
+  end
+end, { desc = 'Add Cursor Below' })
 
 -- Select all occurrences (like VSCode's Ctrl+Shift+L)
-vim.keymap.set('n', '<C-S-l>', '<Plug>(VM-Select-All)', { desc = 'Select All Occurrences' })
+vim.keymap.set('n', '<C-S-l>', function()
+  if vim.fn.exists('*vm#commands#find_all') == 1 then
+    vim.cmd('call vm#commands#find_all(0, 1)')
+  else
+    print('Multi-cursor plugin not available')
+  end
+end, { desc = 'Select All Occurrences' })
 
 -- Show references (like VSCode's Shift+F12)
 vim.keymap.set('n', '<S-F12>', function()
@@ -318,16 +384,10 @@ vim.keymap.set('n', '<A-z>', function()
   print('Word wrap: ' .. (vim.wo.wrap and 'enabled' or 'disabled'))
 end, { desc = 'Toggle Word Wrap' })
 
--- Toggle minimap (custom, like VSCode minimap)
-vim.keymap.set('n', '<C-S-m>', ':MinimapToggle<CR>', { desc = 'Toggle Minimap' })
-
 -- Focus on editor (like VSCode's Ctrl+1)
 vim.keymap.set('n', '<C-1>', function()
   vim.cmd('wincmd p')
 end, { desc = 'Focus Editor' })
-
--- Close editor (like VSCode's Ctrl+W)
-vim.keymap.set('n', '<C-w>', ':bd<CR>', { desc = 'Close Editor' })
 
 -- Close all editors (like VSCode's Ctrl+K Ctrl+W)
 vim.keymap.set('n', '<C-k><C-w>', ':bufdo bd<CR>', { desc = 'Close All Editors' })
@@ -340,7 +400,12 @@ vim.keymap.set('n', '<C-n>', ':enew<CR>', { desc = 'New File' })
 
 -- Open folder (like VSCode's Ctrl+K Ctrl+O)
 vim.keymap.set('n', '<C-k><C-o>', function()
-  require('telescope').extensions.projects.projects{}
+  local ok, telescope = pcall(require, 'telescope')
+  if ok and telescope.extensions and telescope.extensions.projects then
+    telescope.extensions.projects.projects{}
+  else
+    require('telescope.builtin').oldfiles()
+  end
 end, { desc = 'Open Folder' })
 
 -- Settings (like VSCode's Ctrl+,)
@@ -353,44 +418,15 @@ vim.keymap.set('n', '<C-k><C-s>', function()
   require('telescope.builtin').keymaps()
 end, { desc = 'Keyboard Shortcuts' })
 
--- User snippets (custom implementation)
-vim.keymap.set('n', '<C-S-p>', function()
-  require('telescope.builtin').commands()
-end, { desc = 'Configure User Snippets' })
-
--- Toggle sidebar visibility (like VSCode's Ctrl+B)
-vim.keymap.set('n', '<C-b>', function()
-  vim.cmd('Neotree toggle')
-end, { desc = 'Toggle Sidebar Visibility' })
-
--- Toggle panel (bottom panel like VSCode's Ctrl+J)
-vim.keymap.set('n', '<C-j>', function()
-  vim.cmd('ToggleTerm')
-end, { desc = 'Toggle Panel' })
-
--- Focus problems (like VSCode's Ctrl+Shift+M)
-vim.keymap.set('n', '<C-S-m>', function()
-  require('trouble').toggle('workspace_diagnostics')
-end, { desc = 'Focus Problems' })
-
--- Next/previous problem (like VSCode's F8/Shift+F8)
-vim.keymap.set('n', '<F8>', vim.diagnostic.goto_next, { desc = 'Next Problem' })
-vim.keymap.set('n', '<S-F8>', vim.diagnostic.goto_prev, { desc = 'Previous Problem' })
-
--- Go to line (like VSCode's Ctrl+G)
-vim.keymap.set('n', '<C-g>', function()
-  vim.ui.input({ prompt = 'Go to line: ' }, function(input)
-    if input then
-      vim.cmd('normal! ' .. input .. 'G')
-    end
-  end)
-end, { desc = 'Go to Line' })
-
--- Transform to uppercase/lowercase (like VSCode's Ctrl+Shift+U/L)
+-- Transform to uppercase/lowercase (like VSCode's Ctrl+Shift+U)
 vim.keymap.set('v', '<C-S-u>', 'gU', { desc = 'Transform to Uppercase' })
-vim.keymap.set('v', '<C-S-l>', 'gu', { desc = 'Transform to Lowercase' })
 
 -- Zen mode (like VSCode's Ctrl+K Z)
 vim.keymap.set('n', '<C-k>z', function()
-  require('zen-mode').toggle()
+  local ok, zen_mode = pcall(require, 'zen-mode')
+  if ok then
+    zen_mode.toggle()
+  else
+    print('Zen mode not available')
+  end
 end, { desc = 'Zen Mode' })
