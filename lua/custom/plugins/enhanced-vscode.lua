@@ -29,13 +29,15 @@ return {
   {
     'nvim-neo-tree/neo-tree.nvim',
     branch = 'v3.x',
+    lazy = false, -- Load immediately to ensure it's available
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-tree/nvim-web-devicons',
       'MunifTanjim/nui.nvim',
     },
     keys = {
-      { '<C-S-e>', ':Neotree toggle<CR>', desc = 'Toggle file explorer', silent = false },
+      { '<C-b>', ':Neotree toggle<CR>', desc = 'Toggle file explorer', silent = true },
+      { '<C-S-e>', ':Neotree toggle<CR>', desc = 'Toggle file explorer', silent = true },
     },
     config = function()
       require('neo-tree').setup({
