@@ -17,40 +17,8 @@ return {
     end,
   },
 
-  -- File explorer (like VSCode's sidebar)
-  {
-    'nvim-neo-tree/neo-tree.nvim',
-    branch = 'v3.x',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-tree/nvim-web-devicons',
-      'MunifTanjim/nui.nvim',
-    },
-    keys = {
-      { '<C-b>', ':Neotree toggle<CR>', desc = 'Toggle file explorer', silent = false },
-    },
-    config = function()
-      require('neo-tree').setup {
-        close_if_last_window = true,
-        window = {
-          width = 30,
-          mappings = {
-            ['<C-b>'] = 'close_window',
-          },
-        },
-        filesystem = {
-          follow_current_file = {
-            enabled = true,
-          },
-          filtered_items = {
-            visible = false,
-            hide_dotfiles = false,
-            hide_gitignored = false,
-          },
-        },
-      }
-    end,
-  },
+  -- NOTE: neo-tree configuration moved to lua/custom/plugins/enhanced-vscode.lua
+  -- to avoid conflicts and provide better VSCode-like experience
 
   -- Better status line (like VSCode's status bar)
   {
@@ -251,21 +219,21 @@ return {
     event = 'VeryLazy',
     config = function()
       require('Comment').setup({
-        -- LHS of toggle mappings in NORMAL mode
+        -- NOTE: Keybindings are configured in lua/custom/vscode-keybindings.lua
+        -- to maintain consistency with other VSCode-like keybindings
         toggler = {
-          line = '<C-/>', -- Line-comment toggle keymap
-          block = '<C-S-/>', -- Block-comment toggle keymap
+          line = 'gcc', -- Use default vim-style for toggler
+          block = 'gbc',
         },
-        -- LHS of operator-pending mappings in NORMAL and VISUAL mode
         opleader = {
-          line = '<C-/>',
-          block = '<C-S-/>',
+          line = 'gc',
+          block = 'gb',
         },
-        -- LHS of extra mappings
+        -- Disable extra mappings to avoid conflicts
         extra = {
-          above = '<C-k><C-a>', -- Add comment on the line above
-          below = '<C-k><C-c>', -- Add comment on the line below
-          eol = '<C-k><C-l>', -- Add comment at the end of line
+          above = false,
+          below = false,
+          eol = false,
         },
       })
     end,
