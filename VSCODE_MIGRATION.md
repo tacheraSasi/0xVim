@@ -15,7 +15,7 @@ Welcome VSCode users! This guide will help you transition smoothly to 0xVim whil
 | `Ctrl+Shift+P` - Command Palette | `Ctrl+Shift+P` | Same! Opens command palette |
 | `Ctrl+P` - Quick Open | `Ctrl+P` | Same! Quick file finder |
 | `Ctrl+B` - Toggle Sidebar | `Ctrl+B` or `Ctrl+Shift+E` | Both work! |
-| `Ctrl+`` `` - Toggle Terminal | `Ctrl+`` `` | Same! Floating terminal |
+| Ctrl+\` - Toggle Terminal | Ctrl+\` | Same! Floating terminal |
 | `Ctrl+S` - Save | `Ctrl+S` | Same! |
 | `Ctrl+F` - Find | `Ctrl+F` | Same! |
 | `Ctrl+Shift+F` - Find in Files | `Ctrl+Shift+F` | Same! |
@@ -138,8 +138,8 @@ In 0xVim, `Space` is your **leader key** - think of it as a gateway to more comm
 
 | Feature | VSCode | 0xVim |
 |---------|--------|-------|
-| Toggle terminal | `Ctrl+`` `` | `Ctrl+`` `` |
-| New terminal | `Ctrl+Shift+`` `` | `Ctrl+Shift+`` `` |
+| Toggle terminal | Ctrl+\` | Ctrl+\` |
+| New terminal | Ctrl+Shift+\` | Ctrl+Shift+\` |
 | Exit terminal mode | N/A | `Esc` then navigate normally |
 
 ### 11. Git Integration
