@@ -220,7 +220,7 @@ This configuration provides a comprehensive VSCode-like experience with the foll
 
 **Search and Navigation:**
 - `Ctrl+F` - Find in current file
-- `Ctrl+H` - Replace in current file
+- `Ctrl+R` - Replace in current file (changed from Ctrl+H to avoid window nav conflict)
 - `Ctrl+Shift+F` - Find in files
 - `Ctrl+Shift+H` - Replace in files
 - `Ctrl+G` - Go to line
@@ -283,7 +283,35 @@ This configuration provides a comprehensive VSCode-like experience with the foll
 
 **Completion & Documentation:**
 - `Ctrl+Space` - Show completion menu manually
-- `<leader>td` - Toggle documentation window
+
+**Theme Switching:**
+- `<leader>tt` - Open theme picker (Telescope with live preview)
+- `<leader>tv` - Switch to VSCode theme
+- `<leader>to` - Switch to Tokyo Night theme
+- `<leader>tc` - Switch to Catppuccin theme
+- `<leader>tD` - Switch to Dracula theme (capital D to avoid conflict)
+- `<leader>tn` - Switch to Nord theme
+- `<leader>tg` - Switch to Gruvbox theme
+
+**Project Management:**
+- `<leader>pp` - Project switcher (replaces Ctrl+Shift+P project command)
+
+#### Available Themes
+0xVim comes with 10+ carefully selected themes:
+
+1. **VSCode** - Authentic VSCode dark theme
+2. **Tokyo Night** - Beautiful night theme (variants: night, storm, moon, day)
+3. **Catppuccin** - Soothing pastel theme (flavors: mocha, latte, frappe, macchiato)
+4. **Dracula** - Dark theme inspired by Dracula
+5. **Nord** - Arctic, north-bluish color palette
+6. **Gruvbox** - Retro groove color scheme
+7. **OneDark** - Atom's iconic One Dark theme
+8. **Kanagawa** - Inspired by the famous painting
+9. **Nightfox** - Highly customizable theme (7+ variants)
+10. **Rose Pine** - Natural pine theme (variants: main, moon, dawn)
+11. **Material** - Material Design color palette
+
+Use `<leader>tt` to preview and switch between themes interactively!
 
 #### VSCode-like Import Handling
 The configuration includes VSCode-like import handling for various languages:

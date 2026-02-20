@@ -1,5 +1,7 @@
--- How-To Modal: A quick reference guide for Neovim commands
--- Opens a floating window with helpful commands and shortcuts
+--- How-To Modal: A quick reference guide for Neovim commands
+--- Opens a floating window with helpful commands and shortcuts
+--- Provides VSCode-like command reference for easy transition
+--- @module custom.plugins.howto-modal
 
 return {
   -- Create a custom how-to modal plugin
@@ -45,7 +47,7 @@ return {
         '',
         '┌─ SEARCH & NAVIGATION ────────────────────────────────────────────────────┐',
         '│ <Ctrl+F>          Find in current file                                   │',
-        '│ <Ctrl+H>          Replace in current file                                │',
+        '│ <Ctrl+R>          Replace in current file (changed from Ctrl+H)          │',
         '│ <Ctrl+Shift+F>    Find in all files (project-wide)                       │',
         '│ <Ctrl+Shift+H>    Replace in all files (project-wide)                    │',
         '│ <Ctrl+G>          Go to line                                             │',
@@ -101,6 +103,17 @@ return {
         '│ <leader>mm        Toggle code minimap                                    │',
         '│ <leader>xx        Toggle Trouble (diagnostics panel)                     │',
         '│ <leader>S         Search and replace (Spectre)                           │',
+        '│ <leader>pp        Project switcher                                       │',
+        '└──────────────────────────────────────────────────────────────────────────┘',
+        '',
+        '┌─ THEME SWITCHING ────────────────────────────────────────────────────────┐',
+        '│ <leader>tt        Open theme picker (Telescope)                          │',
+        '│ <leader>tv        Switch to VSCode theme                                 │',
+        '│ <leader>to        Switch to Tokyo Night theme                            │',
+        '│ <leader>tc        Switch to Catppuccin theme                             │',
+        '│ <leader>tD        Switch to Dracula theme                                │',
+        '│ <leader>tn        Switch to Nord theme                                   │',
+        '│ <leader>tg        Switch to Gruvbox theme                                │',
         '└──────────────────────────────────────────────────────────────────────────┘',
         '',
         '┌─ GITHUB COPILOT ─────────────────────────────────────────────────────────┐',

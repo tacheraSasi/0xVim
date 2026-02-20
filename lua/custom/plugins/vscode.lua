@@ -1,26 +1,41 @@
+--- VSCode-like plugin configuration for 0xVim
+--- This module provides a comprehensive VSCode experience including:
+--- - VSCode color scheme
+--- - Status line (lualine)
+--- - Integrated terminal (toggleterm)
+--- - Indentation guides
+--- - Auto-pairs
+--- - Git integration
+--- - Search and replace (Spectre)
+--- - Multi-cursor support
+--- - Comment toggling
+--- - Zen mode
+--- - Code folding
+--- - Diagnostics panel (Trouble)
+--- @module custom.plugins.vscode
+
 return {
-  -- VSCode-like color scheme
+  --- VSCode color scheme plugin
+  --- Provides an authentic VSCode dark theme for Neovim
   {
     'Mofiqul/vscode.nvim',
     priority = 1000,
     config = function()
       require('vscode').setup {
-        -- Enable transparent background
         transparent = false,
-        -- Enable italic comments
         italic_comments = true,
-        -- Disable nvim-tree background color
         disable_nvimtree_bg = true,
       }
-      -- Set colorscheme after options
-      vim.cmd.colorscheme 'vscode'
+      --- NOTE: Colorscheme is set in init.lua or via theme manager
+      --- To switch to VSCode theme, use <leader>tv or the theme picker <leader>tt
     end,
   },
 
   -- NOTE: neo-tree configuration moved to lua/custom/plugins/enhanced-vscode.lua
   -- to avoid conflicts and provide better VSCode-like experience
 
-  -- Better status line (like VSCode's status bar)
+  --- Better status line (like VSCode's status bar)
+  --- Shows file info, git status, diagnostics, and cursor position
   {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons', 'SmiteshP/nvim-navic' },
@@ -70,7 +85,9 @@ return {
         },
       }
 
-      -- Terminal keybindings
+      --- Set up terminal keymaps for navigation
+      --- Allows using window navigation commands inside the terminal
+      --- @global
       function _G.set_terminal_keymaps()
         local opts = { buffer = 0 }
         vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], opts)
@@ -80,12 +97,13 @@ return {
         vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
       end
 
-      -- Auto-command to set terminal keymaps when terminal opens
+      -- Auto-command to set terminal keymaps when any terminal opens
       vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
     end,
   },
 
-  -- Indentation guides (like VSCode's indent guides)
+  --- Indentation guides (like VSCode's indent guides)
+  --- Visual vertical lines showing indentation levels
   {
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
@@ -99,7 +117,8 @@ return {
     end,
   },
 
-  -- Auto-pairs (like VSCode's auto-pairing)
+  --- Auto-pairs (like VSCode's auto-pairing)
+  --- Automatically closes brackets, quotes, and other pairs
   {
     'windwp/nvim-autopairs',
     event = 'InsertEnter',
@@ -114,7 +133,8 @@ return {
     end,
   },
 
-  -- Git integration (like VSCode's git features)
+  --- Git integration (like VSCode's git features)
+  --- Shows git changes in the sign column and provides git commands
   {
     'lewis6991/gitsigns.nvim',
     config = function()
@@ -163,7 +183,8 @@ return {
     end,
   },
 
-  -- Better search and replace (like VSCode's search)
+  --- Advanced search and replace (like VSCode's search)
+  --- Provides project-wide search and replace with preview
   {
     'nvim-pack/nvim-spectre',
     dependencies = {
@@ -207,20 +228,22 @@ return {
     end,
   },
 
-  -- Multiple cursors (like VSCode's multi-cursor)
+  --- Multi-cursor support (like VSCode's multi-cursor)
+  --- Enables editing multiple locations simultaneously
   {
     'mg979/vim-visual-multi',
     branch = 'master',
   },
 
-  -- Comment plugin for VSCode-like commenting
+  --- Comment plugin for VSCode-like commenting
+  --- Toggle line and block comments easily
   {
     'numToStr/Comment.nvim',
     event = 'VeryLazy',
     config = function()
       require('Comment').setup({
-        -- NOTE: Keybindings are configured in lua/custom/vscode-keybindings.lua
-        -- to maintain consistency with other VSCode-like keybindings
+        --- NOTE: Keybindings are configured in lua/custom/vscode-keybindings.lua
+        --- to maintain consistency with other VSCode-like keybindings
         toggler = {
           line = 'gcc', -- Use default vim-style for toggler
           block = 'gbc',
@@ -229,7 +252,7 @@ return {
           line = 'gc',
           block = 'gb',
         },
-        -- Disable extra mappings to avoid conflicts
+        -- Disable extra mappings to avoid conflicts with our custom keybindings
         extra = {
           above = false,
           below = false,
@@ -239,7 +262,8 @@ return {
     end,
   },
 
-  -- Zen mode for distraction-free coding
+  --- Zen mode for distraction-free coding
+  --- Removes UI elements for focused coding sessions
   {
     'folke/zen-mode.nvim',
     cmd = 'ZenMode',
@@ -273,7 +297,8 @@ return {
     end,
   },
 
-  -- Twilight (dims inactive code)
+  --- Twilight (dims inactive code)
+  --- Works with Zen mode to highlight only the active code
   {
     'folke/twilight.nvim',
     cmd = 'Twilight',
@@ -291,7 +316,8 @@ return {
     end,
   },
 
-  -- Breadcrumbs navigation
+  --- Breadcrumbs navigation
+  --- Shows code structure in the status bar (file > class > method)
   {
     'SmiteshP/nvim-navic',
     dependencies = 'neovim/nvim-lspconfig',
@@ -334,7 +360,8 @@ return {
     end,
   },
 
-  -- Minimap for code overview
+  --- Minimap for code overview
+  --- Provides a bird's-eye view of your code (like VSCode minimap)
   {
     'wfxr/minimap.vim',
     build = 'cargo install --locked code-minimap',
@@ -354,7 +381,8 @@ return {
     end,
   },
 
-  -- Better folding
+  --- Better code folding with preview
+  --- Uses treesitter for intelligent code folding
   {
     'kevinhwang91/nvim-ufo',
     dependencies = 'kevinhwang91/promise-async',
@@ -406,7 +434,8 @@ return {
     end,
   },
 
-  -- Problems/diagnostics panel
+  --- Problems/diagnostics panel (like VSCode's Problems panel)
+  --- Shows all diagnostics, references, and more
   {
     'folke/trouble.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -437,26 +466,31 @@ return {
       vim.keymap.set('n', 'gR', '<cmd>TroubleToggle lsp_references<cr>', { desc = 'LSP References' })
     end,
   },
+  --- Git blame integration
+  --- Shows git blame info inline in the editor
   {
     'f-person/git-blame.nvim',
     config = function()
-      vim.g.gitblame_enabled = 1 -- Enable by default
+      vim.g.gitblame_enabled = 1 -- Enabled by default
       vim.g.gitblame_message_template = '<author> • <date> • <summary>'
-      vim.g.gitblame_date_format = '%r' -- e.g. "3 days ago"
+      vim.g.gitblame_date_format = '%r' -- Relative time (e.g. "3 days ago")
       vim.g.gitblame_highlight_group = 'Comment'
 
-      -- Optional: Toggle Git blame
-      vim.keymap.set('n', '<leader>gb', '<Cmd>GitBlameToggle<CR>', { desc = 'Toggle git blame' })
+      vim.keymap.set('n', '<leader>gb', '<Cmd>GitBlameToggle<CR>', { desc = 'Toggle [G]it [B]lame' })
     end,
   },
+  --- Neogit - Magit-like git interface for Neovim
+  --- Provides a full-featured git UI
   {
     'NeogitOrg/neogit',
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
       require('neogit').setup {}
-      vim.keymap.set('n', '<leader>gg', '<cmd>Neogit<CR>', { desc = 'Open Neogit' })
+      vim.keymap.set('n', '<leader>gg', '<cmd>Neogit<CR>', { desc = 'Open Neo[g]it' })
     end,
   },
+  --- Conform - Formatter plugin with format-on-save
+  --- Automatically formats code on save
   {
     'stevearc/conform.nvim',
     config = function()
@@ -475,7 +509,8 @@ return {
     end,
   },
 
-  -- Linting (like VSCode's linting)
+  --- nvim-lint - Linting integration for Neovim
+  --- Provides real-time linting for various languages
   {
     'mfussenegger/nvim-lint',
     event = { 'BufReadPre', 'BufNewFile' },
