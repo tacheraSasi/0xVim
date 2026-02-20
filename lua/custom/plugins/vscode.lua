@@ -22,15 +22,12 @@ return {
     priority = 1000,
     config = function()
       require('vscode').setup {
-        -- Enable transparent background
         transparent = false,
-        -- Enable italic comments
         italic_comments = true,
-        -- Disable nvim-tree background color
         disable_nvimtree_bg = true,
       }
-      -- Set colorscheme after options
-      vim.cmd.colorscheme 'vscode'
+      --- NOTE: Colorscheme is set in init.lua or via theme manager
+      --- To switch to VSCode theme, use <leader>tv or the theme picker <leader>tt
     end,
   },
 
