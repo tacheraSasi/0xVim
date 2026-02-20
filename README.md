@@ -10,6 +10,19 @@ A starting point for Neovim that is:
 
 **NOT** a Neovim distribution, but instead a starting point for your configuration.
 
+## 📚 Documentation
+
+**New to 0xVim? Start here:**
+- 📋 **[Documentation Index](DOCUMENTATION.md)** - Complete guide to all documentation
+- 🍎 **[Mac Installation Guide](MAC_INSTALLATION.md)** - Complete setup instructions for macOS users
+- 🔄 **[VSCode Migration Guide](VSCODE_MIGRATION.md)** - Smooth transition from VSCode with familiar shortcuts
+- 🎨 **[Themes Guide](THEMES.md)** - Complete theme reference with shortcuts and customization options
+- 📖 **[How-To Guide](HOWTO.md)** - Comprehensive feature and keybinding reference
+
+**Quick Help:**
+- Press `<leader>?` or `F1` inside Neovim for interactive help modal
+- Press `Space` and wait to see available commands (which-key)
+
 ## Installation
 
 ### Install Neovim
@@ -72,6 +85,9 @@ too - it's ignored in the kickstart repo to make maintenance easier, but it's
 > `nvim-lua` with `<your_github_username>` in the commands below
 
 <details><summary> Linux and Mac </summary>
+
+> [!TIP]
+> **macOS Users:** See [MAC_INSTALLATION.md](MAC_INSTALLATION.md) for a comprehensive installation guide including Homebrew setup and troubleshooting.
 
 ```sh
 git clone https://github.com/nvim-lua/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
@@ -310,6 +326,9 @@ This configuration provides a comprehensive VSCode-like experience with the foll
 9. **Nightfox** - Highly customizable theme (7+ variants)
 10. **Rose Pine** - Natural pine theme (variants: main, moon, dawn)
 11. **Material** - Material Design color palette
+
+> [!TIP]
+> **For detailed theme information, screenshots, and customization options, see [THEMES.md](THEMES.md)**
 
 Use `<leader>tt` to preview and switch between themes interactively!
 
