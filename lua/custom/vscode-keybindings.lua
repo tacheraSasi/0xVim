@@ -3,28 +3,34 @@
 --- a familiar experience for VSCode users transitioning to Neovim.
 --- @module vscode-keybindings
 
--- File operations
+--- File operations: Save, save all
+--- VSCode equivalents: Ctrl+S, Ctrl+Shift+S
 vim.keymap.set('n', '<C-s>', ':w<CR>', { desc = 'Save file' })
 vim.keymap.set('i', '<C-s>', '<Esc>:w<CR>a', { desc = 'Save file (insert mode)' })
 vim.keymap.set('n', '<C-S-s>', ':wa<CR>', { desc = 'Save all files' })
 
--- Undo/Redo
+--- Undo/Redo operations
+--- VSCode equivalents: Ctrl+Z (undo), Ctrl+Y (redo)
 vim.keymap.set('n', '<C-z>', 'u', { desc = 'Undo' })
 vim.keymap.set('i', '<C-z>', '<Esc>ua', { desc = 'Undo (insert mode)' })
 vim.keymap.set('n', '<C-y>', '<C-r>', { desc = 'Redo' })
 vim.keymap.set('i', '<C-y>', '<Esc><C-r>a', { desc = 'Redo (insert mode)' })
 
--- Cut, Copy, Paste
+--- Clipboard operations: Cut, Copy, Paste
+--- VSCode equivalents: Ctrl+X, Ctrl+C, Ctrl+V
 vim.keymap.set('v', '<C-x>', '"+x', { desc = 'Cut' })
 vim.keymap.set('v', '<C-c>', '"+y', { desc = 'Copy' })
 vim.keymap.set('n', '<C-v>', '"+p', { desc = 'Paste' })
 vim.keymap.set('i', '<C-v>', '<C-r>+', { desc = 'Paste (insert mode)' })
 vim.keymap.set('c', '<C-v>', '<C-r>+', { desc = 'Paste (command mode)' })
 
--- Select all
+--- Select all text in current buffer
+--- VSCode equivalent: Ctrl+A
 vim.keymap.set('n', '<C-a>', 'ggVG', { desc = 'Select all' })
 
--- Quick Open (File finder) - improved to exclude unwanted directories
+--- Quick Open: Fuzzy file finder with smart filtering
+--- Excludes: node_modules, dist, build, .git, etc.
+--- VSCode equivalent: Ctrl+P
 vim.keymap.set('n', '<C-p>', function()
   require('telescope.builtin').find_files({
     -- Use the global Telescope configuration for find_files
@@ -32,27 +38,32 @@ vim.keymap.set('n', '<C-p>', function()
   })
 end, { desc = 'Quick Open Files (filtered)' })
 
--- Command Palette (Ctrl+Shift+P)
--- Note: Project switcher uses <leader>pp to avoid conflict
+--- Command Palette: Access all available commands
+--- Note: Project switcher uses <leader>pp to avoid conflict
+--- VSCode equivalent: Ctrl+Shift+P
 vim.keymap.set('n', '<C-S-p>', function()
   require('telescope.builtin').commands()
 end, { desc = 'Command Palette' })
 
--- Find in current file
+--- Find in current file
+--- VSCode equivalent: Ctrl+F
 vim.keymap.set('n', '<C-f>', '/', { desc = 'Find in current file' })
 vim.keymap.set('v', '<C-f>', '/', { desc = 'Find in current file' })
 
--- Replace in current file (using Ctrl+R to avoid conflict with window navigation)
--- VSCode uses Ctrl+H for replace, but we use Ctrl+R to avoid conflicting with window nav <C-h>
+--- Replace in current file
+--- Using Ctrl+R to avoid conflict with window navigation <C-h>
+--- VSCode uses Ctrl+H, but we changed it to Ctrl+R for compatibility
 vim.keymap.set('n', '<C-r>', ':s/', { desc = 'Replace in current file' })
 vim.keymap.set('v', '<C-r>', ':s/', { desc = 'Replace in selection' })
 
--- Find in files (project-wide search) (Ctrl+Shift+F)
+--- Find in files: Project-wide search using live grep
+--- VSCode equivalent: Ctrl+Shift+F
 vim.keymap.set('n', '<C-S-f>', function()
   require('telescope.builtin').live_grep()
 end, { desc = 'Find in Files' })
 
--- Replace in files (project-wide replace) (Ctrl+Shift+H)
+--- Replace in files: Project-wide search and replace with Spectre
+--- VSCode equivalent: Ctrl+Shift+H
 vim.keymap.set('n', '<C-S-h>', function()
   local ok, spectre = pcall(require, 'spectre')
   if ok then
@@ -62,10 +73,12 @@ vim.keymap.set('n', '<C-S-h>', function()
   end
 end, { desc = 'Replace in Files' })
 
--- Go to line
+--- Go to line: Jump to a specific line number
+--- VSCode equivalent: Ctrl+G
 vim.keymap.set('n', '<C-g>', ':lua vim.ui.input({prompt="Go to line: "}, function(input) if input then vim.cmd("normal! " .. input .. "G") end end)<CR>', { desc = 'Go to Line' })
 
--- Line operations
+--- Line operations: Delete, insert above/below
+--- VSCode equivalents: Ctrl+Shift+K (delete), Ctrl+Enter (insert below), Ctrl+Shift+Enter (insert above)
 vim.keymap.set('n', '<C-S-k>', 'dd', { desc = 'Delete Line' })
 vim.keymap.set('i', '<C-S-k>', '<Esc>dda', { desc = 'Delete Line (insert mode)' })
 
@@ -75,7 +88,9 @@ vim.keymap.set('i', '<C-CR>', '<Esc>o', { desc = 'Insert Line Below (insert mode
 vim.keymap.set('n', '<C-S-CR>', 'O<Esc>', { desc = 'Insert Line Above' })
 vim.keymap.set('i', '<C-S-CR>', '<Esc>O', { desc = 'Insert Line Above (insert mode)' })
 
--- Line comments (requires Comment.nvim plugin)
+--- Line comments: Toggle line comments
+--- Requires Comment.nvim plugin
+--- VSCode equivalent: Ctrl+/
 vim.keymap.set('n', '<C-/>', function()
   local ok, comment_api = pcall(require, 'Comment.api')
   if ok then
@@ -98,7 +113,8 @@ vim.keymap.set('v', '<C-/>', function()
   end
 end, { desc = 'Toggle Line Comment' })
 
--- Block comments
+--- Block comments: Toggle block comments
+--- VSCode equivalent: Ctrl+Shift+/
 vim.keymap.set('v', '<C-S-/>', function()
   local ok, comment_api = pcall(require, 'Comment.api')
   if ok then
@@ -111,13 +127,15 @@ vim.keymap.set('v', '<C-S-/>', function()
   end
 end, { desc = 'Toggle Block Comment' })
 
--- Indentation
+--- Indentation: Indent and outdent lines or selections
+--- VSCode equivalents: Ctrl+] (indent), Ctrl+[ (outdent)
 vim.keymap.set('n', '<C-]>', '>>', { desc = 'Indent Line' })
 vim.keymap.set('n', '<C-[>', '<<', { desc = 'Outdent Line' })
 vim.keymap.set('v', '<C-]>', '>gv', { desc = 'Indent Selection' })
 vim.keymap.set('v', '<C-[>', '<gv', { desc = 'Outdent Selection' })
 
--- Editor navigation
+--- Editor navigation: Window movement with Ctrl+h/j/k/l
+--- VSCode uses Ctrl+1/2/3, but we use vim-style navigation
 vim.keymap.set('n', '<C-Tab>', ':bnext<CR>', { desc = 'Next Editor' })
 vim.keymap.set('n', '<C-S-Tab>', ':bprevious<CR>', { desc = 'Previous Editor' })
 
