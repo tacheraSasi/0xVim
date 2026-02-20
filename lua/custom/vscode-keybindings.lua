@@ -1,5 +1,7 @@
--- VSCode-like keybindings for Neovim
--- This file implements comprehensive VSCode keyboard shortcuts
+--- VSCode-like keybindings for Neovim
+--- This file implements comprehensive VSCode keyboard shortcuts to provide
+--- a familiar experience for VSCode users transitioning to Neovim.
+--- @module vscode-keybindings
 
 -- File operations
 vim.keymap.set('n', '<C-s>', ':w<CR>', { desc = 'Save file' })
@@ -31,6 +33,7 @@ vim.keymap.set('n', '<C-p>', function()
 end, { desc = 'Quick Open Files (filtered)' })
 
 -- Command Palette (Ctrl+Shift+P)
+-- Note: Project switcher uses <leader>pp to avoid conflict
 vim.keymap.set('n', '<C-S-p>', function()
   require('telescope.builtin').commands()
 end, { desc = 'Command Palette' })
@@ -39,9 +42,10 @@ end, { desc = 'Command Palette' })
 vim.keymap.set('n', '<C-f>', '/', { desc = 'Find in current file' })
 vim.keymap.set('v', '<C-f>', '/', { desc = 'Find in current file' })
 
--- Replace in current file
-vim.keymap.set('n', '<C-h>', ':s/', { desc = 'Replace in current file' })
-vim.keymap.set('v', '<C-h>', ':s/', { desc = 'Replace in selection' })
+-- Replace in current file (using Ctrl+R to avoid conflict with window navigation)
+-- VSCode uses Ctrl+H for replace, but we use Ctrl+R to avoid conflicting with window nav <C-h>
+vim.keymap.set('n', '<C-r>', ':s/', { desc = 'Replace in current file' })
+vim.keymap.set('v', '<C-r>', ':s/', { desc = 'Replace in selection' })
 
 -- Find in files (project-wide search) (Ctrl+Shift+F)
 vim.keymap.set('n', '<C-S-f>', function()

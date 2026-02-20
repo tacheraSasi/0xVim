@@ -1,6 +1,17 @@
--- Enhanced VSCode-like features
+--- Enhanced VSCode-like features for Neovim
+--- This module provides advanced VSCode-style functionality including:
+--- - Project management with automatic detection
+--- - Enhanced file explorer (Neo-tree)
+--- - Advanced search and replace (Spectre)
+--- - Integrated terminal (ToggleTerm)
+--- - Multi-cursor support
+--- - Minimap for code overview
+--- @module enhanced-vscode
+
 return {
-  -- Advanced project/workspace management
+  --- Advanced project/workspace management
+  --- Provides automatic project detection and switching functionality
+  --- similar to VSCode's workspace management
   {
     'ahmedkhalf/project.nvim',
     config = function()
@@ -18,14 +29,20 @@ return {
       -- Integration with telescope
       require('telescope').load_extension('projects')
       
-      -- Keybinding for project switching (like VSCode's Ctrl+Shift+P > "Switch Project")
-      vim.keymap.set('n', '<C-S-p>', function()
+      -- Keybinding for project switching (using <leader>pp to avoid conflict with Command Palette)
+      -- VSCode: Ctrl+Shift+P > "Switch Project", here we use <leader>pp
+      vim.keymap.set('n', '<leader>pp', function()
         require('telescope').extensions.projects.projects{}
-      end, { desc = 'Switch Project' })
+      end, { desc = '[P]roject Switcher' })
     end,
   },
 
-  -- Advanced file explorer with more VSCode-like features
+  --- Advanced file explorer with VSCode-like sidebar
+  --- Neo-tree provides a powerful file explorer with:
+  --- - Git status integration
+  --- - Diagnostic markers
+  --- - File operations (create, delete, rename, move)
+  --- - Beautiful icons and visual indicators
   {
     'nvim-neo-tree/neo-tree.nvim',
     branch = 'v3.x',
