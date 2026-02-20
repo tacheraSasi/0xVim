@@ -13,6 +13,7 @@ A starting point for Neovim that is:
 ## 📚 Documentation
 
 **New to 0xVim? Start here:**
+- 📋 **[Documentation Index](DOCUMENTATION.md)** - Complete guide to all documentation
 - 🍎 **[Mac Installation Guide](MAC_INSTALLATION.md)** - Complete setup instructions for macOS users
 - 🔄 **[VSCode Migration Guide](VSCODE_MIGRATION.md)** - Smooth transition from VSCode with familiar shortcuts
 - 🎨 **[Themes Guide](THEMES.md)** - Complete theme reference with shortcuts and customization options
