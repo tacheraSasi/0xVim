@@ -2,6 +2,12 @@
 
 This is a comprehensive guide to help you get started with your Neovim configuration.
 
+> [!TIP]
+> **New Users:**
+> - 🍎 Coming from Mac? See [MAC_INSTALLATION.md](MAC_INSTALLATION.md)
+> - 🔄 Coming from VSCode? See [VSCODE_MIGRATION.md](VSCODE_MIGRATION.md)
+> - 🎨 Want to customize themes? See [THEMES.md](THEMES.md)
+
 ## Quick Start: Getting Help
 
 **NEW**: Press `<leader>?` or `F1` at any time to open the **How-To Modal** - a comprehensive floating window with all available commands and shortcuts organized by category!
@@ -108,14 +114,20 @@ The sidebar file explorer (Neo-tree) can be toggled with:
 
 ### Themes
 
-This configuration comes with the following themes:
-- **tokyonight-night** (default): A beautiful dark theme
-- **tokyonight-storm**: A stormy variant
-- **tokyonight-moon**: A moonlit variant
-- **tokyonight-day**: A light variant
+0xVim includes 10+ beautiful themes with 30+ variants:
+- **VSCode**, **Tokyo Night**, **Catppuccin**, **Dracula**, **Nord**, **Gruvbox**, and more!
 
-To switch between themes:
-- `<leader>tc` - Open theme selector
+Quick theme switching:
+- `<leader>tt` - Interactive theme picker with live preview
+- `<leader>tv` - VSCode theme
+- `<leader>to` - Tokyo Night theme
+- `<leader>tc` - Catppuccin theme
+- `<leader>tD` - Dracula theme
+- `<leader>tn` - Nord theme
+- `<leader>tg` - Gruvbox theme
+
+> [!TIP]
+> **For complete theme documentation with all variants and customization options, see [THEMES.md](THEMES.md)**
 
 ## Additional Features
 
