@@ -1,7 +1,7 @@
 --- VSCode-like keybindings for Neovim
 --- This file implements comprehensive VSCode keyboard shortcuts to provide
 --- a familiar experience for VSCode users transitioning to Neovim.
---- @module vscode-keybindings
+--- @module custom.vscode-keybindings
 
 --- File operations: Save, save all
 --- VSCode equivalents: Ctrl+S, Ctrl+Shift+S

@@ -12,7 +12,7 @@
 --- - Zen mode
 --- - Code folding
 --- - Diagnostics panel (Trouble)
---- @module vscode
+--- @module custom.plugins.vscode
 
 return {
   --- VSCode color scheme plugin

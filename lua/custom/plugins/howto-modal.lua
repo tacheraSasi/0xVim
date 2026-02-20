@@ -1,7 +1,7 @@
 --- How-To Modal: A quick reference guide for Neovim commands
 --- Opens a floating window with helpful commands and shortcuts
 --- Provides VSCode-like command reference for easy transition
---- @module howto-modal
+--- @module custom.plugins.howto-modal
 
 return {
   -- Create a custom how-to modal plugin
@@ -111,7 +111,7 @@ return {
         '│ <leader>tv        Switch to VSCode theme                                 │',
         '│ <leader>to        Switch to Tokyo Night theme                            │',
         '│ <leader>tc        Switch to Catppuccin theme                             │',
-        '│ <leader>td        Switch to Dracula theme                                │',
+        '│ <leader>tD        Switch to Dracula theme                                │',
         '│ <leader>tn        Switch to Nord theme                                   │',
         '│ <leader>tg        Switch to Gruvbox theme                                │',
         '└──────────────────────────────────────────────────────────────────────────┘',

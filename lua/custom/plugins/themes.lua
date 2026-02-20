@@ -9,7 +9,7 @@
 --- - Gruvbox
 --- - One Dark
 --- - Kanagawa
---- @module themes
+--- @module custom.plugins.themes
 
 return {
   --- VSCode theme - provides authentic VSCode color scheme

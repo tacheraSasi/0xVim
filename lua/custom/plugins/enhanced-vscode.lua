@@ -6,7 +6,7 @@
 --- - Integrated terminal (ToggleTerm)
 --- - Multi-cursor support
 --- - Minimap for code overview
---- @module enhanced-vscode
+--- @module custom.plugins.enhanced-vscode
 
 return {
   --- Advanced project/workspace management

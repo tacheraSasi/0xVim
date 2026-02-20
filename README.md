@@ -283,14 +283,13 @@ This configuration provides a comprehensive VSCode-like experience with the foll
 
 **Completion & Documentation:**
 - `Ctrl+Space` - Show completion menu manually
-- `<leader>td` - Toggle documentation window
 
 **Theme Switching:**
 - `<leader>tt` - Open theme picker (Telescope with live preview)
 - `<leader>tv` - Switch to VSCode theme
 - `<leader>to` - Switch to Tokyo Night theme
 - `<leader>tc` - Switch to Catppuccin theme
-- `<leader>td` - Switch to Dracula theme
+- `<leader>tD` - Switch to Dracula theme (capital D to avoid conflict)
 - `<leader>tn` - Switch to Nord theme
 - `<leader>tg` - Switch to Gruvbox theme
 

@@ -1,7 +1,7 @@
 --- Theme management and switching utilities for 0xVim
 --- Provides functions to switch between various color schemes
 --- and update lualine theme accordingly
---- @module theme-manager
+--- @module custom.plugins.init
 
 local M = {}
 
@@ -106,7 +106,7 @@ end
 vim.keymap.set('n', '<leader>to', M.switch_to_original_theme, { desc = 'Switch to [O]riginal theme (Tokyo Night)' })
 vim.keymap.set('n', '<leader>tv', M.switch_to_vscode_theme, { desc = 'Switch to [V]SCode theme' })
 vim.keymap.set('n', '<leader>tc', M.switch_to_catppuccin_theme, { desc = 'Switch to [C]atppuccin theme' })
-vim.keymap.set('n', '<leader>td', M.switch_to_dracula_theme, { desc = 'Switch to [D]racula theme' })
+vim.keymap.set('n', '<leader>tD', M.switch_to_dracula_theme, { desc = 'Switch to [D]racula theme' })
 vim.keymap.set('n', '<leader>tn', M.switch_to_nord_theme, { desc = 'Switch to [N]ord theme' })
 vim.keymap.set('n', '<leader>tg', M.switch_to_gruvbox_theme, { desc = 'Switch to [G]ruvbox theme' })
 vim.keymap.set('n', '<leader>tt', M.theme_picker, { desc = 'Open [T]heme picker' })
