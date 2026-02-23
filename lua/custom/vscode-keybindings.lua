@@ -371,8 +371,8 @@ vim.keymap.set('n', '<C-S-;>', function()
   require('telescope.builtin').lsp_document_symbols()
 end, { desc = 'Go to Symbol in Editor' })
 
--- Recent files (like VSCode's Ctrl+R)
-vim.keymap.set('n', '<C-r>', function()
+-- Recent files (like VSCode's Ctrl+Shift+R to avoid conflict with Replace)
+vim.keymap.set('n', '<C-S-r>', function()
   require('telescope.builtin').oldfiles()
 end, { desc = 'Recent Files' })
 
@@ -412,36 +412,7 @@ vim.keymap.set('n', '<C-S-l>', function()
   end
 end, { desc = 'Select All Occurrences' })
 
--- Show references (like VSCode's Shift+F12)
-vim.keymap.set('n', '<S-F12>', function()
-  require('telescope.builtin').lsp_references()
-end, { desc = 'Show References' })
-
--- Show definition (like VSCode's F12)
-vim.keymap.set('n', '<F12>', function()
-  require('telescope.builtin').lsp_definitions()
-end, { desc = 'Go to Definition' })
-
--- Show implementations (like VSCode's Ctrl+F12)
-vim.keymap.set('n', '<C-F12>', function()
-  require('telescope.builtin').lsp_implementations()
-end, { desc = 'Go to Implementations' })
-
--- Show type definition (like VSCode's Ctrl+Shift+F12)
-vim.keymap.set('n', '<C-S-F12>', function()
-  require('telescope.builtin').lsp_type_definitions()
-end, { desc = 'Go to Type Definition' })
-
--- Quick fix (like VSCode's Ctrl+.)
-vim.keymap.set('n', '<C-.>', vim.lsp.buf.code_action, { desc = 'Quick Fix' })
-
--- Rename symbol (like VSCode's F2)
-vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, { desc = 'Rename Symbol' })
-
--- Format document (like VSCode's Shift+Alt+F)
-vim.keymap.set('n', '<S-A-f>', function()
-  require('conform').format({ async = true, lsp_format = 'fallback' })
-end, { desc = 'Format Document' })
+-- NOTE: F2, F12, S-F12, C-., C-F12, S-A-f, Ctrl+Shift+F12 are already defined above
 
 -- Toggle word wrap (like VSCode's Alt+Z)
 vim.keymap.set('n', '<A-z>', function()
@@ -483,12 +454,4 @@ end, { desc = 'Keyboard Shortcuts' })
 -- Transform to uppercase/lowercase (like VSCode's Ctrl+Shift+U)
 vim.keymap.set('v', '<C-S-u>', 'gU', { desc = 'Transform to Uppercase' })
 
--- Zen mode (like VSCode's Ctrl+K Z)
-vim.keymap.set('n', '<C-k>z', function()
-  local ok, zen_mode = pcall(require, 'zen-mode')
-  if ok then
-    zen_mode.toggle()
-  else
-    print('Zen mode not available')
-  end
-end, { desc = 'Zen Mode' })
+-- NOTE: Zen mode (Ctrl+K Z) is already defined above
