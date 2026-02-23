@@ -25,14 +25,14 @@ return {
         silent_chdir = true,
         scope_chdir = 'global',
       })
-      
+
       -- Integration with telescope
       require('telescope').load_extension('projects')
-      
+
       -- Keybinding for project switching (using <leader>pp to avoid conflict with Command Palette)
       -- VSCode: Ctrl+Shift+P > "Switch Project", here we use <leader>pp
       vim.keymap.set('n', '<leader>pp', function()
-        require('telescope').extensions.projects.projects{}
+        require('telescope').extensions.projects.projects {}
       end, { desc = '[P]roject Switcher' })
     end,
   },
@@ -53,8 +53,29 @@ return {
       'MunifTanjim/nui.nvim',
     },
     keys = {
-      { '<C-b>', ':Neotree toggle<CR>', desc = 'Toggle file explorer', silent = true },
-      { '<C-S-e>', ':Neotree toggle<CR>', desc = 'Toggle file explorer', silent = true },
+      {
+        '<C-b>',
+        function()
+          -- VSCode-like toggle: if neo-tree is focused, close it; if open but not focused, focus it; if closed, open and focus it
+          local manager = require('neo-tree.sources.manager')
+          local renderer = require('neo-tree.ui.renderer')
+          local state = manager.get_state('filesystem')
+          local window_exists = renderer.window_exists(state)
+          if window_exists then
+            local neo_tree_win = state.winid
+            if neo_tree_win and vim.api.nvim_win_is_valid(neo_tree_win) and vim.api.nvim_get_current_win() == neo_tree_win then
+              vim.cmd('Neotree close')
+            else
+              vim.cmd('Neotree focus')
+            end
+          else
+            vim.cmd('Neotree show')
+          end
+        end,
+        desc = 'Toggle file explorer (VSCode Ctrl+B)',
+        silent = true
+      },
+      { '<C-S-e>', ':Neotree focus<CR>', desc = 'Focus file explorer', silent = true },
     },
     config = function()
       require('neo-tree').setup({
@@ -123,9 +144,10 @@ return {
             },
             ['<2-LeftMouse>'] = 'open',
             ['<cr>'] = 'open',
-            ['<esc>'] = 'revert_preview',
+            ['<esc>'] = 'close_window',
             ['P'] = { 'toggle_preview', config = { use_float = true } },
-            ['l'] = 'focus_preview',
+            ['l'] = 'open',
+            ['h'] = 'close_node',
             ['S'] = 'open_split',
             ['s'] = 'open_vsplit',
             ['t'] = 'open_tabnew',
@@ -179,8 +201,8 @@ return {
             },
           },
           follow_current_file = {
-            enabled = false,
-            leave_dirs_open = false,
+            enabled = true,
+            leave_dirs_open = true,
           },
           group_empty_dirs = false,
           hijack_netrw_behavior = 'open_default',
@@ -329,10 +351,10 @@ return {
         automatic_setup = true,
         handlers = {},
         ensure_installed = {
-          'delve',      -- Go debugger
-          'python',     -- Python debugger
+          'delve',            -- Go debugger
+          'python',           -- Python debugger
           'js-debug-adapter', -- JavaScript debugger
-          'codelldb',   -- C/C++/Rust debugger
+          'codelldb',         -- C/C++/Rust debugger
         },
       })
 
