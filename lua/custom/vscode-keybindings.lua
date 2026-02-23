@@ -75,7 +75,9 @@ end, { desc = 'Replace in Files' })
 
 --- Go to line: Jump to a specific line number
 --- VSCode equivalent: Ctrl+G
-vim.keymap.set('n', '<C-g>', ':lua vim.ui.input({prompt="Go to line: "}, function(input) if input then vim.cmd("normal! " .. input .. "G") end end)<CR>', { desc = 'Go to Line' })
+vim.keymap.set('n', '<C-g>',
+  ':lua vim.ui.input({prompt="Go to line: "}, function(input) if input then vim.cmd("normal! " .. input .. "G") end end)<CR>',
+  { desc = 'Go to Line' })
 
 --- Line operations: Delete, insert above/below
 --- VSCode equivalents: Ctrl+Shift+K (delete), Ctrl+Enter (insert below), Ctrl+Shift+Enter (insert above)
@@ -179,7 +181,7 @@ end, { desc = 'Go to Symbol in Workspace' })
 vim.keymap.set('n', '<C-S-m>', function()
   local ok, trouble = pcall(require, 'trouble')
   if ok then
-    trouble.toggle('workspace_diagnostics')
+    vim.cmd('Trouble diagnostics toggle')
   else
     require('telescope.builtin').diagnostics()
   end
@@ -319,9 +321,9 @@ end, { desc = 'Go to Symbol in Workspace' })
 
 -- Output panel (Ctrl+Shift+U)
 vim.keymap.set('n', '<C-S-u>', function()
-  local ok, trouble = pcall(require, 'trouble')
+  local ok, _ = pcall(require, 'trouble')
   if ok then
-    trouble.toggle('quickfix')
+    vim.cmd('Trouble qflist toggle')
   else
     vim.cmd('copen')
   end
@@ -428,7 +430,7 @@ vim.keymap.set('n', '<C-n>', ':enew<CR>', { desc = 'New File' })
 vim.keymap.set('n', '<C-k><C-o>', function()
   local ok, telescope = pcall(require, 'telescope')
   if ok and telescope.extensions and telescope.extensions.projects then
-    telescope.extensions.projects.projects{}
+    telescope.extensions.projects.projects {}
   else
     require('telescope.builtin').oldfiles()
   end

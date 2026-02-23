@@ -50,8 +50,8 @@ return {
         sections = {
           lualine_a = { 'mode' },
           lualine_b = { 'branch', 'diff', 'diagnostics' },
-          lualine_c = { 
-            { 'filename', path = 1 }, -- Show relative path
+          lualine_c = {
+            { 'filename',         path = 1 },                  -- Show relative path
             { navic.get_location, cond = navic.is_available }, -- Breadcrumbs
           },
           lualine_x = { 'encoding', 'fileformat', 'filetype' },
@@ -124,9 +124,9 @@ return {
     event = 'InsertEnter',
     config = function()
       require('nvim-autopairs').setup {
-        check_ts = true, -- Use treesitter to check for pairs
+        check_ts = true,                      -- Use treesitter to check for pairs
         ts_config = {
-          lua = { 'string' }, -- Don't add pairs in lua string treesitter nodes
+          lua = { 'string' },                 -- Don't add pairs in lua string treesitter nodes
           javascript = { 'template_string' }, -- Don't add pairs in javascript template_string
         },
       }
@@ -282,7 +282,7 @@ return {
       vim.g.minimap_highlight_search = 1
       vim.g.minimap_highlight_range = 1
       vim.g.minimap_git_colors = 1
-      
+
       -- Keybinding to toggle minimap
       vim.keymap.set('n', '<leader>mm', ':MinimapToggle<CR>', { desc = 'Toggle Minimap' })
     end,
@@ -297,7 +297,7 @@ return {
     config = function()
       require('ufo').setup({
         provider_selector = function(bufnr, filetype, buftype)
-          return {'treesitter', 'indent'}
+          return { 'treesitter', 'indent' }
         end,
         fold_virt_text_handler = function(virtText, lnum, endLnum, width, truncate)
           local newVirtText = {}
@@ -313,7 +313,7 @@ return {
             else
               chunkText = truncate(chunkText, targetWidth - curWidth)
               local hlGroup = chunk[2]
-              table.insert(newVirtText, {chunkText, hlGroup})
+              table.insert(newVirtText, { chunkText, hlGroup })
               chunkWidth = vim.fn.strdisplaywidth(chunkText)
               if curWidth + chunkWidth < targetWidth then
                 suffix = suffix .. (' '):rep(targetWidth - curWidth - chunkWidth)
@@ -322,7 +322,7 @@ return {
             end
             curWidth = curWidth + chunkWidth
           end
-          table.insert(newVirtText, {suffix, 'MoreMsg'})
+          table.insert(newVirtText, { suffix, 'MoreMsg' })
           return newVirtText
         end,
       })
@@ -349,7 +349,7 @@ return {
   {
     'f-person/git-blame.nvim',
     config = function()
-      vim.g.gitblame_enabled = 1 -- Enabled by default
+      vim.g.gitblame_enabled = 1        -- Enabled by default
       vim.g.gitblame_message_template = '<author> • <date> • <summary>'
       vim.g.gitblame_date_format = '%r' -- Relative time (e.g. "3 days ago")
       vim.g.gitblame_highlight_group = 'Comment'
