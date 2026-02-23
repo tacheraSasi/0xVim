@@ -133,100 +133,8 @@ return {
     end,
   },
 
-  --- Git integration (like VSCode's git features)
-  --- Shows git changes in the sign column and provides git commands
-  {
-    'lewis6991/gitsigns.nvim',
-    config = function()
-      require('gitsigns').setup {
-        signs = {
-          add = { text = '│' },
-          change = { text = '│' },
-          delete = { text = '_' },
-          topdelete = { text = '‾' },
-          changedelete = { text = '~' },
-        },
-        on_attach = function(bufnr)
-          local gs = package.loaded.gitsigns
-
-          -- Navigation between hunks
-          vim.keymap.set('n', ']c', function()
-            if vim.wo.diff then
-              return ']c'
-            end
-            vim.schedule(function()
-              gs.next_hunk()
-            end)
-            return '<Ignore>'
-          end, { expr = true, buffer = bufnr })
-
-          vim.keymap.set('n', '[c', function()
-            if vim.wo.diff then
-              return '[c'
-            end
-            vim.schedule(function()
-              gs.prev_hunk()
-            end)
-            return '<Ignore>'
-          end, { expr = true, buffer = bufnr })
-
-          -- Actions
-          vim.keymap.set('n', '<leader>hs', gs.stage_hunk, { buffer = bufnr, desc = 'Stage hunk' })
-          vim.keymap.set('n', '<leader>hr', gs.reset_hunk, { buffer = bufnr, desc = 'Reset hunk' })
-          vim.keymap.set('n', '<leader>hb', function()
-            gs.blame_line { full = true }
-          end, { buffer = bufnr, desc = 'Blame line' })
-          vim.keymap.set('n', '<leader>hd', gs.diffthis, { buffer = bufnr, desc = 'Diff this' })
-          vim.keymap.set('n', '<leader>hp', gs.preview_hunk, { buffer = bufnr, desc = 'Preview hunk' })
-        end,
-      }
-    end,
-  },
-
-  --- Advanced search and replace (like VSCode's search)
-  --- Provides project-wide search and replace with preview
-  {
-    'nvim-pack/nvim-spectre',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-    },
-    config = function()
-      require('spectre').setup {
-        mapping = {
-          ['toggle_line'] = {
-            map = 'dd',
-            cmd = "<cmd>lua require('spectre').toggle_line()<CR>",
-            desc = 'toggle current item',
-          },
-          ['enter_file'] = {
-            map = '<cr>',
-            cmd = "<cmd>lua require('spectre.actions').select_entry()<CR>",
-            desc = 'goto current file',
-          },
-          ['send_to_qf'] = {
-            map = '<leader>q',
-            cmd = "<cmd>lua require('spectre.actions').send_to_qf()<CR>",
-            desc = 'send all items to quickfix',
-          },
-          ['replace_cmd'] = {
-            map = '<leader>c',
-            cmd = "<cmd>lua require('spectre.actions').replace_cmd()<CR>",
-            desc = 'input replace command',
-          },
-          ['show_option_menu'] = {
-            map = '<leader>o',
-            cmd = "<cmd>lua require('spectre').show_options()<CR>",
-            desc = 'show options',
-          },
-        },
-      }
-
-      -- Keybinding to open search and replace
-      vim.keymap.set('n', '<leader>S', '<cmd>lua require("spectre").open()<CR>', {
-        desc = 'Open Spectre for search and replace',
-      })
-    end,
-  },
+  -- NOTE: gitsigns configuration is in init.lua (main kickstart config)
+  -- NOTE: spectre configuration is in enhanced-vscode.lua
 
   --- Multi-cursor support (like VSCode's multi-cursor)
   --- Enables editing multiple locations simultaneously
@@ -253,10 +161,9 @@ return {
           block = 'gb',
         },
         -- Disable extra mappings to avoid conflicts with our custom keybindings
-        extra = {
-          above = false,
-          below = false,
-          eol = false,
+        mappings = {
+          basic = true,
+          extra = false,
         },
       })
     end,
@@ -434,38 +341,9 @@ return {
     end,
   },
 
-  --- Problems/diagnostics panel (like VSCode's Problems panel)
-  --- Shows all diagnostics, references, and more
-  {
-    'folke/trouble.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function()
-      require('trouble').setup({
-        mode = "workspace_diagnostics",
-        auto_open = false,
-        auto_close = true,
-        auto_preview = true,
-        auto_fold = false,
-        auto_jump = {"lsp_definitions"},
-        signs = {
-          error = "󰅚",
-          warning = "󰀪",
-          hint = "󰌶",
-          information = "󰋽",
-          other = "󰌶",
-        },
-        use_diagnostic_signs = true,
-      })
+  -- NOTE: Trouble.nvim configuration is in custom/plugins.lua
+  -- NOTE: Neogit configuration is in enhanced-vscode.lua
 
-      -- Keybindings for trouble
-      vim.keymap.set('n', '<leader>xx', '<cmd>TroubleToggle<cr>', { desc = 'Toggle Trouble' })
-      vim.keymap.set('n', '<leader>xw', '<cmd>TroubleToggle workspace_diagnostics<cr>', { desc = 'Workspace Diagnostics' })
-      vim.keymap.set('n', '<leader>xd', '<cmd>TroubleToggle document_diagnostics<cr>', { desc = 'Document Diagnostics' })
-      vim.keymap.set('n', '<leader>xl', '<cmd>TroubleToggle loclist<cr>', { desc = 'Location List' })
-      vim.keymap.set('n', '<leader>xq', '<cmd>TroubleToggle quickfix<cr>', { desc = 'Quickfix List' })
-      vim.keymap.set('n', 'gR', '<cmd>TroubleToggle lsp_references<cr>', { desc = 'LSP References' })
-    end,
-  },
   --- Git blame integration
   --- Shows git blame info inline in the editor
   {
@@ -477,16 +355,6 @@ return {
       vim.g.gitblame_highlight_group = 'Comment'
 
       vim.keymap.set('n', '<leader>gb', '<Cmd>GitBlameToggle<CR>', { desc = 'Toggle [G]it [B]lame' })
-    end,
-  },
-  --- Neogit - Magit-like git interface for Neovim
-  --- Provides a full-featured git UI
-  {
-    'NeogitOrg/neogit',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function()
-      require('neogit').setup {}
-      vim.keymap.set('n', '<leader>gg', '<cmd>Neogit<CR>', { desc = 'Open Neo[g]it' })
     end,
   },
   --- Conform - Formatter plugin with format-on-save

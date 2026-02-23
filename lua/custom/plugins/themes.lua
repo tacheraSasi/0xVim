@@ -110,7 +110,7 @@ return {
     end,
   },
 
-  --- Gruvbox theme - retro groove color scheme
+  --- Gruvbox theme - retro groove color scheme (DEFAULT THEME)
   {
     'ellisonleao/gruvbox.nvim',
     priority = 1000,
@@ -130,6 +130,8 @@ return {
         contrast = '', -- can be "hard", "soft" or empty string
         transparent_mode = false,
       })
+      -- Set gruvbox as the default colorscheme
+      vim.cmd.colorscheme 'gruvbox'
     end,
   },
 
