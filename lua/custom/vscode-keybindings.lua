@@ -281,15 +281,52 @@ vim.keymap.set('n', '<C-\\>', ':vs<CR>', { desc = 'Split Editor Right' })
 vim.keymap.set('n', '<C-k><C-\\>', ':split<CR>', { desc = 'Split Editor Down' })
 
 -- Explorer/File tree toggle (Ctrl+B or Ctrl+Shift+E)
--- Note: These are also defined in the Neo-tree plugin keys configuration
--- but we keep them here as a fallback and for documentation purposes
+-- Main Ctrl+B handler is in enhanced-vscode.lua Neo-tree keys config
 vim.keymap.set('n', '<C-b>', function()
-  vim.cmd('Neotree toggle')
+  local ok, manager = pcall(require, 'neo-tree.sources.manager')
+  if ok then
+    local renderer = require('neo-tree.ui.renderer')
+    local state = manager.get_state('filesystem')
+    local window_exists = renderer.window_exists(state)
+    if window_exists then
+      local neo_tree_win = state.winid
+      if neo_tree_win and vim.api.nvim_win_is_valid(neo_tree_win) and vim.api.nvim_get_current_win() == neo_tree_win then
+        vim.cmd('Neotree close')
+      else
+        vim.cmd('Neotree focus')
+      end
+    else
+      vim.cmd('Neotree show')
+    end
+  else
+    pcall(vim.cmd, 'Neotree toggle')
+  end
 end, { desc = 'Toggle Sidebar Visibility', silent = true })
 
 vim.keymap.set('n', '<C-S-e>', function()
-  vim.cmd('Neotree toggle')
-end, { desc = 'Toggle Explorer', silent = true })
+  vim.cmd('Neotree focus')
+end, { desc = 'Focus Explorer', silent = true })
+
+-- Focus sidebar explorer (VSCode Ctrl+0)
+vim.keymap.set('n', '<C-0>', function()
+  local ok = pcall(vim.cmd, 'Neotree focus')
+  if not ok then pcall(vim.cmd, 'Neotree show') end
+end, { desc = 'Focus Sidebar (Explorer)' })
+
+-- Focus editor (VSCode Ctrl+1) - jump back from sidebar to editor
+vim.keymap.set('n', '<C-1>', function()
+  local wins = vim.api.nvim_list_wins()
+  for _, win in ipairs(wins) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    local ft = vim.bo[buf].filetype
+    local bt = vim.bo[buf].buftype
+    if ft ~= 'neo-tree' and ft ~= 'toggleterm' and bt ~= 'nofile' and bt ~= 'terminal' then
+      vim.api.nvim_set_current_win(win)
+      return
+    end
+  end
+  vim.cmd('wincmd p')
+end, { desc = 'Focus Editor' })
 
 -- Source Control (Ctrl+Shift+G)
 vim.keymap.set('n', '<C-S-g>', function()
@@ -412,10 +449,7 @@ vim.keymap.set('n', '<A-z>', function()
   print('Word wrap: ' .. (vim.wo.wrap and 'enabled' or 'disabled'))
 end, { desc = 'Toggle Word Wrap' })
 
--- Focus on editor (like VSCode's Ctrl+1)
-vim.keymap.set('n', '<C-1>', function()
-  vim.cmd('wincmd p')
-end, { desc = 'Focus Editor' })
+-- NOTE: Focus editor (Ctrl+1) and Focus sidebar (Ctrl+0) are defined above
 
 -- Close all editors (like VSCode's Ctrl+K Ctrl+W)
 vim.keymap.set('n', '<C-k><C-w>', ':bufdo bd<CR>', { desc = 'Close All Editors' })

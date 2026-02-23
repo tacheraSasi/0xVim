@@ -15,24 +15,8 @@
 --- @module custom.plugins.vscode
 
 return {
-  --- VSCode color scheme plugin
-  --- Provides an authentic VSCode dark theme for Neovim
-  {
-    'Mofiqul/vscode.nvim',
-    priority = 1000,
-    config = function()
-      require('vscode').setup {
-        transparent = false,
-        italic_comments = true,
-        disable_nvimtree_bg = true,
-      }
-      --- NOTE: Colorscheme is set in init.lua or via theme manager
-      --- To switch to VSCode theme, use <leader>tv or the theme picker <leader>tt
-    end,
-  },
-
-  -- NOTE: neo-tree configuration moved to lua/custom/plugins/enhanced-vscode.lua
-  -- to avoid conflicts and provide better VSCode-like experience
+  -- NOTE: VSCode color scheme is configured in themes.lua
+  -- NOTE: neo-tree configuration is in enhanced-vscode.lua
 
   --- Better status line (like VSCode's status bar)
   --- Shows file info, git status, diagnostics, and cursor position
@@ -72,35 +56,7 @@ return {
     end,
   },
 
-  -- Integrated terminal (like VSCode's integrated terminal)
-  {
-    'akinsho/toggleterm.nvim',
-    version = '*',
-    config = function()
-      require('toggleterm').setup {
-        open_mapping = [[<C-`>]], -- Ctrl+` to toggle terminal (like VSCode)
-        direction = 'float',
-        float_opts = {
-          border = 'curved',
-        },
-      }
-
-      --- Set up terminal keymaps for navigation
-      --- Allows using window navigation commands inside the terminal
-      --- @global
-      function _G.set_terminal_keymaps()
-        local opts = { buffer = 0 }
-        vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], opts)
-        vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
-        vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
-        vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
-        vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
-      end
-
-      -- Auto-command to set terminal keymaps when any terminal opens
-      vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
-    end,
-  },
+  -- NOTE: Integrated terminal (toggleterm) configuration is in enhanced-vscode.lua
 
   --- Indentation guides (like VSCode's indent guides)
   --- Visual vertical lines showing indentation levels
