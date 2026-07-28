@@ -48,45 +48,84 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 | Key | Action |
 |-----|--------|
 | `Ctrl+S` | Save |
-| `Ctrl+Z` | Undo |
-| `Ctrl+Y` | Redo |
-| `Ctrl+X` | Cut |
-| `Ctrl+C` | Copy |
-| `Ctrl+V` | Paste |
+| `Ctrl+Shift+S` | Save all |
+| `Ctrl+Z` / `Ctrl+Y` | Undo / Redo |
+| `Ctrl+X` / `Ctrl+C` / `Ctrl+V` | Cut / Copy / Paste |
 | `Ctrl+A` | Select all |
 | `Ctrl+P` | Quick open files |
 | `Ctrl+Shift+P` | Command palette |
 | `Ctrl+F` | Find in file |
+| `Ctrl+R` | Replace in file |
 | `Ctrl+Shift+F` | Find in files |
-| `Ctrl+H` | Replace in files |
-| `Ctrl+B` | Toggle file explorer |
-| `Ctrl+Shift+E` | Focus explorer |
-| `Ctrl+`` ` | Toggle terminal |
+| `Ctrl+Shift+H` | Replace in files (Spectre) |
+| `Ctrl+G` | Go to line |
+| `Ctrl+B` | Toggle file explorer (right side) |
+| `Ctrl+Shift+E` | Focus file explorer |
+| `Ctrl+0` | Focus sidebar |
+| `Ctrl+1` | Focus editor |
+| `Ctrl+`` ` | Toggle terminal (float) |
 | `Ctrl+/` | Toggle comment |
-| `Ctrl+D` | Multi-cursor select next |
+| `Ctrl+K Ctrl+C` / `Ctrl+K Ctrl+U` | Comment / uncomment (chord) |
+| `Ctrl+D` | Add next cursor (multi-cursor) |
+| `Ctrl+Up` / `Ctrl+Down` | Add cursor up / down |
+| `Ctrl+Enter` / `Ctrl+Shift+Enter` | Insert line below / above |
+| `Ctrl+Shift+K` | Delete line |
+| `Ctrl+]` / `Ctrl+[` | Indent / outdent |
+| `Ctrl+Tab` / `Ctrl+Shift+Tab` | Next / previous editor |
+| `Ctrl+Shift+W` | Close editor |
+| `Ctrl+Shift+T` | Reopen closed editor |
+| `Ctrl+Shift+G` | Source control (Neogit) |
+| `Ctrl+Shift+M` | Show problems (Trouble) |
+| `Ctrl+Shift+O` | File symbols |
+| `Ctrl+T` | Workspace symbols |
+| `Ctrl+Shift+R` | Recent files |
+| `Ctrl+=` / `Ctrl+-` | Zoom in / out |
+| `Alt+Up` / `Alt+Down` | Move line up / down |
+| `Alt+Shift+F` | Format document |
+| `Alt+F12` | Peek definition |
+| `Alt+Z` | Toggle word wrap |
 | `F2` | Rename symbol |
 | `F12` | Go to definition |
 | `Shift+F12` | Find references |
-| `Alt+Up/Down` | Move line up/down |
-| `Alt+Shift+F` | Format document |
+| `F8` / `Shift+F8` | Next / previous problem |
+| `F5` / `F9` / `F10` / `F11` | Debug: continue / breakpoint / step over / step into |
+| `Ctrl+. `, | Quick fix (code action) |
+| `Ctrl+,` | Open settings |
+
+> On macOS, `Ctrl` mirrors to `Cmd` automatically for these bindings.
 
 ## Leader Keybindings
 
 | Key | Action |
 |-----|--------|
-| `<space>ff` | Find files |
-| `<space>fg` | Live grep |
-| `<space>fb` | Buffers |
 | `<space>sh` | Search help |
 | `<space>sk` | Search keymaps |
+| `<space>sf` | Search files |
+| `<space>sg` | Live grep |
+| `<space>sw` | Search current word |
+| `<space>sd` | Search diagnostics |
+| `<space>sr` | Resume search |
+| `<space>s.` | Recent files |
+| `<space>sn` | Search neovim files |
+| `<space><space>` | Find buffers |
+| `<space>/` | Fuzzy search in buffer |
+| `<space>sp` | Spectre toggle |
+| `<space>sW` | Spectre word / selection |
 | `<space>e` | Toggle file explorer |
 | `<space>xx` | Toggle trouble (diagnostics) |
 | `<space>gg` | Open git UI (neogit) |
-| `<space>S` | Search & replace (spectre) |
+| `<space>gc` / `<space>gp` / `<space>gl` | Git commit / push / pull |
+| `<space>gb` | Toggle git blame |
 | `<space>pp` | Project switcher |
-| `<space>qs` | Restore session |
+| `<space>qs` / `<space>ql` / `<space>qd` | Restore / restore last / stop session |
 | `<space>tt` | Theme picker |
+| `<space>tv` / `<space>to` / `<space>tc` / `<space>tg` / `<space>tD` / `<space>tn` | VSCode / Tokyo Night / Catppuccin / Gruvbox / Dracula / Nord |
+| `<space>tf` / `<space>tV` / `<space>th` | Floating / vertical / horizontal terminal |
 | `<space>f` | Format buffer |
+| `<space>o` | Toggle outline |
+| `<space>du` | Toggle debug UI |
+| `<space>ti` | Toggle inlay hints (LSP buffer) |
+| `<space>hs` / `<space>hr` / `<space>hp` / `<space>hb` | Git hunk stage / reset / preview / blame |
 
 ## LSP Mappings
 

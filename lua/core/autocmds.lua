@@ -12,11 +12,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
   group = augroup,
   callback = function(event)
     local bufnr = event.buf
-    local client = vim.lsp.get_client_by_id(event.data.client_id)
-    if not client then return end
-    local supports_organize = vim.tbl_contains(client.server_capabilities.codeActionProvider or {}, 'source.organizeImports')
-      or (client.server_capabilities.codeActionProvider == true)
-    if not supports_organize then return end
     vim.api.nvim_create_autocmd('BufWritePre', {
       buffer = bufnr,
       group = augroup,
@@ -27,11 +22,39 @@ vim.api.nvim_create_autocmd('LspAttach', {
         for _, res in pairs(results or {}) do
           for _, action in pairs(res.result or {}) do
             if action.edit then
-              vim.lsp.util.apply_workspace_edit(action.edit, client.offset_encoding or 'utf-16')
+              vim.lsp.util.apply_workspace_edit(action.edit, 'utf-16')
             end
           end
         end
       end,
     })
+  end,
+})
+
+-- Track the last real editor window so the explorer toggle can restore focus.
+local explorer_augroup = vim.api.nvim_create_augroup('nvim-explorer-focus', { clear = true })
+local last_editor_win = nil
+_G.__nvim_last_editor_win = function() return last_editor_win end
+
+local function is_editor_win(win)
+  local buf = vim.api.nvim_win_get_buf(win)
+  local ft = vim.bo[buf].filetype
+  local bt = vim.bo[buf].buftype
+  return ft ~= 'neo-tree'
+    and ft ~= 'toggleterm'
+    and ft ~= 'TelescopePrompt'
+    and ft ~= 'Trouble'
+    and bt ~= 'nofile'
+    and bt ~= 'terminal'
+    and bt ~= 'prompt'
+end
+
+vim.api.nvim_create_autocmd({ 'WinEnter', 'BufEnter' }, {
+  group = explorer_augroup,
+  callback = function()
+    local win = vim.api.nvim_get_current_win()
+    if is_editor_win(win) then
+      last_editor_win = win
+    end
   end,
 })

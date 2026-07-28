@@ -3,7 +3,14 @@ return {
     'folke/tokyonight.nvim',
     priority = 1000,
     config = function()
-      require('tokyonight').setup { styles = { comments = { italic = false } } }
+      require('tokyonight').setup {
+        styles = { comments = { italic = false }, keywords = { italic = false } },
+        on_highlights = function(hl, c)
+          hl.CursorLineNR = { bold = true, fg = c.orange }
+          hl.LineNr = { fg = c.dark3 }
+        end,
+      }
+      vim.cmd.colorscheme 'tokyonight'
     end,
   },
   {
@@ -34,7 +41,6 @@ return {
         terminal_colors = true, undercurl = true, bold = true,
         italic = { strings = false, emphasis = true, comments = true, operators = false, folds = true },
       }
-      vim.cmd.colorscheme 'gruvbox'
     end,
   },
   {

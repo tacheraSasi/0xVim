@@ -27,7 +27,7 @@ return {
     vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], { desc = 'Terminal: window prefix' })
 
     vim.keymap.set('n', '<leader>tf', ':ToggleTerm direction=float<CR>', { desc = 'Toggle floating terminal' })
-    vim.keymap.set('n', '<leader>tv', ':ToggleTerm direction=vertical<CR>', { desc = 'Toggle vertical terminal' })
+    vim.keymap.set('n', '<leader>tV', ':ToggleTerm direction=vertical<CR>', { desc = 'Toggle vertical terminal' })
     vim.keymap.set('n', '<leader>th', ':ToggleTerm direction=horizontal<CR>', { desc = 'Toggle horizontal terminal' })
   end,
 }

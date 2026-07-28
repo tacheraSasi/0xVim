@@ -11,7 +11,18 @@ return {
     {
       '<C-b>',
       function()
-        require('neo-tree.command').execute({ action = 'toggle', source = 'filesystem', toggle = true })
+        local manager = require 'neo-tree.sources.manager'
+        local state = manager.get_state 'filesystem'
+        local visible = state and state.winid and vim.api.nvim_win_is_valid(state.winid)
+        if visible then
+          require('neo-tree.command').execute { action = 'close', source = 'filesystem' }
+          local target = _G.__nvim_last_editor_win and _G.__nvim_last_editor_win()
+          if target and vim.api.nvim_win_is_valid(target) then
+            vim.api.nvim_set_current_win(target)
+          end
+        else
+          require('neo-tree.command').execute { action = 'focus', source = 'filesystem', toggle = false }
+        end
       end,
       desc = 'Toggle file explorer',
       silent = true,

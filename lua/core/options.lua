@@ -38,3 +38,29 @@ vim.opt.completeopt = 'menuone,noselect'
 vim.opt.wildmode = 'longest:full,full'
 vim.opt.wildmenu = true
 vim.opt.wildignore = '*.o,*.obj,*.dylib,*.bin,*.dll,*.so,*.pyc,*.jpg,*.png,*.gif,*.zip,*.tar.gz,*.tar.bz2,*.tar.xz,*.tar'
+
+-- Zed/VSCode-like editing feel
+vim.o.smoothscroll = true
+vim.o.splitkeep = 'cursor'
+vim.o.winblend = 10
+vim.o.pumblend = 10
+vim.o.pumheight = 20
+vim.o.mousemoveevent = true
+vim.o.foldmethod = 'expr'
+vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.o.foldlevelstart = 99
+vim.o.foldcolumn = '0'
+vim.opt.fillchars = {
+  eob = ' ',
+  fold = ' ',
+  foldopen = '',
+  foldclose = '',
+  foldsep = ' ',
+  diff = '╱',
+  horiz = '─',
+  vert = '│',
+  msgsep = '─',
+}
+if vim.fn.has('macunix') == 1 then
+  vim.g.is_mac = true
+end
