@@ -2,6 +2,8 @@
 
 A modular Neovim configuration designed for developers coming from VS Code. Everything should feel familiar while embracing Neovim's strengths.
 
+> **New here?** Read **[HOW_TO.md](HOW_TO.md)** — a full walk-through guide from install to daily usage.
+
 ## Structure
 
 ```

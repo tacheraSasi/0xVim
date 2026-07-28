@@ -29,5 +29,12 @@ return {
     vim.keymap.set('n', '<leader>tf', ':ToggleTerm direction=float<CR>', { desc = 'Toggle floating terminal' })
     vim.keymap.set('n', '<leader>tV', ':ToggleTerm direction=vertical<CR>', { desc = 'Toggle vertical terminal' })
     vim.keymap.set('n', '<leader>th', ':ToggleTerm direction=horizontal<CR>', { desc = 'Toggle horizontal terminal' })
+
+    -- Cmd+J (macOS): seamless toggle of the floating terminal.
+    -- Press once to open, press again to close. Works from normal mode AND
+    -- from inside the terminal itself, so the same key opens and closes it.
+    if vim.g.is_mac then
+      vim.keymap.set({ 'n', 't' }, '<D-j>', '<Cmd>ToggleTerm<CR>', { desc = 'Toggle terminal (Cmd+J)', silent = true })
+    end
   end,
 }
