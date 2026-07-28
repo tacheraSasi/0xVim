@@ -1,8 +1,17 @@
 package howto
 
-import "github.com/charmbracelet/glamour"
+import (
+	"fmt"
+
+	"github.com/charmbracelet/glamour"
+)
 
 // Render the HOW_TO.md to the terminal
-func Render() {
-	out, err := glamour.Render("", "dark")
+func Render(mdSource string) error {
+	out, err := glamour.Render(mdSource, "dark")
+	if err != nil {
+		return err
+	}
+	fmt.Print(out)
+	return nil
 }

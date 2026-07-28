@@ -1,4 +1,4 @@
-# How To — Neovim Config Guide
+# How To Neovim Config Guide
 
 A practical, walk-through guide for this Neovim setup. Start at the top and follow
 along in your editor. Every key combo below is something you can press right now.
@@ -952,6 +952,7 @@ bookmarks (e.g. `mA` on your main file, then `` `A `` from anywhere jumps back).
 | `"0p` | Paste the **last yank** (even if you deleted something after) |
 
 There are also special registers:
+
 - `"0` — last yank
 - `"1`–`"9` — numbered delete history (a stack of recent deletes)
 - `"%` — current filename
@@ -974,6 +975,7 @@ So `"0p` is "paste what I just yanked, ignoring the delete I did in between".
 
 Macros + the dot-repeat are the secret weapon. Example: turn a list of
 `foo` into `'foo',`:
+
 ```
 qa          — start recording into a
 I'<Esc>A',<Esc>   — insert ' at start, ', at end
@@ -1312,4 +1314,3 @@ directly with `nvim file.go` or `Ctrl+P` to skip it. To force it: `nvim +Dashboa
 6. Open `:Tutor` for a 30-minute Vim fundamentals lesson.
 
 Welcome to Neovim.
-

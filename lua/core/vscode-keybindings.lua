@@ -55,21 +55,33 @@ vim.keymap.set('i', '<M-Right>', '<C-o>w', { desc = 'Word forward (insert)' })
 vim.keymap.set({ 'n', 'v', 'i' }, '<M-Up>', '{', { desc = 'Paragraph back' })
 vim.keymap.set({ 'n', 'v', 'i' }, '<M-Down>', '}', { desc = 'Paragraph forward' })
 
+-- Terminal.app sends <M-b>/<M-f> for Opt+Left/Opt+Right (not arrow keys).
+-- Map those too so word-motion works regardless of which terminal encoding.
+vim.keymap.set({ 'n', 'v' }, '<M-b>', 'b', { desc = 'Word back' })
+vim.keymap.set({ 'n', 'v' }, '<M-f>', 'w', { desc = 'Word forward' })
+vim.keymap.set('i', '<M-b>', '<C-o>b', { desc = 'Word back (insert)' })
+vim.keymap.set('i', '<M-f>', '<C-o>w', { desc = 'Word forward (insert)' })
+
 -- Many macOS terminals (iTerm2, Ghostty, Alacritty, kitty, WezTerm) send
 -- raw CSI escape sequences for Option+arrow rather than <M-Left>. Map those
 -- explicitly so Opt+arrows work no matter which terminal you use.
--- Terminal.app sends <M-b>/<M-f> (handled by <M-Left>/<M-Right> above).
-local esc = '\27'
-local opt_left  = esc .. '[1;3D'
-local opt_right = esc .. '[1;3C'
-local opt_up    = esc .. '[1;3A'
-local opt_down  = esc .. '[1;3B'
-vim.keymap.set({ 'n', 'v' }, opt_left,  'b', { desc = 'Word back' })
-vim.keymap.set({ 'n', 'v' }, opt_right, 'w', { desc = 'Word forward' })
-vim.keymap.set('i', opt_left,  '<C-o>b', { desc = 'Word back (insert)' })
-vim.keymap.set('i', opt_right, '<C-o>w', { desc = 'Word forward (insert)' })
-vim.keymap.set({ 'n', 'v', 'i' }, opt_up,   '{', { desc = 'Paragraph back' })
-vim.keymap.set({ 'n', 'v', 'i' }, opt_down, '}', { desc = 'Paragraph forward' })
+-- We map every common variant of the sequence to cover terminal quirks.
+local esc = string.char(27)
+local seqs = {
+  right = { '[1;3C', '[1;5C', '[5C', '[3C', 'OC' },
+  left  = { '[1;3D', '[1;5D', '[5D', '[3D', 'OD' },
+  up    = { '[1;3A', '[1;5A', '[5A', '[3A', 'OA' },
+  down  = { '[1;3B', '[1;5B', '[5B', '[3B', 'OB' },
+}
+local motion = { right = 'w', left = 'b', up = '{', down = '}' }
+local motion_i = { right = '<C-o>w', left = '<C-o>b', up = '<C-o>{', down = '<C-o>}' }
+for dir, list in pairs(seqs) do
+  for _, body in ipairs(list) do
+    local key = esc .. body
+    vim.keymap.set({ 'n', 'v' }, key, motion[dir], { desc = 'Word ' .. dir })
+    vim.keymap.set('i', key, motion_i[dir], { desc = 'Word ' .. dir .. ' (insert)' })
+  end
+end
 
 if vim.g.is_mac then
   vim.keymap.set({ 'n', 'v' }, '<D-Left>', '0', { desc = 'Line start' })
