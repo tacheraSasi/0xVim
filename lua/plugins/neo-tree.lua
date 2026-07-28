@@ -11,33 +11,20 @@ return {
     {
       '<C-b>',
       function()
-        local ok = pcall(function()
-          local state = require('neo-tree.sources.manager').get_state('filesystem')
-          if state and state.winid and vim.api.nvim_win_is_valid(state.winid) then
-            if vim.api.nvim_get_current_win() == state.winid then
-              vim.cmd('Neotree close')
-              return
-            end
-            vim.cmd('Neotree focus')
-            return
-          end
-          vim.cmd('Neotree show')
-        end)
-        if not ok then
-          vim.cmd('Neotree toggle')
-        end
+        require('neo-tree.command').execute({ action = 'toggle', source = 'filesystem', toggle = true })
       end,
       desc = 'Toggle file explorer',
       silent = true,
     },
-    { '<leader>e', ':Neotree toggle<CR>', desc = 'Toggle file explorer', silent = true },
-    { '<C-S-e>', ':Neotree focus<CR>', desc = 'Focus file explorer', silent = true },
+    { '<leader>e', '<cmd>Neotree toggle filesystem right<CR>', desc = 'Toggle file explorer', silent = true },
+    { '<C-S-e>', '<cmd>Neotree focus filesystem right<CR>', desc = 'Focus file explorer', silent = true },
   },
   opts = {
     close_if_last_window = true,
     popup_border_style = 'rounded',
     enable_git_status = true,
     enable_diagnostics = true,
+    open_files_do_not_replace_types = { 'terminal', 'Trouble', 'trouble', 'qf', 'fidget' },
     default_component_configs = {
       indent = { indent_size = 2, padding = 1, with_markers = true, indent_marker = '│', last_indent_marker = '└' },
       icon = { folder_closed = '', folder_open = '', folder_empty = 'ﰊ', default = '*' },
@@ -50,13 +37,15 @@ return {
       },
     },
     window = {
-      position = 'left',
+      position = 'right',
       width = 40,
+      auto_expand_width = false,
+      mapping_options = { noremap = true, nowait = true },
       mappings = {
         ['<space>'] = { 'toggle_node', nowait = false },
         ['<2-LeftMouse>'] = 'open',
         ['<cr>'] = 'open',
-        ['<esc>'] = 'close_window',
+        ['<esc>'] = 'cancel',
         ['P'] = { 'toggle_preview', config = { use_float = true } },
         ['l'] = 'open',
         ['h'] = 'close_node',
@@ -70,7 +59,7 @@ return {
         ['d'] = 'delete',
         ['r'] = 'rename',
         ['y'] = 'copy_to_clipboard',
-        ['x'] = 'cut_to_clipboard',
+        ['x'] = 'open',
         ['p'] = 'paste_from_clipboard',
         ['c'] = 'copy',
         ['m'] = 'move',

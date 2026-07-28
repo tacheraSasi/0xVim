@@ -5,12 +5,6 @@ return {
     dependencies = 'neovim/nvim-lspconfig',
     opts = { highlight = false, separator = ' > ', depth_limit = 0, safe_output = true },
   },
-  -- nvim-autopairs (extra auto-pair support alongside mini.pairs)
-  {
-    'windwp/nvim-autopairs',
-    event = 'InsertEnter',
-    opts = { check_ts = true },
-  },
   -- git-blame
   {
     'f-person/git-blame.nvim',
@@ -85,6 +79,24 @@ return {
   {
     'mg979/vim-visual-multi',
     branch = 'master',
+    init = function()
+      vim.g.VM_leader = '\\'
+      vim.g.VM_default_mappings = 1
+      vim.g.VM_maps = {
+        ['Add Cursor Down'] = '<C-Down>',
+        ['Add Cursor Up'] = '<C-Up>',
+        ['Add Cursor At Pos'] = '<C-CR>',
+        ['Find Under'] = '<C-D>',
+        ['Find Subword Under'] = '<C-D>',
+      }
+    end,
+    keys = {
+      { '<C-D>', mode = { 'n', 'x' }, desc = 'Add next cursor (VSCode)' },
+      { '<D-D>', mode = { 'n', 'x' }, desc = 'Add next cursor (macOS)' },
+      { '<C-Down>', mode = { 'n', 'x' }, desc = 'Add cursor down' },
+      { '<C-Up>', mode = { 'n', 'x' }, desc = 'Add cursor up' },
+      { '<C-CR>', mode = { 'n', 'x' }, desc = 'Add cursor at pos' },
+    },
   },
   -- symbols-outline (VSCode outline panel)
   {
