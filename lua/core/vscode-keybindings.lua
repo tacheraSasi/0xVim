@@ -37,6 +37,67 @@ vscode_map('i', '<C-v>', '<C-r>+', { desc = 'Paste (insert)' })
 vscode_map('c', '<C-v>', '<C-r>+', { desc = 'Paste (command)' })
 vscode_map('n', '<C-a>', 'ggVG', { desc = 'Select all' })
 
+-- Cursor movement (Zed / VSCode-style with Option + arrows)
+-- <M-Left>  = back a word       (Zed: Opt-←)
+-- <M-Right> = forward a word    (Zed: Opt-→)
+-- <M-Up>    = start of paragraph / block  (Zed: Opt-↑)
+-- <M-Down>  = end of paragraph / block    (Zed: Opt-↓)
+-- <D-Left>  = start of line     (Zed: Cmd-←)
+-- <D-Right> = end of line       (Zed: Cmd-→)
+-- <D-Up>    = top of file       (Zed: Cmd-↑)
+-- <D-Down>  = bottom of file    (Zed: Cmd-↓)
+-- Normal mode: use native motions. Insert mode: use <C-o> to run one
+-- normal command then return to insert, so cursor stays fluid while typing.
+vim.keymap.set({ 'n', 'v' }, '<M-Left>', 'b', { desc = 'Word back' })
+vim.keymap.set({ 'n', 'v' }, '<M-Right>', 'w', { desc = 'Word forward' })
+vim.keymap.set('i', '<M-Left>', '<C-o>b', { desc = 'Word back (insert)' })
+vim.keymap.set('i', '<M-Right>', '<C-o>w', { desc = 'Word forward (insert)' })
+vim.keymap.set({ 'n', 'v', 'i' }, '<M-Up>', '{', { desc = 'Paragraph back' })
+vim.keymap.set({ 'n', 'v', 'i' }, '<M-Down>', '}', { desc = 'Paragraph forward' })
+
+-- Many macOS terminals (iTerm2, Ghostty, Alacritty, kitty, WezTerm) send
+-- raw CSI escape sequences for Option+arrow rather than <M-Left>. Map those
+-- explicitly so Opt+arrows work no matter which terminal you use.
+-- Terminal.app sends <M-b>/<M-f> (handled by <M-Left>/<M-Right> above).
+local esc = '\27'
+local opt_left  = esc .. '[1;3D'
+local opt_right = esc .. '[1;3C'
+local opt_up    = esc .. '[1;3A'
+local opt_down  = esc .. '[1;3B'
+vim.keymap.set({ 'n', 'v' }, opt_left,  'b', { desc = 'Word back' })
+vim.keymap.set({ 'n', 'v' }, opt_right, 'w', { desc = 'Word forward' })
+vim.keymap.set('i', opt_left,  '<C-o>b', { desc = 'Word back (insert)' })
+vim.keymap.set('i', opt_right, '<C-o>w', { desc = 'Word forward (insert)' })
+vim.keymap.set({ 'n', 'v', 'i' }, opt_up,   '{', { desc = 'Paragraph back' })
+vim.keymap.set({ 'n', 'v', 'i' }, opt_down, '}', { desc = 'Paragraph forward' })
+
+if vim.g.is_mac then
+  vim.keymap.set({ 'n', 'v' }, '<D-Left>', '0', { desc = 'Line start' })
+  vim.keymap.set({ 'n', 'v' }, '<D-Right>', '$', { desc = 'Line end' })
+  vim.keymap.set('i', '<D-Left>', '<C-o>0', { desc = 'Line start (insert)' })
+  vim.keymap.set('i', '<D-Right>', '<C-o>$', { desc = 'Line end (insert)' })
+  vim.keymap.set({ 'n', 'v' }, '<D-Up>', 'gg', { desc = 'Top of file' })
+  vim.keymap.set({ 'n', 'v' }, '<D-Down>', 'G', { desc = 'Bottom of file' })
+  vim.keymap.set('i', '<D-Up>', '<C-o>gg', { desc = 'Top of file (insert)' })
+  vim.keymap.set('i', '<D-Down>', '<C-o>G', { desc = 'Bottom of file (insert)' })
+end
+
+-- Word-wise deletion (Zed: Opt-Backspace deletes a word, Cmd-Backspace to line start)
+vim.keymap.set('i', '<M-Backspace>', '<C-w>', { desc = 'Delete word back (insert)' })
+vim.keymap.set('i', '<M-Delete>', '<C-o>de', { desc = 'Delete word forward (insert)' })
+if vim.g.is_mac then
+  vim.keymap.set('i', '<D-Backspace>', '<C-u>', { desc = 'Delete to line start (insert)' })
+  vim.keymap.set('i', '<D-Delete>', '<C-o>d$', { desc = 'Delete to line end (insert)' })
+end
+
+-- Word-wise selection (Zed: Shift+Opt+arrows extends by word)
+vim.keymap.set('v', '<M-Left>', 'b', { desc = 'Select word back' })
+vim.keymap.set('v', '<M-Right>', 'w', { desc = 'Select word forward' })
+if vim.g.is_mac then
+  vim.keymap.set('v', '<D-Left>', '0', { desc = 'Select to line start' })
+  vim.keymap.set('v', '<D-Right>', '$', { desc = 'Select to line end' })
+end
+
 -- Quick Open / Command Palette
 vscode_map('n', '<C-p>', function() require('telescope.builtin').find_files {} end, { desc = 'Quick Open' })
 vscode_map('n', '<C-S-p>', function() require('telescope.builtin').commands() end, { desc = 'Command Palette' })

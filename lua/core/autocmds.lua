@@ -8,6 +8,23 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Auto-create missing parent directories when saving a new file.
+-- Fixes E212: Can't open file for writing (e.g. :e newdir/file.go | :w).
+vim.api.nvim_create_autocmd('BufWritePre', {
+  desc = 'Create parent dirs on write',
+  group = augroup,
+  callback = function(event)
+    local file = event.match or vim.api.nvim_buf_get_name(0)
+    if file == '' then return end
+    local dir = vim.fn.fnamemodify(file, ':h')
+    if dir == '' or dir == '.' then return end
+    if vim.fn.isdirectory(dir) == 0 then
+      vim.fn.mkdir(dir, 'p')
+      vim.notify('Created directory: ' .. dir, vim.log.levels.INFO)
+    end
+  end,
+})
+
 vim.api.nvim_create_autocmd('LspAttach', {
   group = augroup,
   callback = function(event)
