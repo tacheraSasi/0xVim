@@ -29,17 +29,19 @@ vim.api.nvim_create_autocmd('LspAttach', {
   group = augroup,
   callback = function(event)
     local bufnr = event.buf
+    local client = vim.lsp.get_client_by_id(event.data.client_id)
+    local offset_encoding = (client and client.offset_encoding) or 'utf-16'
     vim.api.nvim_create_autocmd('BufWritePre', {
       buffer = bufnr,
       group = augroup,
       callback = function()
-        local params = vim.lsp.util.make_range_params()
+        local params = vim.lsp.util.make_range_params(0, offset_encoding)
         params.context = { only = { 'source.organizeImports' }, diagnostics = {} }
         local results = vim.lsp.buf_request_sync(bufnr, 'textDocument/codeAction', params, 1000)
         for _, res in pairs(results or {}) do
           for _, action in pairs(res.result or {}) do
             if action.edit then
-              vim.lsp.util.apply_workspace_edit(action.edit, 'utf-16')
+              vim.lsp.util.apply_workspace_edit(action.edit, offset_encoding)
             end
           end
         end

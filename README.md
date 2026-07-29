@@ -133,24 +133,29 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 
 | Key | Action |
 |-----|--------|
-| `grd` | Go to definition |
-| `grr` | Find references |
-| `gri` | Go to implementation |
-| `grn` | Rename |
-| `gra` | Code action |
+| `grd` / `F12` | Go to definition |
+| `gD` | Go to definition in **vsplit** (read std source) |
+| `gH` | Go to definition in **hsplit** |
+| `grr` / `Shift+F12` | Find references |
+| `gri` / `gI` | Go to implementation (in-place / vsplit) |
+| `grn` / `F2` | Rename |
+| `gra` / `Ctrl+.` | Code action |
 | `K` | Hover documentation |
-| `gO` | Document symbols |
-| `gW` | Workspace symbols |
+| `Ctrl+K` | Signature help |
+| `gO` / `Ctrl+Shift+O` | Document symbols |
+| `gW` / `Ctrl+T` | Workspace symbols |
+| `<space>o` | Toggle outline panel |
+| `<space>ti` | Toggle inlay hints |
 
 ## Theme Switching
 
 | Key | Theme |
 |-----|-------|
 | `<space>tt` | Theme picker (Telescope) |
-| `<space>tv` | VSCode |
+| `<space>tc` | Catppuccin (Mocha) — **default** |
 | `<space>to` | Tokyo Night |
-| `<space>tc` | Catppuccin |
-| `<space>tg` | Gruvbox (default) |
+| `<space>tv` | VSCode |
+| `<space>tg` | Gruvbox |
 | `<space>tD` | Dracula |
 | `<space>tn` | Nord |
 

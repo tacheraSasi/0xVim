@@ -5,6 +5,43 @@ return {
     dependencies = 'neovim/nvim-lspconfig',
     opts = { highlight = false, separator = ' > ', depth_limit = 0, safe_output = true },
   },
+  -- nvim-lightbulb: show a gutter lightbulb when code actions are available (VSCode-style)
+  {
+    'kosayoda/nvim-lightbulb',
+    event = 'LspAttach',
+    opts = {
+      action_kinds = nil,
+      sign = { enabled = true, text = { hl = 'LightBulbSign', text = '' } },
+      float = { enabled = false },
+      status_text = { enabled = false },
+      number = { enabled = false },
+      ignore = { ft = { 'neo-tree', 'toggleterm', 'TelescopePrompt', 'Trouble' } },
+      autocmd = { enabled = true, pattern = { 'CursorHold', 'CursorHoldI' }, mode = 'n' },
+    },
+  },
+  -- rainbow-delimiters: bracket-pair colorization (VSCode "Bracket Pair Colorization")
+  {
+    'HiPhish/rainbow-delimiters.nvim',
+    event = 'BufReadPost',
+    config = function()
+      require('rainbow-delimiters.setup').setup {
+        strategy = {
+          [''] = 'rainbow-delimiters.strategy.local',
+          vim = 'rainbow-delimiters.strategy.local',
+          query = { [''] = 'rainbow-delimiters', latex = 'rainbow-blocks' },
+        },
+        highlight = {
+          'RainbowDelimiterRed',
+          'RainbowDelimiterYellow',
+          'RainbowDelimiterBlue',
+          'RainbowDelimiterOrange',
+          'RainbowDelimiterGreen',
+          'RainbowDelimiterViolet',
+          'RainbowDelimiterCyan',
+        },
+      }
+    end,
+  },
   -- git-blame
   {
     'f-person/git-blame.nvim',
@@ -98,15 +135,35 @@ return {
       { '<C-CR>', mode = { 'n', 'x' }, desc = 'Add cursor at pos' },
     },
   },
-  -- symbols-outline (VSCode outline panel)
+  -- outline (VSCode outline panel) — maintained fork of symbols-outline.
+  -- The original simrat39/symbols-outline.nvim breaks on Neovim 0.11+
+  -- (vim.treesitter.get_parser arity change); this fork fixes it.
   {
-    'simrat39/symbols-outline.nvim',
-    config = function()
-      require('symbols-outline').setup {
-        highlight_hovered_item = true, show_guides = true, auto_preview = false,
-        position = 'right', width = 25, auto_close = false,
-      }
-      vim.keymap.set('n', '<leader>o', '<cmd>SymbolsOutline<CR>', { desc = 'Toggle Outline' })
-    end,
+    'hedyhli/outline.nvim',
+    lazy = true,
+    cmd = { 'Outline', 'OutlineOpen' },
+    keys = {
+      { '<leader>o', '<cmd>Outline<CR>', desc = 'Toggle Outline' },
+    },
+    opts = {
+      outline_window = { position = 'right', width = 25, relative_width = true },
+      outline_items = { show_cursorline = true, highlight_hovered_item = true },
+      guides = { enabled = true, markers = { bottom = '└', middle = '├', vertical = '│', horizontal = '─' } },
+      keymaps = {
+        close = { 'q' },
+        goto_location = '<CR>',
+        peek_location = 'o',
+        goto_and_close = '<S-CR>',
+        move_down = 'j',
+        move_up = 'k',
+        fold = 'zc',
+        unfold = 'zo',
+        fold_toggle = { '<tab>', 'za' },
+        fold_all = 'zM',
+        unfold_all = 'zR',
+        reset_open_folds = 'R',
+        fold_toggle_all = { 'zm' },
+      },
+    },
   },
 }

@@ -38,6 +38,19 @@ return {
         map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
         map('K', vim.lsp.buf.hover, 'Hover Documentation')
 
+        -- Open the actual source file of a definition (e.g. Go/Zig stdlib).
+        -- gd/F12 jump in-place; these open in a split so you keep your spot
+        -- and can read the real implementation alongside your code.
+        map('gD', function()
+          require('telescope.builtin').lsp_definitions { jump_type = 'vsplit' }
+        end, '[G]oto [D]efinition in vsplit')
+        map('gH', function()
+          require('telescope.builtin').lsp_definitions { jump_type = 'split' }
+        end, '[G]oto [D]efinition in hsplit')
+        map('gI', function()
+          require('telescope.builtin').lsp_implementations { jump_type = 'vsplit' }
+        end, '[G]oto [I]mplementation in vsplit')
+
         local client = vim.lsp.get_client_by_id(event.data.client_id)
 
         if client and client.server_capabilities.documentSymbolProvider then
@@ -166,6 +179,20 @@ return {
       },
       html = {},
       cssls = {},
+      tailwindls = {
+        filetypes = { 'html', 'typescriptreact', 'javascriptreact', 'javascript', 'typescript', 'vue', 'svelte', 'php', 'blade' },
+        root_dir = function(fname)
+          local util = require 'lspconfig.util'
+          return util.root_pattern('tailwind.config.js', 'tailwind.config.ts', 'tailwind.config.mjs', 'tailwind.config.cjs')(fname)
+        end,
+        settings = {
+          tailwindCSS = {
+            classAttributes = { 'class', 'className', 'class:list', 'classList', 'ngClass' },
+            includeLanguages = { eelixir = 'html', eruby = 'html' },
+            lint = { cssConflict = 'warning', invalidApply = 'error', invalidScreen = 'error', invalidVariant = 'error', invalidConfigPath = 'error', invalidTailwindDirective = 'error', recommendedVariantOrder = 'warning' },
+          },
+        },
+      },
       jsonls = {
         settings = {
           json = { schemas = require('schemastore').json.schemas(), validate = { enable = true } },
@@ -194,12 +221,50 @@ return {
           Lua = { completion = { callSnippet = 'Replace' } },
         },
       },
+      -- PHP / Laravel
+      intelephense = {
+        settings = {
+          intelephense = {
+            format = { braces = 'k&r' },
+            environment = { includePaths = { 'vendor/**' } },
+            files = { maxSize = 5000000 },
+            completion = { maxItems = 100, fullyQualifyGlobalConstantsAndFunctions = true },
+            diagnostics = { enable = true, run = 'onType' },
+          },
+        },
+      },
+      -- Vue (often used alongside Laravel + React)
+      volar = {
+        filetypes = { 'vue' },
+      },
+      -- Svelte
+      svelte = {},
+      -- Prisma (used in NestJS)
+      prismals = {},
+      -- GraphQL (used in NestJS / React)
+      graphql = {},
+      -- Docker Compose
+      docker_compose_language_service = {},
     }
 
-    local ensure_installed = vim.tbl_keys(servers)
+    -- Map lspconfig server names to Mason package names where they differ.
+    local lsp_to_mason = {
+      tailwindls = 'tailwindcss-language-server',
+      ts_ls = 'typescript-language-server',
+      docker_compose_language_service = 'docker-compose-language-service',
+    }
+    local ensure_installed = {}
+    for server_name, _ in pairs(servers) do
+      table.insert(ensure_installed, lsp_to_mason[server_name] or server_name)
+    end
     vim.list_extend(ensure_installed, {
-      'stylua', 'prettier', 'black', 'shfmt', 'gofumpt', 'rustfmt',
-      'eslint_d', 'flake8', 'shellcheck', 'luacheck',
+      'stylua', 'prettier', 'prettierd', 'black', 'isort', 'shfmt', 'gofumpt',
+      'goimports', 'golines', 'rustfmt', 'zig',
+      'eslint_d', 'flake8', 'ruff', 'shellcheck', 'luacheck',
+      'php-cs-fixer', 'phpstan', 'phpcs', 'phpcbf',
+      'golangci-lint', 'revive', 'staticcheck',
+      'markdownlint-cli2', 'jsonlint', 'yamllint',
+      'codelldb', 'delve',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 

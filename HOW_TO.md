@@ -62,6 +62,7 @@ Install these first — the config depends on them.
 | **Go** | Go LSP + tools | `brew install go` |
 | **Rust** | rust-analyzer + rustfmt | `brew install rustup` |
 | **Zig** (optional) | zls LSP + zig formatter | `brew install zig` |
+| **PHP** (optional) | intelephense LSP + php-cs-fixer | `brew install php composer` |
 | **make + clang** | Build native plugins | `brew install make clang` |
 
 Set the Nerd Font in **your terminal app's preferences** (iTerm2, Alacitty,
@@ -505,20 +506,62 @@ Powered by `vim-visual-multi`, configured to match VSCode.
 The LSP installs servers automatically via Mason on first open of a file of
 each language. Give it a few seconds the first time.
 
+### Viewing documentation (the "hover" feature)
+
+This is the equivalent of hovering your mouse over a function in Zed/VSCode.
+Put your cursor on a function / type / variable and press one of:
+
+| Key | What you get |
+|-----|--------------|
+| **`K`** | Full hover docs — docstring, signature, types. **The main one.** |
+| `Ctrl+K` | Signature help (only the parameters) while typing inside `(...)` |
+| `Alt+F12` | **Peek** the definition source in a popup (don't leave your spot) |
+| `gd` / `F12` | Jump to the definition (use `Ctrl+O` to come back) |
+| `gD` | Open definition in a **vsplit** — read the real std source alongside |
+| `Shift+F12` / `grr` | Find every place that calls this |
+
+**Inside the hover/peek popup:** scroll with `Ctrl+F` (down) / `Ctrl+B` (up),
+close with `<Esc>` or `q`.
+
+#### Per-language: what the hover shows
+
+| Language | LSP server | Hover shows |
+|----------|-----------|-------------|
+| **Go** | `gopls` | godoc comment, signature, type info |
+| **JS/TS** | `ts_ls` | TSDoc/JSDoc, params, return type |
+| **Zig** | `zls` | doc comment (`///`), signature, type |
+| **PHP/Laravel** | `intelephense` | PHPDoc, signature, type info |
+| **Python** | `pyright` | docstring, types |
+| **Rust** | `rust_analyzer` | rustdoc, signature, generics |
+| **Lua** | `lua_ls` | vim docs, signature |
+| **C/C++** | `clangd` | Doxygen comment, signature |
+| **Vue** | `volar` | component props, types |
+| **Svelte** | `svelte` | component props, types |
+| **Prisma** | `prismals` | schema field types |
+| **GraphQL** | `graphql` | type definitions |
+| **HTML/CSS** | `html` / `cssls` | MDN-style reference |
+| **Tailwind** | `tailwindls` | class completion + color previews |
+
 ### Navigation
 
 | Key | Action |
 |-----|--------|
-| `F12` | Go to definition |
-| `gd` | Same — vim style |
+| `F12` / `gd` | Go to definition (in-place) |
+| **`gD`** | Open definition in **vertical split** — see std source alongside your code |
+| **`gH`** | Open definition in **horizontal split** |
+| **`gI`** | Open implementation in **vertical split** |
 | `Alt+F12` | **Peek** definition in a popup (don't leave your spot) |
-| `Shift+F12` | Find all references (Telescope) |
-| `grr` | Same — vim style |
-| `gri` | Go to implementation |
+| `Shift+F12` / `grr` | Find all references (Telescope) |
+| `gri` | Go to implementation (in-place) |
 | `grD` | Go to declaration |
 | `grt` | Go to type definition |
-| `Ctrl+O` | Jump **back** in your tag stack (after `gd`) |
+| `Ctrl+O` | Jump **back** in your tag stack (after `gd`/`gD`) |
 | `Ctrl+I` | Jump forward |
+
+> **Reading the actual stdlib source**: put your cursor on `fmt.Println` (Go),
+> `std.debug.print` (Zig), or any function, press **`gD`** — the real source
+> file opens in a split on the right. Press `Ctrl+W C` to close the split
+> when done, or `Ctrl+O` to jump back.
 
 ### Refactoring & info
 
@@ -530,6 +573,14 @@ each language. Give it a few seconds the first time.
 | `Ctrl+K` | Signature help (while typing a function call) |
 | `<Space>ti` | Toggle inlay hints (types/params inline) |
 
+> **Lightbulb**: a  icon appears in the gutter whenever a code action
+> (quick fix) is available at your cursor — you don't have to guess when to
+> press `Ctrl+.`. Powered by `nvim-lightbulb`.
+
+> **Rainbow brackets**: matching bracket pairs are colorized
+> (red/yellow/blue/orange/green/violet/cyan) for easy nesting visibility —
+> VSCode's "Bracket Pair Colorization". Powered by `rainbow-delimiters.nvim`.
+
 ### Document & workspace symbols
 
 | Key | Action |
@@ -538,7 +589,7 @@ each language. Give it a few seconds the first time.
 | `Ctrl+T` | Workspace symbols |
 | `gO` | Document symbols (Telescope) |
 | `gW` | Workspace symbols (Telescope) |
-| `<Space>o` | Toggle the symbols outline panel (right side) |
+| `<Space>o` | Toggle the symbols outline panel (right side, `outline.nvim`) |
 
 ### Diagnostics (errors/warnings)
 
@@ -665,7 +716,8 @@ Powered by `toggleterm.nvim`. Default direction is **floating** (your pick).
 
 | Key | Action |
 |-----|--------|
-| `Ctrl+Shift+\`` | Toggle floating terminal |
+| **`Cmd+J`** (macOS) | Toggle floating terminal — seamless open/close |
+| `Ctrl+Shift+\`` | Toggle floating terminal (fallback) |
 | `<Space>tf` | Floating terminal (explicit) |
 | `<Space>tV` | Vertical terminal (sidebar) |
 | `<Space>th` | Horizontal terminal (bottom pane, like VSCode) |
@@ -799,21 +851,21 @@ Sessions auto-save on exit. To disable for a particular session, use
 
 ## 18. Themes
 
-Default is **Tokyo Night** (your pick). Several more are installed.
+Default is **Catppuccin Mocha**. Several more are installed.
 
 | Key | Theme |
 |-----|-------|
 | `<Space>tt` | Live picker (preview as you arrow through) |
-| `<Space>to` | Tokyo Night (default) |
+| `<Space>tc` | Catppuccin (Mocha) — **default** |
+| `<Space>to` | Tokyo Night |
 | `<Space>tv` | VSCode |
-| `<Space>tc` | Catppuccin (Mocha) |
 | `<Space>tg` | Gruvbox |
 | `<Space>tD` | Dracula |
 | `<Space>tn` | Nord |
 
 To make a different theme the default, edit
-`lua/plugins/colorscheme.lua` — change the `vim.cmd.colorscheme 'tokyonight'`
-line near the top of the tokyonight config block.
+`lua/plugins/colorscheme.lua` — move the `vim.cmd.colorscheme 'catppuccin'`
+line to your preferred theme's config block.
 
 ---
 
@@ -851,12 +903,55 @@ Run `:Mason` to open the UI.
 ### What's pre-configured
 
 LSP servers (auto-install on first file open):
-`ts_ls`, `gopls`, `pyright`, `rust_analyzer`, `clangd`, `html`, `cssls`,
-`jsonls`, `yamlls`, `lemminx`, `dockerls`, `bashls`, `marksman`, `lua_ls`.
 
-Formatters/linters (auto-install via `mason-tool-installer`):
-`stylua`, `prettier`, `black`, `shfmt`, `gofumpt`, `rustfmt`, `eslint_d`,
-`flake8`, `shellcheck`, `luacheck`.
+| Server | Language(s) |
+|--------|------------|
+| `ts_ls` | TypeScript, JavaScript, React, React Native, NestJS |
+| `gopls` | Go |
+| `zls` | Zig |
+| `rust_analyzer` | Rust |
+| `intelephense` | PHP / Laravel |
+| `volar` | Vue |
+| `svelte` | Svelte |
+| `prismals` | Prisma (NestJS / React Native backends) |
+| `graphql` | GraphQL |
+| `tailwindls` | Tailwind CSS |
+| `pyright` | Python |
+| `clangd` | C / C++ |
+| `html` / `cssls` | HTML / CSS |
+| `jsonls` / `yamlls` | JSON / YAML (with schemastore) |
+| `dockerls` / `docker_compose_language_service` | Docker / Compose |
+| `bashls` | Bash / Shell |
+| `marksman` | Markdown |
+| `lua_ls` | Lua (Neovim config) |
+| `lemminx` | XML |
+
+Formatters (auto-install via `mason-tool-installer`, run on save via conform.nvim):
+
+| Language | Formatter(s) |
+|----------|-------------|
+| Lua | `stylua` |
+| JS/TS/JSX/TSX | `prettierd` → `prettier` (fallback) |
+| Go | `goimports` + `gofumpt` |
+| Zig | `zig fmt` |
+| Rust | `rustfmt` |
+| PHP | `php-cs-fixer` |
+| Blade | `blade-formatter` → `prettierd` |
+| Python | `isort` + `black` |
+| Vue / Svelte | `prettierd` |
+| GraphQL | `prettierd` |
+| HTML / CSS / SCSS / LESS | `prettierd` |
+| JSON / YAML | `prettierd` |
+| Markdown / MDX | `prettierd` |
+| Shell | `shfmt` |
+
+Linters (auto-install):
+`eslint_d`, `flake8`, `ruff`, `shellcheck`, `luacheck`, `phpstan`, `phpcs`,
+`golangci-lint`, `revive`, `staticcheck`, `markdownlint-cli2`, `jsonlint`,
+`yamllint`.
+
+Debuggers:
+`delve` (Go), `codelldb` (C/C++/Rust).
 
 ### Add a new LSP
 
@@ -1270,11 +1365,13 @@ directly with `nvim file.go` or `Ctrl+P` to skip it. To force it: `nvim +Dashboa
 │                                                                  │
 │  CODE                       GO TO                                │
 │  K        hover docs        F12 / gd   definition                │
-│  Ctrl+K   signature         Alt+F12    peek definition           │
-│  F2       rename symbol     Shift+F12  find references           │
-│  Ctrl+.   quick fix         Ctrl+O     jump back                 │
-│  <Space>ti inlay hints      Ctrl+Shift+O file symbols            │
-│  F8 / S-F8 prev/next diag   Ctrl+T     workspace symbols         │
+│  Ctrl+K   signature         gD          definition in vsplit     │
+│  F2       rename symbol     gH          definition in hsplit     │
+│  Ctrl+.   quick fix         Alt+F12     peek definition           │
+│   bulb    gutter = fix ready Shift+F12  find references           │
+│  <Space>ti inlay hints      Ctrl+O      jump back                 │
+│  F8 / S-F8 prev/next diag   Ctrl+Shift+O file symbols            │
+│  ()  rainbow brackets       Ctrl+T      workspace symbols         │
 │                                                                  │
 │  WINDOWS                    GIT                                  │
 │  Ctrl+\   split right       Ctrl+Shift+G  Neogit                 │
@@ -1283,10 +1380,10 @@ directly with `nvim file.go` or `Ctrl+P` to skip it. To force it: `nvim +Dashboa
 │  <Space>w= equalize         <Space>gb   toggle blame             │
 │                                                                  │
 │  TERMINAL                   DEBUG                                │
-│  Ctrl+Shift+` toggle        F5  start/continue                   │
-│  <Space>th bottom pane      F9  toggle breakpoint                │
-│  <Space>tV vertical split   F10 step over  F11 step into         │
-│  Esc Esc  exit insert       S-F11 step out   S-F5 stop           │
+│  Cmd+J    toggle (macOS)    F5  start/continue                   │
+│  Ctrl+Shift+` toggle        F9  toggle breakpoint                │
+│  <Space>th bottom pane      F10 step over  F11 step into         │
+│  <Space>tV vertical split   S-F11 step out   S-F5 stop           │
 │                                                                  │
 │  VIM SUPERPOWERS            PROJECT                              │
 │  .        repeat last change <Space>pp switch project            │
