@@ -25,5 +25,6 @@ return {
   { import = 'plugins.spectre' },
   { import = 'plugins.comment' },
   { import = 'plugins.indent-blankline' },
+  { import = 'plugins.colorizer' },
   { import = 'plugins.extra' },
 }
