@@ -162,7 +162,7 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 ## Installation
 
 ```sh
-git clone https://github.com/YOUR_USER/nvim-config.git ~/.config/nvim
+git clone https://github.com/tacheraSasi/0xVim.git ~/.config/nvim
 nvim --headless "+Lazy! sync" +qa
 ```
 

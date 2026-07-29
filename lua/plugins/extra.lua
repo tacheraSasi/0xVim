@@ -11,7 +11,7 @@ return {
     event = 'LspAttach',
     opts = {
       action_kinds = nil,
-      sign = { enabled = true, text = { hl = 'LightBulbSign', text = '' } },
+      sign = { enabled = true, text = '', hl = 'LightBulbSign' },
       float = { enabled = false },
       status_text = { enabled = false },
       number = { enabled = false },

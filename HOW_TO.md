@@ -75,7 +75,7 @@ Ghostty, etc.) — *not* in Neovim. Without it you'll see boxes instead of icons
 mv ~/.config/nvim ~/.config/nvim.bak 2>/dev/null
 
 # Clone this repo into place
-git clone <your-repo-url> ~/.config/nvim
+git clone https://github.com/tacheraSasi/0xVim.git ~/.config/nvim
 
 # First launch — plugins auto-install
 nvim
