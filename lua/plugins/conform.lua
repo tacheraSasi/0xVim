@@ -43,8 +43,8 @@ return {
       go = { 'goimports', 'gofumpt' },
       -- Rust
       rust = { 'rustfmt' },
-      -- Zig
-      zig = { 'zig' },
+      -- Zig (uses the system zig binary via zls, not Mason)
+      zig = { lsp_format = 'fallback' },
       -- PHP / Laravel / Blade
       php = { 'php-cs-fixer' },
       blade = { 'blade-formatter', 'prettierd', stop_after_first = true },
@@ -59,6 +59,13 @@ return {
       prisma = { 'prisma-format' },
       -- GraphQL
       graphql = { 'prettierd', 'prettier', stop_after_first = true },
+    },
+    formatters = {
+      zigfmt = {
+        command = 'zig',
+        args = { 'fmt', '--stdin' },
+        stdin = true,
+      },
     },
   },
 }
