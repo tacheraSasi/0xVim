@@ -212,14 +212,24 @@ nvim -O a.ts b.ts         # open in vertical splits
 nvim +"Telescope find_files"   # launch picker on startup
 ```
 
-### Saving
+### Creating files & directories
+
+Neovim doesn't need an explicit "new file" command — just open a path
+that doesn't exist and save it.
 
 | Key | Action |
 |-----|--------|
-| `Ctrl+S` | Save current file (works in insert mode too) |
-| `Ctrl+Shift+S` | Save all files |
-| `:w<CR>` | Vim-style save |
-| `:wa<CR>` | Save all |
+| `:e path/to/new/file.ts` | Create a buffer for a new file at that path |
+| `:w` | Save — **parent dirs are created automatically** (E212 fix) |
+| `Ctrl+N` | New untitled buffer |
+| `:w /full/path/to/file.ts` | Name & save an untitled buffer at a specific path |
+
+**Using the explorer** (neo-tree, right sidebar):
+- Focus it with `Ctrl+B` or `<Space>e`
+- Press `a` and type `path/to/new/file.ts` (neo-tree creates intermediate folders)
+- Press `A` to create a directory instead
+
+### Saving
 
 > **E212 "Can't open file for writing" — auto-fixed.**
 > Stock Neovim refuses to save a file when its parent directory doesn't exist
@@ -408,7 +418,20 @@ the right tool per filetype (prettier for JS/TS, stylua for Lua, gofumpt for
 Go, black for Python, etc.). You can disable this per-filetype in
 `lua/plugins/conform.lua` (the `disable_filetypes` table).
 
-### Selecting text (vim style — faster than the mouse)
+### Selecting & Deleting
+
+#### VSCode-style select + delete
+
+| Key | Action |
+|-----|--------|
+| `Shift+←/→/↑/↓` | Extend selection by char/line |
+| `Shift+Opt+←/→` | Extend selection by word |
+| `Shift+Cmd+←/→` | Extend selection to line start/end |
+| `Ctrl+A` | Select all |
+| `Ctrl+X` | Cut (visual mode) |
+| `Ctrl+D` | Add next cursor, then delete/del to remove |
+
+#### Vim-style selection (faster once learned)
 
 | Key | What it selects |
 |-----|-----------------|
@@ -421,8 +444,26 @@ Go, black for Python, etc.). You can disable this per-filetype in
 | `vap` | Select around paragraph |
 | `ggVG` | Select whole file (or `Ctrl+A`) |
 
-After selecting, press an operator: `d` (delete), `y` (copy), `c` (change),
-`>` (indent), `<` (outdent), `~` (toggle case).
+After selecting in visual mode, press:
+`d` or `x` — delete, `y` — copy (yank), `c` — change (delete + insert),
+`>` — indent, `<` — outdent, `~` — toggle case.
+
+#### Delete without selecting (normal mode)
+
+| Key | Action |
+|-----|--------|
+| `dd` | Delete current line |
+| `dw` | Delete to start of next word |
+| `d$` / `D` | Delete to end of line |
+| `d0` | Delete to start of line |
+| `x` | Delete character under cursor |
+| `X` | Delete character before cursor |
+| `dap` | Delete around paragraph |
+| `diw` | Delete inner word |
+| `Ctrl+Shift+K` | Delete line (VSCode-style) |
+
+To delete without saving to the clipboard (black-hole register): `"_dd`,
+`"_dw`, `"_d$`, etc.
 
 ---
 
@@ -742,6 +783,85 @@ Each call opens a new terminal. Use `:TermSelect` to pick which one to show.
 ---
 
 ## 15. Git Workflow
+
+### VSCode-style diff & changes sidebar (codediff)
+
+`codediff.nvim` gives you the exact VSCode Source-Control experience: a
+**sidebar listing every changed file**, and clicking one opens a
+**side-by-side diff** with character-level highlighting from VSCode's own
+diff algorithm.
+
+| Key | Action |
+|-----|--------|
+| **`Opt+Cmd+B`** (macOS) | Open the **changes sidebar** — all modified/staged/conflicted files |
+| `<Space>gd` | Same |
+| `<Space>gD` | Git **history** (list of commits, expand to files, `<CR>` to diff) |
+| `<Space>gf` | Diff **current file** against `HEAD` |
+
+#### Inside the changes sidebar
+
+| Key | Action |
+|-----|--------|
+| `<CR>` / `Enter` | Open the diff for the selected file (side-by-side) |
+| `j` / `k` | Move up/down — **the diff previews automatically** under the cursor |
+| `i` | Toggle flat list / tree view |
+| `S` | Stage all files |
+| `U` | Unstage all files |
+| `X` | Discard changes (restore file) |
+| `gu` / `gs` | Toggle the "Changes" / "Staged Changes" groups |
+| `K` | Hover — diff preview popup |
+| `R` | Refresh git status |
+| `q` | Close |
+
+Files show VSCode-style status letters (`M`/`A`/`D`) and **line counts**
+(`+12 -4`) in the sidebar.
+
+**AI-commit from here:** stage with `S` / `-`, then `<Space>ga` — the AI
+commit flow (aicommits) runs without leaving the panel.
+
+#### Inside a diff
+
+| Key | Action |
+|-----|--------|
+| `]c` / `[c` | Next / previous hunk (change) |
+| `]f` / `[f` | Next / previous file |
+| `t` | Toggle **side-by-side** / **inline** layout |
+| `gc` | Toggle compact mode (fold unchanged regions) |
+| `do` / `dp` | Get / put change (like vimdiff) |
+| `<Space>hs` / `<Space>hu` | Stage / unstage hunk under cursor |
+| `<Space>hr` | Discard hunk under cursor |
+| `-` | Stage / unstage the whole file |
+| `g?` | Help — every keymap in this view |
+| `q` | Close the diff tab |
+
+#### VSCode-style git diff from the command line
+
+```sh
+git difftool codediff     # view uncommitted changes in the diff view
+```
+
+(configured via `git config --global diff.tool codediff`)
+
+### AI commit messages (aicommits.nvim)
+
+Stage your changes, then let AI write the conventional-commit message.
+
+| Key | Action |
+|-----|--------|
+| `<Space>ga` | Generate commit message(s) from staged changes, pick one, commit |
+| `C` (in Neogit status) | Same, right from the Neogit buffer |
+
+**Works inside CodeDiff too** — open the changes sidebar (`Opt+Cmd+B`), stage
+files/hunks with `-` / `S`, then press `<Space>ga` right in the explorer or
+history panel to AI-commit.
+
+- Uses the **OpenCode Go** endpoint (`https://opencode.ai/zen/go/v1`) — no extra
+  API keys needed beyond your OpenCode key.
+- Set the key once in your shell profile:
+  `export OPENCODE_API_KEY=...` (never commit it to the repo).
+- Generates a single commit message option (`generate = 1` — OpenCode Go
+  only supports `n = 1`; see `lua/plugins/aicommits.lua`).
+- Diagnose with `:AICommitHealth`.
 
 ### Quick view
 
@@ -1374,16 +1494,23 @@ directly with `nvim file.go` or `Ctrl+P` to skip it. To force it: `nvim +Dashboa
 │  ()  rainbow brackets       Ctrl+T      workspace symbols         │
 │                                                                  │
 │  WINDOWS                    GIT                                  │
-│  Ctrl+\   split right       Ctrl+Shift+G  Neogit                 │
-│  Ctrl+H/J/K/L move focus    <Space>hs   stage hunk               │
-│  <Space>wd close win        ]c / [c     next/prev change         │
-│  <Space>w= equalize         <Space>gb   toggle blame             │
+│  Ctrl+\   split right       Opt+Cmd+B  changes sidebar (CodeDiff) │
+│  Ctrl+H/J/K/L move focus    <Space>gd   CodeDiff sidebar          │
+│  <Space>wd close win        <Space>gD   CodeDiff history          │
+│  <Space>w= equalize         <Space>gf   diff file vs HEAD         │
+│                             <Space>ga   AI commit message         │
+│                             <Space>hs   stage hunk               │
+│                             ]c / [c     next/prev change         │
+│  TERMINAL                   Ctrl+Shift+G Neogit                  │
+│  Cmd+J    toggle (macOS)    <Space>gb   toggle blame             │
+│  Ctrl+Shift+` toggle                                              │
+│  <Space>th bottom pane                                            │
+│  <Space>tV vertical split                                         │
 │                                                                  │
-│  TERMINAL                   DEBUG                                │
-│  Cmd+J    toggle (macOS)    F5  start/continue                   │
-│  Ctrl+Shift+` toggle        F9  toggle breakpoint                │
-│  <Space>th bottom pane      F10 step over  F11 step into         │
-│  <Space>tV vertical split   S-F11 step out   S-F5 stop           │
+│  DEBUG                                                           │
+│  F5  start/continue          F10 step over                       │
+│  F9  toggle breakpoint       F11 step into                       │
+│  S-F11 step out              S-F5 stop                           │
 │                                                                  │
 │  VIM SUPERPOWERS            PROJECT                              │
 │  .        repeat last change <Space>pp switch project            │
