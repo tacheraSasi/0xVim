@@ -40,9 +40,10 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 │       ├── spectre.lua         # Search & replace across files
 │       ├── codediff.lua        # VSCode-style git diff & changes sidebar
 │       ├── aicommits.lua       # AI commit messages (OpenCode Go)
+│       ├── snacks.lua          # QoL: smooth scroll, zen mode, lazygit, images
+│       ├── tailwind-tools.lua  # Tailwind CSS intellisense
 │       ├── project.lua         # Project management
 │       ├── colorscheme.lua     # Color schemes & theme switcher
-│       ├── indent-blankline.lua # Indentation guides
 │       └── extra.lua           # DAP, neogit, outline, multicursor
 └── lazy-lock.json              # Plugin lockfile
 ```
@@ -131,6 +132,8 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 | `<space>gD` | CodeDiff: git history |
 | `<space>gf` | CodeDiff: current file vs HEAD |
 | `<space>ga` | AI commit message (aicommits via OpenCode Go) |
+| `<space>lg` | Lazygit in a floating window |
+| `<space>uz` | Toggle zen mode (distraction-free) |
 | `<space>gb` | Toggle git blame |
 | `<space>pp` | Project switcher |
 | `<space>qs` / `<space>ql` / `<space>qd` | Restore / restore last / stop session |

@@ -38,9 +38,10 @@ along in your editor. Every key combo below is something you can press right now
 19. [Plugin Manager (Lazy)](#19-plugin-manager-lazy)
 20. [LSP & Formatter Installer (Mason)](#20-lsp--formatter-installer-mason)
 21. [Vim Superpowers (beyond VSCode)](#21-vim-superpowers-beyond-vscode)
-22. [Customizing the Config](#22-customizing-the-config)
-23. [Troubleshooting](#23-troubleshooting)
-24. [Cheat Sheet (print this)](#24-cheat-sheet-print-this)
+22. [Quality-of-Life: Snacks & Tailwind](#22-quality-of-life-snacks--tailwind)
+23. [Customizing the Config](#23-customizing-the-config)
+24. [Troubleshooting](#24-troubleshooting)
+25. [Cheat Sheet (print this)](#25-cheat-sheet-print-this)
 
 ---
 
@@ -1272,7 +1273,47 @@ cursor. Type the number + a motion to jump: `12j` (down 12), `7k` (up 7),
 
 ---
 
-## 22. Customizing the Config
+## 22. Quality-of-Life: Snacks & Tailwind
+
+### Snacks.nvim (smooth scrolling, zen mode, lazygit, images)
+
+`folke/snacks.nvim` bundles several small quality-of-life features:
+
+- **Smooth scrolling** — `Ctrl+U` / `Ctrl+D`, `gg` / `G`, fold toggles and more animate
+  smoothly instead of jumping.
+- **Zen mode** (`<Space>uz`) — hides everything except your code. Press again to exit.
+- **Lazygit** (`<Space>lg`) — the popular TUI git client in a floating window.
+  Requires the `lazygit` binary (installed via Homebrew).
+- **Image previews** — PNG / JPG / GIF / WEBP / PDF etc. render inline in the buffer
+  (works in Ghostty, kitty and WezTerm).
+- **Indent guides** — replaced indent-blankline; same `│` guides with scope
+  highlighting.
+- **Big file mode** — buffers larger than 1.5 MB automatically disable treesitter
+  and folding so they stay snappy.
+- **Word references** — `]]` / `[[` jump between LSP references of the word under
+  the cursor, like VSCode's reference navigation.
+- **Quickfile** — files opened from the command line render instantly, before
+  plugins finish loading.
+
+### Tailwind CSS tools (tailwind-tools.nvim)
+
+VSCode-style Tailwind intellisense for Neovim:
+
+- **Color hints** — inline color swatches next to Tailwind color classes
+  (`TailwindColorToggle` to toggle).
+- **Class motions** — `TailwindNextClass` / `TailwindPrevClass` jump between class
+  attributes in the buffer.
+- **Smart increment** — `<C-a>` / `<C-x>` cycle Tailwind unit values (`p-2` → `p-4`).
+- **Class sorting** — `TailwindSort` / `TailwindSortSelection` sort classes without
+  needing the prettier Tailwind plugin.
+- **Class previewer** — `:Telescope tailwind classes` (jump to classes in the file)
+  and `:Telescope tailwind utilities` (browse all utility classes in the project).
+- **Conceal** — `TailwindConcealToggle` hides long class lists behind a single icon.
+
+Requires `tailwindcss-language-server` (installed via Mason) plus the `html`, `css`
+and `tsx` treesitter parsers — all pre-configured.
+
+## 23. Customizing the Config
 
 ### Where things live
 
@@ -1349,7 +1390,7 @@ local disable_filetypes = { c = true, cpp = true, rust = true }
 
 ---
 
-## 23. Troubleshooting
+## 24. Troubleshooting
 
 ### "I see boxes/tofu instead of icons"
 
@@ -1461,7 +1502,7 @@ directly with `nvim file.go` or `Ctrl+P` to skip it. To force it: `nvim +Dashboa
 
 ---
 
-## 24. Cheat Sheet (print this)
+## 25. Cheat Sheet (print this)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
