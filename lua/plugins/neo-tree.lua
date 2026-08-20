@@ -31,7 +31,7 @@ return {
     { '<C-S-e>', '<cmd>Neotree focus filesystem right<CR>', desc = 'Focus file explorer', silent = true },
   },
   opts = {
-    close_if_last_window = true,
+    close_if_last_window = false,
     popup_border_style = 'rounded',
     enable_git_status = true,
     enable_diagnostics = true,
