@@ -252,6 +252,17 @@ return {
       tailwindls = 'tailwindcss-language-server',
       ts_ls = 'typescript-language-server',
       docker_compose_language_service = 'docker-compose-language-service',
+      volar = 'vue-language-server',
+      lua_ls = 'lua-language-server',
+      graphql = 'graphql-language-service-cli',
+      prismals = 'prisma-language-server',
+      bashls = 'bash-language-server',
+      cssls = 'css-lsp',
+      dockerls = 'dockerfile-language-server',
+      html = 'html-lsp',
+      jsonls = 'json-lsp',
+      yamlls = 'yaml-language-server',
+      svelte = 'svelte-language-server',
     }
     local ensure_installed = {}
     for server_name, _ in pairs(servers) do
@@ -259,7 +270,7 @@ return {
     end
     vim.list_extend(ensure_installed, {
       'stylua', 'prettier', 'prettierd', 'black', 'isort', 'shfmt', 'gofumpt',
-      'goimports', 'golines', 'rustfmt', 'zig',
+      'goimports', 'golines', 'rustfmt',
       'eslint_d', 'flake8', 'ruff', 'shellcheck', 'luacheck',
       'php-cs-fixer', 'phpstan', 'phpcs', 'phpcbf',
       'golangci-lint', 'revive', 'staticcheck',
