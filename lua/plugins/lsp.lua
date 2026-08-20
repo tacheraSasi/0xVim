@@ -108,6 +108,17 @@ return {
 
     local capabilities = require('blink.cmp').get_lsp_capabilities()
 
+    vim.lsp.config('tailwindcss', {
+      filetypes = { 'html', 'typescriptreact', 'javascriptreact', 'javascript', 'typescript', 'vue', 'svelte', 'php', 'blade' },
+      settings = {
+        tailwindCSS = {
+          classAttributes = { 'class', 'className', 'class:list', 'classList', 'ngClass' },
+          includeLanguages = { eelixir = 'html', eruby = 'html' },
+          lint = { cssConflict = 'warning', invalidApply = 'error', invalidScreen = 'error', invalidVariant = 'error', invalidConfigPath = 'error', invalidTailwindDirective = 'error', recommendedVariantOrder = 'warning' },
+        },
+      },
+    })
+
     local servers = {
       ts_ls = {
         settings = {
@@ -179,20 +190,6 @@ return {
       },
       html = {},
       cssls = {},
-      tailwindls = {
-        filetypes = { 'html', 'typescriptreact', 'javascriptreact', 'javascript', 'typescript', 'vue', 'svelte', 'php', 'blade' },
-        root_dir = function(fname)
-          local util = require 'lspconfig.util'
-          return util.root_pattern('tailwind.config.js', 'tailwind.config.ts', 'tailwind.config.mjs', 'tailwind.config.cjs')(fname)
-        end,
-        settings = {
-          tailwindCSS = {
-            classAttributes = { 'class', 'className', 'class:list', 'classList', 'ngClass' },
-            includeLanguages = { eelixir = 'html', eruby = 'html' },
-            lint = { cssConflict = 'warning', invalidApply = 'error', invalidScreen = 'error', invalidVariant = 'error', invalidConfigPath = 'error', invalidTailwindDirective = 'error', recommendedVariantOrder = 'warning' },
-          },
-        },
-      },
       jsonls = {
         settings = {
           json = { schemas = require('schemastore').json.schemas(), validate = { enable = true } },
@@ -276,6 +273,7 @@ return {
       'golangci-lint', 'revive', 'staticcheck',
       'markdownlint-cli2', 'jsonlint', 'yamllint',
       'codelldb', 'delve',
+      'tailwindcss-language-server',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 

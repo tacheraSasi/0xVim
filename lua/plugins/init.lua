@@ -26,7 +26,8 @@ return {
   { import = 'plugins.comment' },
   { import = 'plugins.codediff' },
   { import = 'plugins.aicommits' },
-  { import = 'plugins.indent-blankline' },
+  { import = 'plugins.snacks' },
+  { import = 'plugins.tailwind-tools' },
   { import = 'plugins.colorizer' },
   { import = 'plugins.extra' },
 }
