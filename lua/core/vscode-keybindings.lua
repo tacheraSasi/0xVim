@@ -176,7 +176,33 @@ vscode_map('v', '<C-[>', '<gv', { desc = 'Outdent Selection' })
 -- Editor tabs (buffers)
 vscode_map('n', '<C-Tab>', '<cmd>bnext<CR>', { desc = 'Next Editor' })
 vscode_map('n', '<C-S-Tab>', '<cmd>bprevious<CR>', { desc = 'Previous Editor' })
-vscode_map('n', '<C-S-w>', '<cmd>bd<CR>', { desc = 'Close Editor' })
+vscode_map('n', '<C-S-w>', function()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local buftype = vim.bo[bufnr].buftype
+  if buftype ~= '' then
+    vim.cmd('bd! ' .. bufnr)
+    return
+  end
+  local real_buffers = 0
+  for _, b in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_loaded(b) and vim.bo[b].buftype == '' and vim.bo[b].filetype ~= '' then
+      real_buffers = real_buffers + 1
+    end
+  end
+  if real_buffers <= 1 then
+    vim.cmd('bd ' .. bufnr)
+    local ok = pcall(vim.cmd, 'Dashboard')
+    if not ok then vim.cmd('enew') end
+  else
+    local prev_buf = vim.fn.bufnr('#')
+    if prev_buf > 0 and vim.api.nvim_buf_is_loaded(prev_buf) and prev_buf ~= bufnr then
+      vim.cmd('buffer ' .. prev_buf)
+      vim.cmd('bd ' .. bufnr)
+    else
+      vim.cmd('bd ' .. bufnr)
+    end
+  end
+end, { desc = 'Close Editor (smart)' })
 vscode_map('n', '<C-S-n>', '<cmd>tabnew<CR>', { desc = 'New Window' })
 vscode_map('n', '<C-S-t>', '<cmd>e #<CR>', { desc = 'Reopen Closed Editor' })
 
