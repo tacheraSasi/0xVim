@@ -49,6 +49,8 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 │       ├── rustaceanvim.lua    # Rust-analyzer extras
 │       ├── crates.lua          # Cargo.toml crate management
 │       ├── gopher.lua          # Go tools (tags, iferr, tests)
+│       ├── scrollbar.lua       # Scrollbar with diagnostics/git/search marks
+│       ├── smear-cursor.lua    # Animated cursor trail (Neovide-style)
 │       ├── project.lua         # Project management
 │       ├── colorscheme.lua     # Color schemes & theme switcher
 │       └── extra.lua           # DAP, neogit, outline, multicursor

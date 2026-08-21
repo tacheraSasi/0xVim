@@ -1314,6 +1314,22 @@ VSCode-style Tailwind intellisense for Neovim:
 Requires `tailwindcss-language-server` (installed via Mason) plus the `html`, `css`
 and `tsx` treesitter parsers — all pre-configured.
 
+### Animated cursor (smear-cursor.nvim)
+
+The cursor leaves a smooth animated trail when moving — the Neovide effect in
+any terminal. Enabled by default (normal + insert mode, buffer switches, and
+scrolling included).
+
+- Toggle with `:SmearCursorToggle`
+- Tune speed/stiffness in `lua/plugins/smear-cursor.lua` (`stiffness`,
+  `trailing_stiffness`, `distance_stop_animating`, …)
+
+### Search marks on the scrollbar (hlslens)
+
+Search matches (`/`, `?`, `*`, `#`) now show as `≡` marks on the scrollbar, and
+hlslens displays a VSCode-style **match counter** (e.g. `3/14`) next to the
+search line. `n` / `N` jump between them as usual.
+
 ## 23. Language Tooling: Lint, Tests & Per-Language Extras
 
 ### Linting (nvim-lint)
