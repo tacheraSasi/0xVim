@@ -36,6 +36,7 @@ return {
   { import = 'plugins.markview' },
   { import = 'plugins.yanky' },
   { import = 'plugins.scrollbar' },
+  { import = 'plugins.smear-cursor' },
   { import = 'plugins.eyeliner' },
   { import = 'plugins.dressing' },
   { import = 'plugins.lint' },
