@@ -34,4 +34,13 @@ return {
   opts = {
     features = { pickers = { provider = 'telescope' } },
   },
+  config = function(_, opts)
+    require('laravel').setup(opts)
+    local ok, blink = pcall(require, 'blink.cmp')
+    if ok then
+      blink.add_filetype_source('php', 'laravel')
+      blink.add_filetype_source('blade', 'laravel')
+      blink.add_filetype_source('tinker', 'laravel')
+    end
+  end,
 }

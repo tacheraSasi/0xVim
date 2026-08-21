@@ -32,8 +32,11 @@ return {
       trigger = { prefetch_on_insert = false, show_in_snippet = true, show_on_keyword = true },
     },
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'lazydev', 'laravel' },
-      providers = { lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 } },
+      default = { 'lsp', 'path', 'snippets', 'lazydev' },
+      providers = {
+        lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+        laravel = { module = 'laravel.extensions.completion.blink' },
+      },
     },
     cmdline = { sources = { default = { 'path', 'cmdline' } } },
     snippets = { preset = 'luasnip' },
