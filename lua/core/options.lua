@@ -5,6 +5,10 @@ vim.o.showmode = false
 vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
 end)
+
+-- Make Mason-installed binaries (formatters, linters, debug adapters,
+-- Go tools) resolvable from Neovim.
+vim.env.PATH = vim.fn.stdpath('data') .. '/mason/bin:' .. vim.env.PATH
 vim.o.breakindent = true
 vim.o.undofile = true
 vim.o.ignorecase = true

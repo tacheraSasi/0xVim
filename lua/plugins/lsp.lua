@@ -58,6 +58,16 @@ return {
           if ok then navic.attach(client, event.buf) end
         end
 
+        vim.api.nvim_create_autocmd({ 'CursorMoved', 'BufWinEnter' }, {
+          group = vim.api.nvim_create_augroup('navic-winbar', { clear = true }),
+          callback = function()
+            local ok, navic = pcall(require, 'nvim-navic')
+            if ok and navic.is_available() then
+              vim.wo.winbar = navic.get_location()
+            end
+          end,
+        })
+
         local function client_supports_method(client, method, bufnr)
           if vim.fn.has 'nvim-0.11' == 1 then
             return client:supports_method(method, bufnr)
@@ -108,6 +118,12 @@ return {
 
     local capabilities = require('blink.cmp').get_lsp_capabilities()
 
+    -- mason-lspconfig v2 enables installed servers natively via vim.lsp.enable;
+    -- custom settings must be registered through vim.lsp.config to apply.
+    vim.lsp.config('*', {
+      capabilities = capabilities,
+    })
+
     vim.lsp.config('tailwindcss', {
       filetypes = { 'html', 'typescriptreact', 'javascriptreact', 'javascript', 'typescript', 'vue', 'svelte', 'php', 'blade' },
       settings = {
@@ -119,129 +135,90 @@ return {
       },
     })
 
+    vim.lsp.config('gopls', {
+      settings = {
+        gopls = {
+          completeUnimported = true, usePlaceholders = true,
+          analyses = { unusedparams = true, shadow = true },
+          staticcheck = true, gofumpt = true,
+        },
+      },
+    })
+
+    vim.lsp.config('pyright', {
+      settings = {
+        python = {
+          analysis = { autoImportCompletions = true, typeCheckingMode = 'basic', useLibraryCodeForTypes = true },
+        },
+      },
+    })
+
+    vim.lsp.config('clangd', {
+      settings = {
+        clangd = {
+          compilationDatabase = './build',
+          fallbackFlags = { '-std=c++17' },
+          inlayHints = { enabled = true, parameterNames = true, deducedTypes = true },
+        },
+      },
+    })
+
+    vim.lsp.config('zls', {
+      settings = {
+        zls = {
+          enable_inlay_hints = true,
+          inlay_hints_show_builtin = true,
+          inlay_hints_exclude_single_argument = false,
+          inlay_hints_hide_redundant_param_names = false,
+          inlay_hints_hide_redundant_param_names_last_token = false,
+        },
+      },
+    })
+
+    vim.lsp.config('jsonls', {
+      settings = {
+        json = { schemas = require('schemastore').json.schemas(), validate = { enable = true } },
+      },
+    })
+
+    vim.lsp.config('yamlls', {
+      settings = {
+        yaml = {
+          schemas = {
+            ['https://json.schemastore.org/github-workflow.json'] = '/.github/workflows/*',
+            ['https://json.schemastore.org/github-action.json'] = '/action.{yml,yaml}',
+            ['https://json.schemastore.org/docker-compose.json'] = '/*docker-compose*.{yml,yaml}',
+            ['https://json.schemastore.org/kustomization.json'] = '/kustomization.{yml,yaml}',
+            ['https://json.schemastore.org/prettierrc.json'] = '/.prettierrc.{yml,yaml}',
+            ['https://json.schemastore.org/dependabot-v2.json'] = '/.github/dependabot.{yml,yaml}',
+          },
+        },
+      },
+    })
+
+    vim.lsp.config('lua_ls', {
+      settings = {
+        Lua = { completion = { callSnippet = 'Replace' } },
+      },
+    })
+
+    vim.lsp.config('intelephense', {
+      settings = {
+        intelephense = {
+          format = { braces = 'k&r' },
+          environment = { includePaths = { 'vendor/**' } },
+          files = { maxSize = 5000000 },
+          completion = { maxItems = 100, fullyQualifyGlobalConstantsAndFunctions = true },
+          diagnostics = { enable = true, run = 'onType' },
+        },
+      },
+    })
+
     local servers = {
-      ts_ls = {
-        settings = {
-          typescript = {
-            suggest = { completeFunctionCalls = true },
-            inlayHints = {
-              includeInlayParameterNameHints = "all",
-              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayVariableTypeHints = true,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayEnumMemberValueHints = true,
-            },
-          },
-          javascript = {
-            suggest = { completeFunctionCalls = true },
-            inlayHints = {
-              includeInlayParameterNameHints = "all",
-              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayVariableTypeHints = true,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayEnumMemberValueHints = true,
-            },
-          },
-        },
-      },
-      gopls = {
-        settings = {
-          gopls = {
-            completeUnimported = true, usePlaceholders = true,
-            analyses = { unusedparams = true, shadow = true },
-            staticcheck = true, gofumpt = true,
-          },
-        },
-      },
-      pyright = {
-        settings = {
-          python = {
-            analysis = { autoImportCompletions = true, typeCheckingMode = "basic", useLibraryCodeForTypes = true },
-          },
-        },
-      },
-      rust_analyzer = {
-        settings = {
-          ["rust-analyzer"] = {
-            checkOnSave = { command = "clippy" },
-            imports = { granularity = { group = "module" }, prefix = "self" },
-            cargo = { buildScripts = { enable = true } },
-            procMacro = { enable = true },
-          },
-        },
-      },
-      clangd = {
-        settings = { clangd = { compilationDatabase = "./build", fallbackFlags = { "-std=c++17" } } },
-      },
-      zls = {
-        settings = {
-          zls = {
-            enable_inlay_hints = true,
-            inlay_hints_show_builtin = true,
-            inlay_hints_exclude_single_argument = false,
-            inlay_hints_hide_redundant_param_names = false,
-            inlay_hints_hide_redundant_param_names_last_token = false,
-          },
-        },
-      },
-      html = {},
-      cssls = {},
-      jsonls = {
-        settings = {
-          json = { schemas = require('schemastore').json.schemas(), validate = { enable = true } },
-        },
-      },
-      yamlls = {
-        settings = {
-          yaml = {
-            schemas = {
-              ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-              ["https://json.schemastore.org/github-action.json"] = "/action.{yml,yaml}",
-              ["https://json.schemastore.org/docker-compose.json"] = "/*docker-compose*.{yml,yaml}",
-              ["https://json.schemastore.org/kustomization.json"] = "/kustomization.{yml,yaml}",
-              ["https://json.schemastore.org/prettierrc.json"] = "/.prettierrc.{yml,yaml}",
-              ["https://json.schemastore.org/dependabot-v2.json"] = "/.github/dependabot.{yml,yaml}",
-            },
-          },
-        },
-      },
-      lemminx = {},
-      dockerls = {},
-      bashls = {},
-      marksman = {},
-      lua_ls = {
-        settings = {
-          Lua = { completion = { callSnippet = 'Replace' } },
-        },
-      },
-      -- PHP / Laravel
-      intelephense = {
-        settings = {
-          intelephense = {
-            format = { braces = 'k&r' },
-            environment = { includePaths = { 'vendor/**' } },
-            files = { maxSize = 5000000 },
-            completion = { maxItems = 100, fullyQualifyGlobalConstantsAndFunctions = true },
-            diagnostics = { enable = true, run = 'onType' },
-          },
-        },
-      },
-      -- Vue (often used alongside Laravel + React)
-      volar = {
-        filetypes = { 'vue' },
-      },
-      -- Svelte
-      svelte = {},
-      -- Prisma (used in NestJS)
-      prismals = {},
-      -- GraphQL (used in NestJS / React)
-      graphql = {},
-      -- Docker Compose
-      docker_compose_language_service = {},
+      'ts_ls', 'gopls', 'pyright', 'rust_analyzer', 'clangd', 'zls', 'html',
+      'cssls', 'jsonls', 'yamlls', 'lemminx', 'dockerls', 'bashls', 'marksman',
+      'lua_ls', 'intelephense', 'volar', 'svelte', 'prismals', 'graphql',
+      'docker_compose_language_service',
     }
 
     -- Map lspconfig server names to Mason package names where they differ.
@@ -262,31 +239,26 @@ return {
       svelte = 'svelte-language-server',
     }
     local ensure_installed = {}
-    for server_name, _ in pairs(servers) do
+    for _, server_name in ipairs(servers) do
       table.insert(ensure_installed, lsp_to_mason[server_name] or server_name)
     end
     vim.list_extend(ensure_installed, {
       'stylua', 'prettier', 'prettierd', 'black', 'isort', 'shfmt', 'gofumpt',
-      'goimports', 'golines', 'rustfmt',
+      'goimports', 'golines', 'rustfmt', 'clang-format', 'blade-formatter',
       'eslint_d', 'flake8', 'ruff', 'shellcheck', 'luacheck',
       'php-cs-fixer', 'phpstan', 'phpcs', 'phpcbf',
       'golangci-lint', 'revive', 'staticcheck',
       'markdownlint-cli2', 'jsonlint', 'yamllint',
       'codelldb', 'delve',
       'tailwindcss-language-server',
+      'gomodifytags', 'gotests', 'impl', 'iferr',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
     require('mason-lspconfig').setup {
       ensure_installed = {},
       automatic_installation = false,
-      handlers = {
-        function(server_name)
-          local server = servers[server_name] or {}
-          server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-          require('lspconfig')[server_name].setup(server)
-        end,
-      },
+      automatic_enable = { exclude = { 'ts_ls', 'rust_analyzer' } },
     }
   end,
 },
