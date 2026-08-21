@@ -32,7 +32,7 @@ return {
       trigger = { prefetch_on_insert = false, show_in_snippet = true, show_on_keyword = true },
     },
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'lazydev' },
+      default = { 'lsp', 'path', 'snippets', 'lazydev', 'laravel' },
       providers = { lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 } },
     },
     cmdline = { sources = { default = { 'path', 'cmdline' } } },

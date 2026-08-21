@@ -1,5 +1,8 @@
 local augroup = vim.api.nvim_create_augroup('nvim-general', { clear = true })
 
+-- Laravel Blade templates: *.blade.php
+vim.filetype.add({ pattern = { ['.*%.blade%.php'] = 'blade' } })
+
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking text',
   group = augroup,
