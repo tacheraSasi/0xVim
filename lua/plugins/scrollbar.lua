@@ -1,6 +1,7 @@
 return {
   'petertriho/nvim-scrollbar',
   event = 'BufReadPost',
+  dependencies = { 'kevinhwang91/nvim-hlslens' },
   opts = {
     show_in_active_only = false,
     handle = { blend = 30 },
@@ -22,6 +23,7 @@ return {
     },
   },
   config = function(_, opts)
+    require('hlslens').setup()
     require('scrollbar').setup(opts)
     require('scrollbar.handlers.search').setup { override_lsp = true }
   end,
