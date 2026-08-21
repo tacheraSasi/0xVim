@@ -39,9 +39,10 @@ along in your editor. Every key combo below is something you can press right now
 20. [LSP & Formatter Installer (Mason)](#20-lsp--formatter-installer-mason)
 21. [Vim Superpowers (beyond VSCode)](#21-vim-superpowers-beyond-vscode)
 22. [Quality-of-Life: Snacks & Tailwind](#22-quality-of-life-snacks--tailwind)
-23. [Customizing the Config](#23-customizing-the-config)
-24. [Troubleshooting](#24-troubleshooting)
-25. [Cheat Sheet (print this)](#25-cheat-sheet-print-this)
+23. [Language Tooling: Lint, Tests & Per-Language Extras](#23-language-tooling-lint-tests--per-language-extras)
+24. [Customizing the Config](#24-customizing-the-config)
+25. [Troubleshooting](#25-troubleshooting)
+26. [Cheat Sheet (print this)](#26-cheat-sheet-print-this)
 
 ---
 
@@ -1313,7 +1314,110 @@ VSCode-style Tailwind intellisense for Neovim:
 Requires `tailwindcss-language-server` (installed via Mason) plus the `html`, `css`
 and `tsx` treesitter parsers — all pre-configured.
 
-## 23. Customizing the Config
+## 23. Language Tooling: Lint, Tests & Per-Language Extras
+
+### Linting (nvim-lint)
+
+Linters run automatically when you open, save, or leave insert mode:
+
+| Filetype | Linters |
+|----------|---------|
+| php | phpstan, phpcs |
+| javascript / typescript / vue | eslint_d |
+| go | golangci-lint |
+| python | ruff, flake8 |
+| sh / bash / zsh | shellcheck |
+| lua | luacheck |
+| yaml | yamllint |
+| markdown | markdownlint-cli2 |
+
+> PHPStan needs a `phpstan.neon` (or default level) in the project; ESLint needs
+> its usual `eslint.config.js` / `.eslintrc`. No config, no output — by design.
+
+### Testing (neotest)
+
+Works for PHPUnit (Laravel), Jest (TS/JS) and Go tests:
+
+| Key | Action |
+|-----|--------|
+| `<Space>nt` | Run nearest test (under cursor) |
+| `<Space>nT` | Run current test file |
+| `<Space>nR` | Run all tests in the project |
+| `<Space>ns` | Toggle test summary panel |
+| `<Space>no` | Show test output (enter to jump back) |
+
+Inside the summary panel use `j`/`k` to move and `o` to expand test results.
+
+### PHP / Laravel (laravel.nvim)
+
+Loads automatically in `php`/`blade` files. Keymap cheatsheet:
+
+| Key | Action |
+|-----|--------|
+| `<Space>ll` | Master picker (everything searchable) |
+| `<Space>la` | Artisan command picker |
+| `<Space>lr` | Routes list (jump to controller method) |
+| `<Space>lm` | `make:*` picker (models, controllers, migrations…) |
+| `<Space>lo` | Resources (Controllers / Models / Migrations / …) |
+| `<Space>lt` | Laravel code actions: `$fillable` generation, add relations, go-to-migration |
+| `<Space>lu` | Artisan Hub (serve / vite / pail / logs tabs) |
+| `<Space>lp` | Command Center (REPL with autocomplete) |
+| `gf` | Laravel-aware: `route('…')`, `view('…')`, `config('…')`, `env('…')`, `Inertia::render('…')` |
+
+Also included: virtual info above models (table/columns) and controller
+methods (route/method/middleware), blink.cmp completion for `route()` /
+`view()` / `config()` / `env()` / Eloquent columns, and `.tinker` files
+(side-by-side live PHP REPL). Environment: run `Laravel.commands.run("env:configure")`
+once per project if you use Sail/Docker instead of local php.
+
+### TypeScript / JavaScript (typescript-tools.nvim)
+
+Inlay hints (types, param names, enums), organize-imports code action on save,
+better rename/import handling — all via the tsserver setup.
+
+### Rust (rustaceanvim + crates.nvim)
+
+| Command | Action |
+|---------|--------|
+| `:RustLsp runnables` | Run/debug binaries and tests via DAP |
+| `:RustLsp debuggables` | Debug targets |
+| `:RustLsp expandMacro` | Expand macro under cursor |
+| `K` on hover | Extra hover actions (docs, open cargo.toml, source) |
+
+`crates.nvim` — in `Cargo.toml`: `K` on a dependency shows versions,
+`g?`-style keymaps let you bump/update versions inline.
+
+### Go (gopher.nvim)
+
+| Command | Action |
+|---------|--------|
+| `:GoTagAdd json` | Add struct tags (`:GoTagRm`, `:GoTagClear`) |
+| `:GoIfErr` | Generate `if err != nil` boilerplate |
+| `:GoFillStruct` / `:GoImpl` | Fill struct literal / implement interface |
+| `:GoJson` | Generate struct from JSON |
+| `:GoTestAdd` | Generate test scaffold for the function under cursor |
+
+### C / C++ / Zig
+
+- **clang-format** formats on save; clangd inlay hints enabled (types + param names).
+- **Zig**: zls inlay hints enabled; `zig fmt` runs on save.
+
+### Debugging (DAP) — new adapters
+
+| Language | Adapter | Notes |
+|----------|---------|-------|
+| TS / JS | js-debug-adapter (`pwa-node`) | Breakpoints in plain node apps |
+| PHP / Laravel | php-debug-adapter | Requires Xdebug listening on port 9003 |
+| Go | delve | pre-existing |
+| C / C++ / Rust / Zig | codelldb | pre-existing |
+
+Same keys as always: `F5` continue, `F9` breakpoint, `F10`/`F11` step, `<Space>du` UI.
+
+> **Mason PATH fix**: Mason-installed binaries (formatters, linters, debuggers)
+> are now on Neovim's `PATH` automatically — previously formatters like
+> prettierd/stylua were silently not running.
+
+## 24. Customizing the Config
 
 ### Where things live
 
@@ -1390,7 +1494,7 @@ local disable_filetypes = { c = true, cpp = true, rust = true }
 
 ---
 
-## 24. Troubleshooting
+## 25. Troubleshooting
 
 ### "I see boxes/tofu instead of icons"
 
@@ -1502,7 +1606,7 @@ directly with `nvim file.go` or `Ctrl+P` to skip it. To force it: `nvim +Dashboa
 
 ---
 
-## 25. Cheat Sheet (print this)
+## 26. Cheat Sheet (print this)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐

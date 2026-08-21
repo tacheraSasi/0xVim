@@ -42,6 +42,13 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 │       ├── aicommits.lua       # AI commit messages (OpenCode Go)
 │       ├── snacks.lua          # QoL: smooth scroll, zen mode, lazygit, images
 │       ├── tailwind-tools.lua  # Tailwind CSS intellisense
+│       ├── lint.lua            # Linting (phpstan, eslint, golangci-lint…)
+│       ├── neotest.lua         # Test runner (phpunit, jest, golang)
+│       ├── laravel.lua         # Laravel tooling (routes, artisan, tinker…)
+│       ├── typescript-tools.lua # TSServer features (inlay hints, imports)
+│       ├── rustaceanvim.lua    # Rust-analyzer extras
+│       ├── crates.lua          # Cargo.toml crate management
+│       ├── gopher.lua          # Go tools (tags, iferr, tests)
 │       ├── project.lua         # Project management
 │       ├── colorscheme.lua     # Color schemes & theme switcher
 │       └── extra.lua           # DAP, neogit, outline, multicursor
@@ -135,6 +142,11 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 | `<space>lg` | Lazygit in a floating window |
 | `<space>uz` | Toggle zen mode (distraction-free) |
 | `<space>gb` | Toggle git blame |
+| `<space>nt` / `<space>nT` / `<space>nR` | Test: nearest / file / all (neotest) |
+| `<space>ns` / `<space>no` | Test: summary / output |
+| `<space>ll` | Laravel master picker |
+| `<space>la` / `<space>lr` / `<space>lm` / `<space>lo` | Laravel: artisan / routes / make / resources |
+| `<space>lt` / `<space>lu` / `<space>lp` | Laravel: code actions / artisan hub / command center |
 | `<space>pp` | Project switcher |
 | `<space>qs` / `<space>ql` / `<space>qd` | Restore / restore last / stop session |
 | `<space>tt` | Theme picker |
