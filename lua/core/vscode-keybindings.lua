@@ -21,6 +21,10 @@ end
 -- File / Save
 vscode_map('n', '<C-s>', '<cmd>w<CR>', { desc = 'Save file' })
 vscode_map('i', '<C-s>', '<Esc><cmd>w<CR>a', { desc = 'Save file (insert)' })
+-- Cmd+S additionally exits insert mode (Vim muscle memory); Ctrl+S stays in insert.
+if vim.g.is_mac then
+  vim.keymap.set('i', '<D-s>', '<Esc><cmd>w<CR>', { desc = 'Save file and exit insert mode' })
+end
 vscode_map('n', '<C-S-s>', '<cmd>wa<CR>', { desc = 'Save all files' })
 
 -- Undo / Redo

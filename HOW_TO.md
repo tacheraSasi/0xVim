@@ -144,7 +144,8 @@ nvim
 1. **`Ctrl+P`** → type a few letters → `Enter` — open any file.
 2. **`Ctrl+B`** — toggle the file explorer on the right. Press again to close.
 3. **`i`** — enter insert mode. Type some junk. **`<Esc>`** — back to normal.
-4. **`Ctrl+S`** — save.
+4. **`Ctrl+S`** — save (stays in insert mode). On macOS, **`Cmd+S`** also saves
+   but leaves insert mode and returns to normal.
 5. **`Ctrl+D`** on a word — press 3 times. You now have 4 cursors. Type
    something — it edits all of them. **`<Esc>`** exits.
 6. **`<Space>`** — hesitate. Read the menu. Press `<Space>e`? Press `<Space>g`?

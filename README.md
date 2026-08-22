@@ -62,6 +62,7 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 | Key | Action |
 |-----|--------|
 | `Ctrl+S` | Save |
+| `Cmd+S` | Save & exit insert mode (macOS) |
 | `Ctrl+Shift+S` | Save all |
 | `Ctrl+Z` / `Ctrl+Y` | Undo / Redo |
 | `Ctrl+X` / `Ctrl+C` / `Ctrl+V` | Cut / Copy / Paste |
