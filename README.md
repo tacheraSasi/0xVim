@@ -109,7 +109,7 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 | `Alt+Z` | Toggle word wrap |
 | `F2` | Rename symbol |
 | `F12` | Go to definition |
-| `Shift+F12` | Find references |
+| `Shift+F12` / `gpr` | Find references in a popup (peek outside the file) |
 | `F8` / `Shift+F8` | Next / previous problem |
 | `F5` / `F9` / `F10` / `F11` | Debug: continue / breakpoint / step over / step into |
 | `Ctrl+. `, | Quick fix (code action) |
@@ -168,7 +168,8 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 | `grd` / `F12` | Go to definition |
 | `gD` | Go to definition in **vsplit** (read std source) |
 | `gH` | Go to definition in **hsplit** |
-| `grr` / `Shift+F12` | Find references |
+| `grr` | Find references (list) |
+| `gpr` / `Shift+F12` | Find references in popup |
 | `gri` / `gI` | Go to implementation (in-place / vsplit) |
 | `grn` / `F2` | Rename |
 | `gra` / `Ctrl+.` | Code action |

@@ -223,7 +223,7 @@ end, { desc = 'New Terminal' })
 -- LSP / Refactoring
 vscode_map('n', '<F2>', vim.lsp.buf.rename, { desc = 'Rename Symbol' })
 vscode_map('n', '<F12>', vim.lsp.buf.definition, { desc = 'Go to Definition' })
-vscode_map('n', '<S-F12>', function() require('telescope.builtin').lsp_references() end, { desc = 'Find References' })
+vscode_map('n', '<S-F12>', function() require('goto-preview').goto_preview_references() end, { desc = 'Find References (popup)' })
 vscode_map('n', '<C-t>', function() require('telescope.builtin').lsp_workspace_symbols() end, { desc = 'Go to Symbol' })
 vscode_map('n', '<C-S-o>', function() require('telescope.builtin').lsp_document_symbols() end, { desc = 'File Symbols' })
 vscode_map('n', '<C-S-r>', function() require('telescope.builtin').oldfiles() end, { desc = 'Recent Files' })

@@ -595,7 +595,8 @@ close with `<Esc>` or `q`.
 | **`gH`** | Open definition in **horizontal split** |
 | **`gI`** | Open implementation in **vertical split** (falls back to references when the server doesn't support implementations) |
 | `Alt+F12` | **Peek** definition in a popup (don't leave your spot) |
-| `Shift+F12` / `grr` | Find all references (Telescope) |
+| `Shift+F12` / `gpr` | Find all references in a **popup** (peek outside the file) |
+| `grr` | Find all references (Telescope list) |
 | `gri` | Go to implementation (in-place; falls back to references when unsupported) |
 | `grD` | Go to declaration |
 | `grt` | Go to type definition |
