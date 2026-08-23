@@ -593,10 +593,10 @@ close with `<Esc>` or `q`.
 | `F12` / `gd` | Go to definition (in-place) |
 | **`gD`** | Open definition in **vertical split** — see std source alongside your code |
 | **`gH`** | Open definition in **horizontal split** |
-| **`gI`** | Open implementation in **vertical split** |
+| **`gI`** | Open implementation in **vertical split** (falls back to references when the server doesn't support implementations) |
 | `Alt+F12` | **Peek** definition in a popup (don't leave your spot) |
 | `Shift+F12` / `grr` | Find all references (Telescope) |
-| `gri` | Go to implementation (in-place) |
+| `gri` | Go to implementation (in-place; falls back to references when unsupported) |
 | `grD` | Go to declaration |
 | `grt` | Go to type definition |
 | `Ctrl+O` | Jump **back** in your tag stack (after `gd`/`gD`) |

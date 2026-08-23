@@ -30,7 +30,14 @@ return {
         map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
         map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
         map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-        map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+        map('gri', function()
+          if #vim.lsp.get_clients({ bufnr = event.buf, method = 'textDocument/implementation' }) > 0 then
+            require('telescope.builtin').lsp_implementations()
+          else
+            vim.notify('Server does not support implementations — showing references instead', vim.log.levels.WARN)
+            require('telescope.builtin').lsp_references()
+          end
+        end, '[G]oto [I]mplementation')
         map('grd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
         map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
         map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
@@ -48,7 +55,12 @@ return {
           require('telescope.builtin').lsp_definitions { jump_type = 'split' }
         end, '[G]oto [D]efinition in hsplit')
         map('gI', function()
-          require('telescope.builtin').lsp_implementations { jump_type = 'vsplit' }
+          if #vim.lsp.get_clients({ bufnr = event.buf, method = 'textDocument/implementation' }) > 0 then
+            require('telescope.builtin').lsp_implementations { jump_type = 'vsplit' }
+          else
+            vim.notify('Server does not support implementations — showing references instead', vim.log.levels.WARN)
+            require('telescope.builtin').lsp_references()
+          end
         end, '[G]oto [I]mplementation in vsplit')
 
         local client = vim.lsp.get_client_by_id(event.data.client_id)
