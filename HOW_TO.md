@@ -1514,6 +1514,12 @@ local disable_filetypes = { c = true, cpp = true, rust = true }
 
 ## 25. Troubleshooting
 
+### Error log
+
+Every runtime error is appended to `~/.local/state/nvim/errors.log` with a
+timestamp and the directory you were in — if something misbehaves, check that
+file first, then restart Neovim and reproduce the error.
+
 ### "I see boxes/tofu instead of icons"
 
 Your terminal isn't using a Nerd Font. Install one:

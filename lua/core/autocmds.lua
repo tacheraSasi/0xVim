@@ -1,3 +1,22 @@
+-- Error log: record every runtime error with a timestamp and the current
+-- directory so nothing is lost between sessions.
+local error_log_path = vim.fn.stdpath('state') .. '/errors.log'
+local function append_error(msg)
+  if msg == nil or msg == '' then return end
+  local ok, file = pcall(io.open, error_log_path, 'a')
+  if not ok or not file then return end
+  file:write(('%s [%s] %s\n'):format(os.date('%Y-%m-%d %H:%M:%S'), vim.fn.getcwd(), msg))
+  file:close()
+end
+
+for _, name in ipairs({ 'nvim_err_writeln', 'nvim_err_write' }) do
+  local orig = vim.api[name]
+  vim.api[name] = function(msg, ...)
+    append_error(msg)
+    return orig(msg, ...)
+  end
+end
+
 local augroup = vim.api.nvim_create_augroup('nvim-general', { clear = true })
 
 -- Laravel Blade templates: *.blade.php
