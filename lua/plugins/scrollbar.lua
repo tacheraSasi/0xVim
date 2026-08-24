@@ -7,7 +7,7 @@ return {
     handle = { blend = 30 },
     marks = {
       Cursor = { text = '•' },
-      Search = { priority = 1, text = '≡' },
+      Search = { priority = 1, text = { '≡' } },
       Error = { priority = 2, text = { '-', '=' } },
       Warn = { priority = 2, text = { '-', '=' } },
       Info = { priority = 2, text = { '-', '=' } },
