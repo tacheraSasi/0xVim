@@ -83,7 +83,7 @@ return {
     },
     filesystem = {
       filtered_items = {
-        visible = false, hide_dotfiles = true, hide_gitignored = true,
+        visible = false, hide_dotfiles = false, hide_gitignored = false,
         hide_by_name = { 'node_modules' },
         never_show = { '.DS_Store', 'thumbs.db' },
       },
@@ -92,6 +92,7 @@ return {
       window = {
         mappings = {
           ['<bs>'] = 'navigate_up',
+          ['-'] = 'navigate_up',
           ['.'] = 'set_root',
           ['H'] = 'toggle_hidden',
           ['/'] = 'fuzzy_finder',

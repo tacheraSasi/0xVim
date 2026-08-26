@@ -287,8 +287,12 @@ When the explorer is focused, these keys act on the selected file/folder:
 | `R` | Refresh |
 | `H` | Toggle hidden files |
 | `/` | Fuzzy filter |
-| `<BS>` | Go up a directory |
+| `<BS>` / `-` | Go up a directory |
 | `.` | Set root here |
+
+Dotfiles (`.github`, `.gitignore`, …) are **visible by default**; `H` hides/shows
+them. Opening Neovim inside a subfolder roots the explorer there — press
+`<BS>` / `-` to climb out, or `.` on a folder to re-root the whole tree.
 | `]g` / `[g` | Next / previous git-modified file |
 | `q` | Close explorer |
 | `?` | Help (shows all keys) |
