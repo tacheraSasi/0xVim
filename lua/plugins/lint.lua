@@ -1,6 +1,6 @@
 return {
   'mfussenegger/nvim-lint',
-  event = { 'BufReadPost', 'BufWritePost', 'InsertLeave' },
+  event = { 'BufWritePost', 'InsertLeave' },
   config = function()
     local lint = require('lint')
     lint.linters_by_ft = {
@@ -19,9 +19,9 @@ return {
       yaml = { 'yamllint' },
       markdown = { 'markdownlint-cli2' },
     }
-    vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufWritePost', 'InsertLeave' }, {
+    vim.api.nvim_create_autocmd({ 'BufWritePost', 'InsertLeave' }, {
       callback = function()
-        require('lint').try_lint()
+        pcall(require('lint').try_lint)
       end,
     })
   end,
