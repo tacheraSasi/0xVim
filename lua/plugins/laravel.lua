@@ -35,6 +35,11 @@ return {
     features = { pickers = { provider = 'telescope' } },
   },
   config = function(_, opts)
+    -- Drop the lualine status poller (crashes when `artisan about` fails)
+    opts.providers = vim.tbl_filter(
+      function(p) return p ~= require('laravel.providers.status_provider') end,
+      require('laravel.options.default').providers
+    )
     require('laravel').setup(opts)
     local ok, blink = pcall(require, 'blink.cmp')
     if ok then
