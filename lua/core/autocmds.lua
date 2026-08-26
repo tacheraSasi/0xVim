@@ -30,6 +30,19 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Heavy-file mode: on very large buffers, turn off the animated smooth
+-- scroll — animating every wheel tick while everything else redraws causes
+-- visible flicker/glitching.
+vim.api.nvim_create_autocmd('BufReadPost', {
+  desc = 'Disable smooth scroll on very large files',
+  group = augroup,
+  callback = function(args)
+    if vim.api.nvim_buf_line_count(args.buf) > 5000 then
+      vim.b[args.buf].snacks_scroll = false
+    end
+  end,
+})
+
 -- Auto-create missing parent directories when saving a new file.
 -- Fixes E212: Can't open file for writing (e.g. :e newdir/file.go | :w).
 vim.api.nvim_create_autocmd('BufWritePre', {

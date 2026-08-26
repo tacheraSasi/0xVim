@@ -1546,6 +1546,12 @@ Every runtime error is appended to `~/.local/state/nvim/errors.log` with a
 timestamp and the directory you were in — if something misbehaves, check that
 file first, then restart Neovim and reproduce the error.
 
+### Large files
+
+Buffers over ~5000 lines automatically drop the fancy stuff that causes
+flicker while scrolling (animated smooth scrolling, the scrollbar). Everything
+re-enables on normal-sized files.
+
 ### "I see boxes/tofu instead of icons"
 
 Your terminal isn't using a Nerd Font. Install one:
