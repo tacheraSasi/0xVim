@@ -60,6 +60,7 @@ Install these first — the config depends on them.
 | **git** | Plugin manager + git features | `brew install git` |
 | **a Nerd Font** | Icons in the UI | `brew install --cask font-jetbrains-mono-nerd-font` |
 | **node** | TypeScript/JS LSP, formatters | `brew install node` |
+| **tree-sitter CLI** | Compiles syntax parsers (`TSInstall`) | `npm install -g tree-sitter-cli` |
 | **Python 3 + pip** | Python LSP, formatters | `brew install python` |
 | **Go** | Go LSP + tools | `brew install go` |
 | **Rust** | rust-analyzer + rustfmt | `brew install rustup` |
