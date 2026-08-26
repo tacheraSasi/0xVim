@@ -630,7 +630,7 @@ You don't need a key for the most common case — **accepting a completion
 auto-imports the symbol**:
 
 - **TS/JS** — `Tab`/`Enter` on a completion from an unimported module inserts
-  the `import { … }` line automatically (tsserver via typescript-tools).
+  the `import { … }` line automatically (tsserver via vtsls).
 - **Go** — completions from unimported packages appear in the menu; accepting
   one adds the import (gopls `completeUnimported`). `goimports` also fixes
   imports on every save.
@@ -1411,10 +1411,12 @@ methods (route/method/middleware), blink.cmp completion for `route()` /
 (side-by-side live PHP REPL). Environment: run `Laravel.commands.run("env:configure")`
 once per project if you use Sail/Docker instead of local php.
 
-### TypeScript / JavaScript (typescript-tools.nvim)
+### TypeScript / JavaScript (vtsls)
 
-Inlay hints (types, param names, enums), organize-imports code action on save,
-better rename/import handling — all via the tsserver setup.
+The real VSCode tsserver experience: inlay hints (types, param names, enums),
+auto-import quickfixes (`Ctrl+.`), organize-imports on save, rename across
+files, "Move to file" refactors. Uses your project's own `node_modules`
+typescript when present.
 
 ### Rust (rustaceanvim + crates.nvim)
 

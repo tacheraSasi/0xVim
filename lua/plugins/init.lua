@@ -41,7 +41,6 @@ return {
   { import = 'plugins.dressing' },
   { import = 'plugins.lint' },
   { import = 'plugins.neotest' },
-  { import = 'plugins.typescript-tools' },
   { import = 'plugins.rustaceanvim' },
   { import = 'plugins.crates' },
   { import = 'plugins.gopher' },

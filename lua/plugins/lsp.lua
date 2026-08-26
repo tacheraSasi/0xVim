@@ -76,13 +76,13 @@ return {
         map('<leader>ci', function()
           local buf = event.buf
           local clients = vim.lsp.get_clients { bufnr = buf }
-          local is_ts = false
+          local is_vtsls = false
           for _, c in ipairs(clients) do
-            if c.name == 'ts_ls' then is_ts = true end
+            if c.name == 'vtsls' then is_vtsls = true end
           end
-          if is_ts then
-            -- TS: remove unused + sort + add missing in one pass
-            pcall(require('typescript-tools.api').organize_imports, false)
+          if is_vtsls then
+            -- TS/JS: full pass via the real tsserver organize-imports command
+            pcall(vim.cmd, 'VtsExec organize_imports')
             return
           end
           -- Everything else (go, rust, python, …): source.organizeImports code action
@@ -98,6 +98,17 @@ return {
             end
           end
         end, 'Organize [I]mports')
+
+        map('<leader>cA', function()
+          local clients = vim.lsp.get_clients { bufnr = event.buf }
+          for _, c in ipairs(clients) do
+            if c.name == 'vtsls' then
+              pcall(vim.cmd, 'VtsExec add_missing_imports')
+              return
+            end
+          end
+          vim.notify('No TypeScript server attached here', vim.log.levels.INFO)
+        end, '[A]dd all missing imports')
 
         if client and client.server_capabilities.documentSymbolProvider then
           local ok, navic = pcall(require, 'nvim-navic')
@@ -177,6 +188,43 @@ return {
           classAttributes = { 'class', 'className', 'class:list', 'classList', 'ngClass' },
           includeLanguages = { eelixir = 'html', eruby = 'html' },
           lint = { cssConflict = 'warning', invalidApply = 'error', invalidScreen = 'error', invalidVariant = 'error', invalidConfigPath = 'error', invalidTailwindDirective = 'error', recommendedVariantOrder = 'warning' },
+        },
+      },
+    })
+
+    vim.lsp.config('vtsls', {
+      settings = {
+        vtsls = { autoUseWorkspaceTsdk = true },
+        -- Fallback TS SDK for projects without their own node_modules/typescript
+        typescript = {
+          tsdk = vim.fn.stdpath('data') .. '/mason/packages/typescript-language-server/node_modules/typescript/lib',
+        },
+        javascript = {
+          tsdk = vim.fn.stdpath('data') .. '/mason/packages/typescript-language-server/node_modules/typescript/lib',
+        },
+        typescript = {
+          suggest = { completeFunctionCalls = true },
+          inlayHints = {
+            includeInlayParameterNameHints = 'all',
+            includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+            includeInlayFunctionParameterTypeHints = true,
+            includeInlayVariableTypeHints = true,
+            includeInlayPropertyDeclarationTypeHints = true,
+            includeInlayFunctionLikeReturnTypeHints = true,
+            includeInlayEnumMemberValueHints = true,
+          },
+        },
+        javascript = {
+          suggest = { completeFunctionCalls = true },
+          inlayHints = {
+            includeInlayParameterNameHints = 'all',
+            includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+            includeInlayFunctionParameterTypeHints = true,
+            includeInlayVariableTypeHints = true,
+            includeInlayPropertyDeclarationTypeHints = true,
+            includeInlayFunctionLikeReturnTypeHints = true,
+            includeInlayEnumMemberValueHints = true,
+          },
         },
       },
     })
@@ -261,7 +309,7 @@ return {
     })
 
     local servers = {
-      'ts_ls', 'gopls', 'pyright', 'rust_analyzer', 'clangd', 'zls', 'html',
+      'vtsls', 'gopls', 'pyright', 'rust_analyzer', 'clangd', 'zls', 'html',
       'cssls', 'jsonls', 'yamlls', 'lemminx', 'dockerls', 'bashls', 'marksman',
       'lua_ls', 'intelephense', 'volar', 'svelte', 'prismals', 'graphql',
       'docker_compose_language_service',
@@ -304,7 +352,7 @@ return {
     require('mason-lspconfig').setup {
       ensure_installed = {},
       automatic_installation = false,
-      automatic_enable = { exclude = { 'ts_ls', 'rust_analyzer' } },
+      automatic_enable = { exclude = { 'rust_analyzer', 'ts_ls' } },
     }
   end,
 },

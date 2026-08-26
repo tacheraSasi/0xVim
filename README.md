@@ -45,7 +45,6 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 │       ├── lint.lua            # Linting (phpstan, eslint, golangci-lint…)
 │       ├── neotest.lua         # Test runner (phpunit, jest, golang)
 │       ├── laravel.lua         # Laravel tooling (routes, artisan, tinker…)
-│       ├── typescript-tools.lua # TSServer features (inlay hints, imports)
 │       ├── rustaceanvim.lua    # Rust-analyzer extras
 │       ├── crates.lua          # Cargo.toml crate management
 │       ├── gopher.lua          # Go tools (tags, iferr, tests)
