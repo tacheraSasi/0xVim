@@ -18,6 +18,8 @@ return {
     },
     spec = {
       { '<leader>b', group = '[B]uffer' },
+      { '<leader>c', group = '[C]ode' },
+      { '<leader>ci', desc = 'Organize imports' },
       { '<leader>d', group = '[D]ebug' },
       { '<leader>g', group = '[G]it' },
       { '<leader>gd', desc = 'CodeDiff: changes sidebar' },

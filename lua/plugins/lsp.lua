@@ -73,6 +73,32 @@ return {
 
         local client = vim.lsp.get_client_by_id(event.data.client_id)
 
+        map('<leader>ci', function()
+          local buf = event.buf
+          local clients = vim.lsp.get_clients { bufnr = buf }
+          local is_ts = false
+          for _, c in ipairs(clients) do
+            if c.name == 'ts_ls' then is_ts = true end
+          end
+          if is_ts then
+            -- TS: remove unused + sort + add missing in one pass
+            pcall(require('typescript-tools.api').organize_imports, false)
+            return
+          end
+          -- Everything else (go, rust, python, …): source.organizeImports code action
+          local offset_encoding = (client and client.offset_encoding) or 'utf-16'
+          local params = vim.lsp.util.make_range_params(0, offset_encoding)
+          params.context = { only = { 'source.organizeImports' }, diagnostics = {} }
+          local results = vim.lsp.buf_request_sync(buf, 'textDocument/codeAction', params, 1000)
+          for _, res in pairs(results or {}) do
+            for _, action in pairs(res.result or {}) do
+              if action.edit then
+                vim.lsp.util.apply_workspace_edit(action.edit, offset_encoding)
+              end
+            end
+          end
+        end, 'Organize [I]mports')
+
         if client and client.server_capabilities.documentSymbolProvider then
           local ok, navic = pcall(require, 'nvim-navic')
           if ok then navic.attach(client, event.buf) end

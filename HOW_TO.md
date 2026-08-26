@@ -621,7 +621,25 @@ close with `<Esc>` or `q`.
 | `Ctrl+.` | Code actions / Quick fix menu |
 | `K` | Hover documentation (normal mode, cursor on symbol) |
 | `Ctrl+K` | Signature help (while typing a function call) |
+| `<Space>ci` | Organize imports (sort, remove unused; TS also adds missing) |
 | `<Space>ti` | Toggle inlay hints (types/params inline) |
+
+### Auto-imports
+
+You don't need a key for the most common case — **accepting a completion
+auto-imports the symbol**:
+
+- **TS/JS** — `Tab`/`Enter` on a completion from an unimported module inserts
+  the `import { … }` line automatically (tsserver via typescript-tools).
+- **Go** — completions from unimported packages appear in the menu; accepting
+  one adds the import (gopls `completeUnimported`). `goimports` also fixes
+  imports on every save.
+- **Rust** — same behavior via rust-analyzer; **Python** — pyright
+  `autoImportCompletions`; both format imports on save (rustfmt / isort).
+
+For existing files: `Ctrl+.` shows "Add all missing imports" as a quick fix,
+and `<Space>ci` cleans up the import block (TS: organize; Go/Rust/Python:
+`source.organizeImports`). Imports are also auto-organized on save in TS.
 
 > **Lightbulb**: a  icon appears in the gutter whenever a code action
 > (quick fix) is available at your cursor — you don't have to guess when to

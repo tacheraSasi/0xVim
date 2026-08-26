@@ -170,6 +170,7 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 | `gH` | Go to definition in **hsplit** |
 | `grr` | Find references (list) |
 | `gpr` / `Shift+F12` | Find references in popup |
+| `<space>ci` | Organize imports |
 | `gri` / `gI` | Go to implementation (in-place / vsplit) |
 | `grn` / `F2` | Rename |
 | `gra` / `Ctrl+.` | Code action |
