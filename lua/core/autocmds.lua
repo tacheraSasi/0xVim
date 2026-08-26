@@ -37,7 +37,7 @@ vim.api.nvim_create_autocmd('BufReadPost', {
   desc = 'Disable smooth scroll on very large files',
   group = augroup,
   callback = function(args)
-    if vim.api.nvim_buf_line_count(args.buf) > 5000 then
+    if vim.api.nvim_buf_line_count(args.buf) > 300 then
       vim.b[args.buf].snacks_scroll = false
     end
   end,

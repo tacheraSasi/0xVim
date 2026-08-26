@@ -1548,9 +1548,9 @@ file first, then restart Neovim and reproduce the error.
 
 ### Large files
 
-Buffers over ~5000 lines automatically drop the fancy stuff that causes
+Buffers over ~300 lines automatically drop the fancy stuff that causes
 flicker while scrolling (animated smooth scrolling, the scrollbar). Everything
-re-enables on normal-sized files.
+re-enables on smaller files.
 
 ### "I see boxes/tofu instead of icons"
 

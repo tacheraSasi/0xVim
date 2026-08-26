@@ -5,8 +5,8 @@ return {
   opts = {
     show_in_active_only = false,
     handle = { blend = 30 },
-    -- Skip rendering entirely on huge buffers (redraw flicker while scrolling)
-    max_lines = 5000,
+    -- Skip rendering entirely on big buffers (redraw flicker while scrolling)
+    max_lines = 300,
     marks = {
       Cursor = { text = '•' },
       Search = { priority = 1, text = { '≡' } },
