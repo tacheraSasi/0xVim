@@ -974,8 +974,9 @@ Drop configs in `lua/plugins/extra.lua` inside the dap `config` function.
 ### Projects (project.nvim)
 
 Projects are auto-detected from `.git`, `package.json`, `Cargo.toml`,
-`go.mod`, `Makefile`, `build.zig`. When you open a file inside one, your
-`cwd` switches to that project root automatically.
+`go.mod`, `Makefile`, `build.zig`. Your `cwd` stays wherever you launched
+Neovim — opening files never silently re-cd's the session (the explorer and
+terminals stay put). `<Space>pp` still switches projects explicitly.
 
 | Key | Action |
 |-----|--------|

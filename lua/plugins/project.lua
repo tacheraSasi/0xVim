@@ -2,8 +2,10 @@ return {
   'ahmedkhalf/project.nvim',
   config = function()
     require('project_nvim').setup {
-      manual_mode = false,
-      detection_methods = { 'lsp', 'pattern' },
+      -- Don't silently re-cd Neovim when opening files: a stray LSP root or
+      -- subdirectory used to drag the whole session (explorer + terminals) there.
+      manual_mode = true,
+      detection_methods = { 'pattern' },
       patterns = { '.git', 'Makefile', 'package.json', 'Cargo.toml', 'go.mod', 'build.zig' },
       silent_chdir = true,
       scope_chdir = 'global',

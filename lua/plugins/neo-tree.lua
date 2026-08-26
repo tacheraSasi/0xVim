@@ -82,6 +82,9 @@ return {
       },
     },
     filesystem = {
+      -- Keep Neovim's cwd stable: navigating/re-rooting the tree must not
+      -- drag the session (terminals, pickers) into subdirectories.
+      bind_to_cwd = false,
       filtered_items = {
         visible = false, hide_dotfiles = false, hide_gitignored = false,
         hide_by_name = { 'node_modules' },
