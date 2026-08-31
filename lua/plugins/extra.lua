@@ -57,12 +57,12 @@ return {
   -- neogit (enhanced git UI)
   {
     'NeogitOrg/neogit',
-    dependencies = { 'nvim-lua/plenary.nvim', 'sindrets/diffview.nvim' },
+    dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
       require('neogit').setup {
         disable_signs = false, disable_hint = false, disable_context_highlighting = false,
         disable_commit_confirmation = false, auto_refresh = true, use_magit_keybindings = false,
-        integrations = { diffview = true },
+        highlight = { treesitter_diff_highlight = true },
       }
       vim.keymap.set('n', '<leader>gg', '<cmd>Neogit<CR>', { desc = 'Open Neogit' })
       vim.keymap.set('n', '<leader>gc', '<cmd>Neogit commit<CR>', { desc = 'Git commit' })
