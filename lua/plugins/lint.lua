@@ -20,7 +20,8 @@ return {
       markdown = { 'markdownlint-cli2' },
     }
     vim.api.nvim_create_autocmd({ 'BufWritePost', 'InsertLeave' }, {
-      callback = function()
+      callback = function(event)
+        if vim.bo.filetype == 'php' and event.match == 'InsertLeave' then return end
         pcall(require('lint').try_lint)
       end,
     })

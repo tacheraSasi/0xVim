@@ -39,6 +39,7 @@ vim.api.nvim_create_autocmd('BufReadPost', {
   callback = function(args)
     if vim.api.nvim_buf_line_count(args.buf) > 300 then
       vim.b[args.buf].snacks_scroll = false
+      vim.o.mousemoveevent = false
     end
   end,
 })

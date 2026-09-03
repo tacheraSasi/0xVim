@@ -46,10 +46,11 @@ vim.opt.wildignore = '*.o,*.obj,*.dylib,*.bin,*.dll,*.so,*.pyc,*.jpg,*.png,*.gif
 -- Zed/VSCode-like editing feel
 vim.o.smoothscroll = true
 vim.o.splitkeep = 'cursor'
-vim.o.winblend = 10
-vim.o.pumblend = 10
+vim.o.winblend = 0
+vim.o.pumblend = 0
 vim.o.pumheight = 20
 vim.o.mousemoveevent = true
+vim.o.mousescroll = 'ver:1,hor:1'
 vim.o.foldmethod = 'expr'
 vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 vim.o.foldlevelstart = 99

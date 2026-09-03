@@ -115,7 +115,7 @@ return {
           if ok then navic.attach(client, event.buf) end
         end
 
-        vim.api.nvim_create_autocmd({ 'CursorMoved', 'BufWinEnter' }, {
+        vim.api.nvim_create_autocmd({ 'CursorHold', 'BufWinEnter' }, {
           group = vim.api.nvim_create_augroup('navic-winbar', { clear = true }),
           callback = function()
             local ok, navic = pcall(require, 'nvim-navic')
@@ -182,7 +182,7 @@ return {
     })
 
     vim.lsp.config('tailwindcss', {
-      filetypes = { 'html', 'typescriptreact', 'javascriptreact', 'javascript', 'typescript', 'vue', 'svelte', 'php', 'blade' },
+      filetypes = { 'html', 'typescriptreact', 'javascriptreact', 'javascript', 'typescript', 'vue', 'svelte', 'blade' },
       settings = {
         tailwindCSS = {
           classAttributes = { 'class', 'className', 'class:list', 'classList', 'ngClass' },
@@ -303,7 +303,7 @@ return {
           environment = { includePaths = { 'vendor/**' } },
           files = { maxSize = 5000000 },
           completion = { maxItems = 100, fullyQualifyGlobalConstantsAndFunctions = true },
-          diagnostics = { enable = true, run = 'onType' },
+          diagnostics = { enable = true, run = 'onSave' },
         },
       },
     })
