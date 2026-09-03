@@ -32,7 +32,7 @@ return {
   { import = 'plugins.goto-preview' },
   { import = 'plugins.ufo' },
   { import = 'plugins.lsp-file-operations' },
-  { import = 'plugins.mini-map' },
+  
   { import = 'plugins.markview' },
   { import = 'plugins.yanky' },
   { import = 'plugins.scrollbar' },
