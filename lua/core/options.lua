@@ -14,6 +14,9 @@ vim.o.undofile = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.signcolumn = 'yes'
+-- Skip syntax highlighting on absurdly long lines: a big win when scrolling
+-- large/minified files (see core/autocmds.lua for the large-file handling).
+vim.o.synmaxcol = 300
 vim.o.updatetime = 250
 vim.o.timeoutlen = 300
 vim.o.splitright = true

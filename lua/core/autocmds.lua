@@ -113,3 +113,53 @@ vim.api.nvim_create_autocmd({ 'WinEnter', 'BufEnter' }, {
     end
   end,
 })
+
+-- Large files -----------------------------------------------------------------
+-- Big files lag while scrolling in both terminal Neovim and Neovide. Detect
+-- them and turn off the expensive per-line features.
+local large_file_augroup = vim.api.nvim_create_augroup('nvim-large-files', { clear = true })
+local LARGE_FILE_BYTES = 200 * 1024 -- 200 KB
+
+function _G.is_large_file(bufnr)
+  bufnr = (bufnr == nil or bufnr == 0) and vim.api.nvim_get_current_buf() or bufnr
+  local name = vim.api.nvim_buf_get_name(bufnr)
+  if name == '' then
+    return false
+  end
+  local ok, stats = pcall((vim.uv or vim.loop).fs_stat, name)
+  return ok and stats ~= nil and stats.size > LARGE_FILE_BYTES
+end
+
+vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileReadPre' }, {
+  group = large_file_augroup,
+  callback = function(args)
+    if not _G.is_large_file(args.buf) then
+      return
+    end
+    vim.b[args.buf].large_file = true
+    vim.opt_local.syntax = 'off'
+    vim.opt_local.foldmethod = 'manual'
+    vim.opt_local.foldenable = false
+    vim.opt_local.spell = false
+    vim.opt_local.list = false
+    vim.opt_local.swapfile = false
+    vim.opt_local.undofile = false
+    vim.opt_local.signcolumn = 'no'
+  end,
+})
+
+-- Treesitter is the biggest scrolling bottleneck on huge files. The plugin
+-- starts it on FileType, so stop it right after that has run.
+vim.api.nvim_create_autocmd('FileType', {
+  group = large_file_augroup,
+  callback = function(args)
+    if not _G.is_large_file(args.buf) then
+      return
+    end
+    vim.schedule(function()
+      if vim.api.nvim_buf_is_valid(args.buf) then
+        pcall(vim.treesitter.stop, args.buf)
+      end
+    end)
+  end,
+})

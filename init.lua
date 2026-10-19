@@ -15,6 +15,7 @@ vim.opt.rtp:prepend(lazypath)
 require 'core.options'
 require 'core.keymaps'
 require 'core.autocmds'
+require 'core.neovide'
 require('lazy').setup('plugins', {
   ui = {
     icons = vim.g.have_nerd_font and {} or {

@@ -308,16 +308,37 @@ end, { desc = 'Toggle Word Wrap' })
 vscode_map('n', '<C-n>', '<cmd>enew<CR>', { desc = 'New File' })
 vscode_map('n', '<C-,>', function() vim.cmd('edit ' .. vim.fn.stdpath 'config' .. '/init.lua') end, { desc = 'Open Settings' })
 
--- Font zoom (VSCode Ctrl+= / Ctrl+-)
-local function zoom_font(delta)
-  local cur = vim.o.guifont == '' and 14 or tonumber(vim.o.guifont:match ':h(%d+)') or 14
-  local next = math.max(6, cur + delta)
-  if vim.o.guifont ~= '' then
-    vim.o.guifont = vim.o.guifont:gsub(':h%d+', ':h' .. next)
-  else
-    if vim.g.neovide then vim.g.neovide_scale_factor = (vim.g.neovide_scale_factor or 1) * (next / cur) end
+-- Zoom (VSCode Ctrl+= / Ctrl+- / Ctrl+0)
+--
+-- In Neovide, scale the whole UI via neovide_scale_factor instead of changing
+-- guifont: resizing the font makes Neovide re-render glyphs with different
+-- hinting/spacing, which is why the font visibly "changes" while zooming.
+local function zoom(delta)
+  if vim.g.neovide then
+    local new = math.max(0.5, (vim.g.neovide_scale_factor or 1) + 0.1 * delta)
+    vim.g.neovide_scale_factor = new
+    vim.notify(('Zoom: %.1f'):format(new))
+    return
   end
-  vim.notify('Font size: ' .. next)
+
+  local cur = vim.o.guifont == '' and 14 or tonumber(vim.o.guifont:match ':h(%d+)') or 14
+  local new = math.max(6, cur + delta)
+  if vim.o.guifont ~= '' then
+    vim.o.guifont = vim.o.guifont:gsub(':h%d+', ':h' .. new)
+  end
+  vim.notify('Font size: ' .. new)
 end
-vscode_map('n', '<C-=>', function() zoom_font(1) end, { desc = 'Zoom In' })
-vscode_map('n', '<C-->', function() zoom_font(-1) end, { desc = 'Zoom Out' })
+
+local function zoom_reset()
+  if vim.g.neovide then
+    vim.g.neovide_scale_factor = 1.0
+  else
+    vim.o.guifont = vim.o.guifont:gsub(':h%d+', ':h14')
+  end
+  vim.notify('Zoom reset')
+end
+
+vscode_map({ 'n', 'v' }, '<C-=>', function() zoom(1) end, { desc = 'Zoom In' })
+vscode_map({ 'n', 'v' }, '<C-+>', function() zoom(1) end, { desc = 'Zoom In' })
+vscode_map({ 'n', 'v' }, '<C-->', function() zoom(-1) end, { desc = 'Zoom Out' })
+vscode_map({ 'n', 'v' }, '<C-0>', zoom_reset, { desc = 'Reset Zoom' })
