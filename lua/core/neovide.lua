@@ -18,9 +18,9 @@ vim.g.neovide_cursor_trail_size = 0.1
 -- Performance.
 vim.g.neovide_refresh_rate = 60
 vim.g.neovide_refresh_rate_idle = 5
-vim.g.neovide_no_idle = true
 vim.g.neovide_hide_mouse_when_typing = true
 vim.g.neovide_confirm_quit = false
 
--- Transparency costs frame time; keep it off.
-vim.g.neovide_transparency = 1.0
+-- Opacity: 1.0 = fully opaque. Transparency costs frame time, so keep it off.
+-- (Neovide 0.16 renamed neovide_transparency -> neovide_opacity.)
+vim.g.neovide_opacity = 1.0
