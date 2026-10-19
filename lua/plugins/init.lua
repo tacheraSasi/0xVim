@@ -24,7 +24,6 @@ return {
   { import = 'plugins.project' },
   { import = 'plugins.spectre' },
   { import = 'plugins.comment' },
-  { import = 'plugins.codediff' },
   { import = 'plugins.aicommits' },
   { import = 'plugins.snacks' },
   { import = 'plugins.tailwind-tools' },

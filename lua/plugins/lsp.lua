@@ -338,7 +338,7 @@ return {
     end
     vim.list_extend(ensure_installed, {
       'stylua', 'prettier', 'prettierd', 'black', 'isort', 'shfmt', 'gofumpt',
-      'goimports', 'golines', 'rustfmt', 'clang-format', 'blade-formatter',
+      'goimports', 'golines', 'clang-format', 'blade-formatter',
       'eslint_d', 'flake8', 'ruff', 'shellcheck', 'luacheck',
       'php-cs-fixer', 'phpstan', 'phpcs', 'phpcbf',
       'golangci-lint', 'revive', 'staticcheck',

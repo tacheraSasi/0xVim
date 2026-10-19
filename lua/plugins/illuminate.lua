@@ -8,7 +8,6 @@ return {
     under_cursor = true,
     filetypes_denylist = {
       'neo-tree', 'telescope', 'noice', 'dashboard', 'lazy', 'mason',
-      'checkhealth', 'codewindow', 'codediff-explorer', 'codediff-history',
       'spectre', 'help', 'qf', 'prompt', 'toggleterm',
     },
   },

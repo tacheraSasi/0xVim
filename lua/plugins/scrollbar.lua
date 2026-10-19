@@ -20,7 +20,6 @@ return {
     },
     excluded_filetypes = {
       'neo-tree', 'telescope', 'dashboard', 'lazy', 'mason', 'checkhealth',
-      'noice', 'codewindow', 'codediff-explorer', 'codediff-history',
       'spectre', 'toggleterm', 'prompt', 'qf', 'help',
     },
   },

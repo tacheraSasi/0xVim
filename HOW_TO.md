@@ -811,63 +811,13 @@ Each call opens a new terminal. Use `:TermSelect` to pick which one to show.
 
 ## 15. Git Workflow
 
-### VSCode-style diff & changes sidebar (codediff)
+### Diff review (Diffview + Neogit)
 
-`codediff.nvim` gives you the exact VSCode Source-Control experience: a
-**sidebar listing every changed file**, and clicking one opens a
-**side-by-side diff** with character-level highlighting from VSCode's own
-diff algorithm.
-
-| Key | Action |
-|-----|--------|
-| **`Opt+Cmd+B`** (macOS) | Open the **changes sidebar** — all modified/staged/conflicted files |
-| `<Space>gd` | Same |
-| `<Space>gD` | Git **history** (list of commits, expand to files, `<CR>` to diff) |
-| `<Space>gf` | Diff **current file** against `HEAD` |
-
-#### Inside the changes sidebar
-
-| Key | Action |
-|-----|--------|
-| `<CR>` / `Enter` | Open the diff for the selected file (side-by-side) |
-| `j` / `k` | Move up/down — **the diff previews automatically** under the cursor |
-| `i` | Toggle flat list / tree view |
-| `S` | Stage all files |
-| `U` | Unstage all files |
-| `X` | Discard changes (restore file) |
-| `gu` / `gs` | Toggle the "Changes" / "Staged Changes" groups |
-| `K` | Hover — diff preview popup |
-| `R` | Refresh git status |
-| `q` | Close |
-
-Files show VSCode-style status letters (`M`/`A`/`D`) and **line counts**
-(`+12 -4`) in the sidebar.
-
-**AI-commit from here:** stage with `S` / `-`, then `<Space>ga` — the AI
-commit flow (aicommits) runs without leaving the panel.
-
-#### Inside a diff
-
-| Key | Action |
-|-----|--------|
-| `]c` / `[c` | Next / previous hunk (change) |
-| `]f` / `[f` | Next / previous file |
-| `t` | Toggle **side-by-side** / **inline** layout |
-| `gc` | Toggle compact mode (fold unchanged regions) |
-| `do` / `dp` | Get / put change (like vimdiff) |
-| `<Space>hs` / `<Space>hu` | Stage / unstage hunk under cursor |
-| `<Space>hr` | Discard hunk under cursor |
-| `-` | Stage / unstage the whole file |
-| `g?` | Help — every keymap in this view |
-| `q` | Close the diff tab |
-
-#### VSCode-style git diff from the command line
-
-```sh
-git difftool codediff     # view uncommitted changes in the diff view
-```
-
-(configured via `git config --global diff.tool codediff`)
+- `<leader>gg` — Neogit status (stage, commit, push)
+- `<leader>gd` — Diffview: review uncommitted changes, with real syntax highlighting
+- `<leader>gD` — close Diffview
+- `<leader>gh` — file history of the current file
+- Inside Neogit: `d w` = worktree diff, `d s` = staged diff (hands off to Diffview)
 
 ### AI commit messages (aicommits.nvim)
 
@@ -878,9 +828,8 @@ Stage your changes, then let AI write the conventional-commit message.
 | `<Space>ga` | Generate commit message(s) from staged changes, pick one, commit |
 | `C` (in Neogit status) | Same, right from the Neogit buffer |
 
-**Works inside CodeDiff too** — open the changes sidebar (`Opt+Cmd+B`), stage
-files/hunks with `-` / `S`, then press `<Space>ga` right in the explorer or
-history panel to AI-commit.
+**Works inside Neogit too** — stage files/hunks with `s` / `S`, then press
+`<Space>ga` in the Neogit status buffer to AI-commit.
 
 - Uses the **OpenCode Go** endpoint (`https://opencode.ai/zen/go/v1`) — no extra
   API keys needed beyond your OpenCode key.
@@ -1695,9 +1644,9 @@ directly with `nvim file.go` or `Ctrl+P` to skip it. To force it: `nvim +Dashboa
 │  ()  rainbow brackets       Ctrl+T      workspace symbols         │
 │                                                                  │
 │  WINDOWS                    GIT                                  │
-│  Ctrl+\   split right       Opt+Cmd+B  changes sidebar (CodeDiff) │
-│  Ctrl+H/J/K/L move focus    <Space>gd   CodeDiff sidebar          │
-│  <Space>wd close win        <Space>gD   CodeDiff history          │
+│  Ctrl+\   split right       <Space>gd   Diffview uncommitted      │
+│  Ctrl+H/J/K/L move focus    <Space>gD   close Diffview            │
+│  <Space>wd close win        <Space>gh   file history              │
 │  <Space>w= equalize         <Space>gf   diff file vs HEAD         │
 │                             <Space>ga   AI commit message         │
 │                             <Space>hs   stage hunk               │

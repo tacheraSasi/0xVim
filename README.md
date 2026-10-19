@@ -38,7 +38,6 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 │       ├── mini.lua            # Text objects, surround, pairs, statusline
 │       ├── comment.lua         # Comment toggling
 │       ├── spectre.lua         # Search & replace across files
-│       ├── codediff.lua        # VSCode-style git diff & changes sidebar
 │       ├── aicommits.lua       # AI commit messages (OpenCode Go)
 │       ├── snacks.lua          # QoL: smooth scroll, zen mode, lazygit, images
 │       ├── tailwind-tools.lua  # Tailwind CSS intellisense
@@ -96,7 +95,6 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 | `Ctrl+X` | Cut (visual mode) |
 | `Ctrl+Shift+K` | Delete line |
 | `Ctrl+Shift+G` | Source control (Neogit) |
-| `Opt+Cmd+B` | Git changes sidebar (CodeDiff) — VSCode-style diff |
 | `Ctrl+Shift+M` | Show problems (Trouble) |
 | `Ctrl+Shift+O` | File symbols |
 | `Ctrl+T` | Workspace symbols |
@@ -137,9 +135,9 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 | `<space>xx` | Toggle trouble (diagnostics) |
 | `<space>gg` | Open git UI (neogit) |
 | `<space>gc` / `<space>gp` / `<space>gl` | Git commit / push / pull |
-| `<space>gd` | CodeDiff: changes sidebar (VSCode-style diff) |
-| `<space>gD` | CodeDiff: git history |
-| `<space>gf` | CodeDiff: current file vs HEAD |
+| `<space>gd` | Diffview: review uncommitted changes |
+| `<space>gD` | Close Diffview |
+| `<space>gh` | Diffview: file history of current file |
 | `<space>ga` | AI commit message (aicommits via OpenCode Go) |
 | `<space>lg` | Lazygit in a floating window |
 | `<space>uz` | Toggle zen mode (distraction-free) |

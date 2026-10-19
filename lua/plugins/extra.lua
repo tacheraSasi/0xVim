@@ -62,13 +62,77 @@ return {
       require('neogit').setup {
         disable_signs = false, disable_hint = false, disable_context_highlighting = false,
         disable_commit_confirmation = false, auto_refresh = true, use_magit_keybindings = false,
-        highlight = { treesitter_diff_highlight = true },
+        -- Let NeoGit's review action (d w / d s) hand off to Diffview.
+        integrations = { diffview = true },
+        highlight = {
+          -- Keep syntax/word emphasis inside the diff hunks.
+          treesitter_diff_highlight = true,
+          word_diff_highlight = true,
+        },
       }
+
+      -- NeoGit paints whole added/deleted lines with a solid green/red
+      -- background, which flattens everything into blocks and hides any syntax
+      -- colours. Keep the tint, drop the opaque background instead.
+      local function neogit_diff_highlights()
+        for _, group in ipairs {
+          'NeogitDiffAdd', 'NeogitDiffAddHighlight',
+          'NeogitDiffDelete', 'NeogitDiffDeleteHighlight',
+        } do
+          vim.api.nvim_set_hl(0, group, { bg = 'NONE', ctermbg = 'NONE' })
+        end
+      end
+      neogit_diff_highlights()
+      vim.api.nvim_create_autocmd('ColorScheme', { callback = neogit_diff_highlights })
+      vim.api.nvim_create_autocmd('FileType', { pattern = 'Neogit*', callback = neogit_diff_highlights })
       vim.keymap.set('n', '<leader>gg', '<cmd>Neogit<CR>', { desc = 'Open Neogit' })
       vim.keymap.set('n', '<leader>gc', '<cmd>Neogit commit<CR>', { desc = 'Git commit' })
       vim.keymap.set('n', '<leader>gp', '<cmd>Neogit push<CR>', { desc = 'Git push' })
       vim.keymap.set('n', '<leader>gl', '<cmd>Neogit pull<CR>', { desc = 'Git pull' })
     end,
+  },
+  -- diffview.nvim — multi-file / side-by-side diffs WITH real syntax highlighting
+  {
+    'sindrets/diffview.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    cmd = {
+      'DiffviewOpen', 'DiffviewClose', 'DiffviewFileHistory',
+      'DiffviewToggleFiles', 'DiffviewFocusFiles', 'DiffviewRefresh',
+    },
+    keys = {
+      { '<leader>gd', '<cmd>DiffviewOpen<CR>', desc = 'Diffview (uncommitted)' },
+      { '<leader>gD', '<cmd>DiffviewClose<CR>', desc = 'Close Diffview' },
+      { '<leader>gh', '<cmd>DiffviewFileHistory %<CR>', desc = 'File history' },
+    },
+    opts = {
+      -- The whole point: highlight the diff with the real file syntax
+      -- instead of NeoGit's solid green/red blocks.
+      enhanced_diff_hl = true,
+      view = {
+        default = { layout = 'diff2_horizontal' },
+      },
+    },
+  },
+  -- zdiff.nvim — Zed-style multi-buffer diff view (treesitter highlighted)
+  -- :Zdiff        → uncommitted changes (vs HEAD)
+  -- :Zdiff <ref>  → compare against a branch / tag / commit
+  {
+    'martindur/zdiff.nvim',
+    cmd = 'Zdiff',
+    keys = {
+      { '<leader>zd', '<cmd>Zdiff<CR>', desc = 'Zdiff (uncommitted)' },
+      {
+        '<leader>zD',
+        function()
+          -- Repos here use master and main, so ask instead of hardcoding one.
+          vim.ui.input({ prompt = 'Zdiff vs ref (branch/tag/commit): ' }, function(ref)
+            if ref and ref ~= '' then require('zdiff').open(ref) end
+          end)
+        end,
+        desc = 'Zdiff (vs ref)',
+      },
+    },
+    opts = {},
   },
   -- nvim-dap (debugger)
   {
