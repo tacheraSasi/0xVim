@@ -1,148 +1,95 @@
-return {
-  {
-    'folke/tokyonight.nvim',
-    priority = 1000,
-    config = function()
-      require('tokyonight').setup {
-        styles = { comments = { italic = false }, keywords = { italic = false } },
-        on_highlights = function(hl, c)
-          hl.CursorLineNR = { bold = true, fg = c.orange }
-          hl.LineNr = { fg = c.dark3 }
-        end,
-      }
-    end,
-  },
-  {
-    'Mofiqul/vscode.nvim',
-    priority = 1000,
-    config = function()
-      require('vscode').setup { transparent = false, italic_comments = true, disable_nvimtree_bg = true }
-    end,
-  },
-  {
-    'catppuccin/nvim',
-    name = 'catppuccin',
-    priority = 1000,
-    config = function()
-      require('catppuccin').setup {
-        flavour = 'mocha',
-        term_colors = true,
-        styles = { comments = { 'italic' }, conditionals = { 'italic' } },
-        integrations = { cmp = true, gitsigns = true, telescope = true, treesitter = true, mason = true, which_key = true },
-      }
-      vim.cmd.colorscheme 'catppuccin'
-    end,
-  },
-  {
-    'ellisonleao/gruvbox.nvim',
-    priority = 1000,
-    config = function()
-      require('gruvbox').setup {
-        terminal_colors = true,
-        undercurl = true,
-        bold = true,
-        italic = { strings = false, emphasis = true, comments = true, operators = false, folds = true },
-      }
-    end,
-  },
-  {
-    'Mofiqul/dracula.nvim',
-    priority = 1000,
-    config = function()
-      require('dracula').setup { transparent_bg = false, italic_comment = true }
-    end,
-  },
-  {
-    'shaunsingh/nord.nvim',
-    priority = 1000,
-    config = function()
-      vim.g.nord_contrast = true
-      vim.g.nord_borders = true
-      vim.g.nord_italic = true
-    end,
-  },
-  {
-    'navarasu/onedark.nvim',
-    priority = 1000,
-    config = function()
-      require('onedark').setup {
-        style = 'dark',
-        transparent = false,
-        term_colors = true,
-        code_style = { comments = 'italic', keywords = 'none', functions = 'none', strings = 'none', variables = 'none' },
-      }
-    end,
-  },
-  {
-    'rebelot/kanagawa.nvim',
-    priority = 1000,
-    config = function()
-      require('kanagawa').setup {
-        undercurl = true,
-        commentStyle = { italic = true },
-        keywordStyle = { italic = true },
-        statementStyle = { bold = true },
-        transparent = false,
-        terminalColors = true,
-        theme = 'wave',
-      }
-    end,
-  },
-  {
-    'EdenEast/nightfox.nvim',
-    priority = 1000,
-    config = function()
-      require('nightfox').setup {
-        options = {
-          transparent = false,
-          terminal_colors = true,
-          styles = { comments = 'italic', keywords = 'bold', types = 'italic,bold' },
-        },
-      }
-    end,
-  },
-  {
-    'marko-cerovac/material.nvim',
-    priority = 1000,
-    config = function()
-      require('material').setup {
-        styles = { comments = { italic = true } },
-        plugins = { 'gitsigns', 'indent-blankline', 'nvim-web-devicons', 'telescope', 'trouble', 'which-key' },
-      }
-    end,
-  },
-  -- Theme switching keymaps
-  {
-    dir = vim.fn.stdpath 'config',
-    name = 'theme-utils',
-    config = function()
-      local function switch_theme(name)
-        local ok = pcall(vim.cmd.colorscheme, name)
-        if ok then
-          vim.notify('Theme: ' .. name)
-        end
-      end
-      vim.keymap.set('n', '<leader>tt', function()
-        require('telescope.builtin').colorscheme { enable_preview = true }
-      end, { desc = 'Theme picker' })
-      vim.keymap.set('n', '<leader>tv', function()
-        switch_theme 'vscode'
-      end, { desc = 'VSCode theme' })
-      vim.keymap.set('n', '<leader>to', function()
-        switch_theme 'tokyonight'
-      end, { desc = 'Tokyo Night theme' })
-      vim.keymap.set('n', '<leader>tc', function()
-        switch_theme 'catppuccin'
-      end, { desc = 'Catppuccin theme' })
-      vim.keymap.set('n', '<leader>tg', function()
-        switch_theme 'gruvbox'
-      end, { desc = 'Gruvbox theme' })
-      vim.keymap.set('n', '<leader>tD', function()
-        switch_theme 'dracula'
-      end, { desc = 'Dracula theme' })
-      vim.keymap.set('n', '<leader>tn', function()
-        switch_theme 'nord'
-      end, { desc = 'Nord theme' })
-    end,
-  },
+-- Colorschemes: one plugin per Omarchy theme, plus automatic follow.
+--
+-- Omarchy writes the active theme's Neovim spec to
+--   ~/.local/state/omarchy/current/theme/neovim.lua
+-- on every theme change (including Darky's light/dark switching), so we read the
+-- colorscheme name from there and apply it at startup.
+local function omarchy_colorscheme()
+  local path = vim.fn.expand '~/.local/state/omarchy/current/theme/neovim.lua'
+  if vim.fn.filereadable(path) == 0 then
+    return nil
+  end
+  local ok, spec = pcall(dofile, path)
+  if not ok or type(spec) ~= 'table' then
+    return nil
+  end
+  for _, s in ipairs(spec) do
+    if type(s) == 'table' and type(s.opts) == 'table' and s.opts.colorscheme then
+      return s.opts.colorscheme
+    end
+  end
+  return nil
+end
+
+local function apply_omarchy_theme()
+  local name = omarchy_colorscheme()
+  if not name then
+    return
+  end
+  if pcall(vim.cmd.colorscheme, name) then
+    vim.g.omarchy_colorscheme = name
+  else
+    vim.notify('No Neovim colorscheme for Omarchy theme: ' .. name, vim.log.levels.WARN)
+  end
+end
+
+-- The themes Omarchy ships, matched to their Neovim colorscheme plugin.
+-- (Names are the `colorscheme` value Omarchy writes per theme.)
+local themes = {
+  { 'catppuccin/nvim', name = 'catppuccin' },
+  { 'neanias/everforest-nvim' },
+  { 'kepano/flexoki-neovim' },
+  { 'ellisonleao/gruvbox.nvim' },
+  -- hackerman's colorscheme requires the `aether` module.
+  { 'bjarneo/hackerman.nvim', deps = { 'bjarneo/aether.nvim' } },
+  { 'rebelot/kanagawa.nvim' },
+  { 'omacom-io/lumon.nvim' },
+  { 'tahayvr/matteblack.nvim' },
+  { 'EdenEast/nightfox.nvim' },
+  { 'ribru17/bamboo.nvim' },
+  { 'OldJobobo/retro-82.nvim' },
+  { 'rose-pine/neovim' },
+  { 'ficcdaf/ashen.nvim' },
+  { 'folke/tokyonight.nvim' },
+  -- Extras you already had, not tied to an Omarchy theme.
+  { 'Mofiqul/vscode.nvim' },
+  { 'Mofiqul/dracula.nvim' },
+  { 'navarasu/onedark.nvim' },
+  { 'marko-cerovac/material.nvim' },
 }
+
+local specs = {}
+for _, t in ipairs(themes) do
+  specs[#specs + 1] = {
+    t[1],
+    name = t.name,
+    priority = 1000,
+    dependencies = t.deps,
+  }
+end
+
+-- Follow the Omarchy theme once lazy has loaded everything.
+specs[#specs + 1] = {
+  dir = vim.fn.stdpath 'config',
+  name = 'theme-utils',
+  lazy = false,
+  config = function()
+    -- Apply the Omarchy theme as soon as this spec loads. `:colorscheme` makes
+    -- lazy.nvim load the providing plugin on demand, so there is nothing to
+    -- wait for (VeryLazy only fires with a UI, and an autocmd registered during
+    -- VimEnter never fires for that same event).
+    vim.schedule(apply_omarchy_theme)
+    vim.api.nvim_create_autocmd('User', { pattern = 'VeryLazy', once = true, callback = apply_omarchy_theme })
+
+    vim.keymap.set('n', '<leader>tt', function()
+      require('telescope.builtin').colorscheme { enable_preview = true }
+    end, { desc = 'Theme picker' })
+
+    vim.keymap.set('n', '<leader>tr', function()
+      apply_omarchy_theme()
+      vim.notify('Omarchy theme: ' .. (vim.g.omarchy_colorscheme or '?'))
+    end, { desc = 'Reload Omarchy theme' })
+  end,
+}
+
+return specs
