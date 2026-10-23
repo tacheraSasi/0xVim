@@ -252,38 +252,16 @@ vscode_map('n', '<C-\\>', '<cmd>vs<CR>', { desc = 'Split Editor Right' })
 -- Primary toggle is <C-b> (registered in neo-tree.lua). Mirror to Cmd+B on macOS.
 if vim.g.is_mac then
   vim.keymap.set('n', '<D-b>', function()
-    local manager = require 'neo-tree.sources.manager'
-    local state = manager.get_state 'filesystem'
-    local visible = state and state.winid and vim.api.nvim_win_is_valid(state.winid)
-    if visible then
-      require('neo-tree.command').execute { action = 'close', source = 'filesystem' }
-      local target = _G.__nvim_last_editor_win and _G.__nvim_last_editor_win()
-      if target and vim.api.nvim_win_is_valid(target) then
-        vim.api.nvim_set_current_win(target)
-      end
-    else
-      require('neo-tree.command').execute { action = 'focus', source = 'filesystem', toggle = false }
-    end
+    require('core.explorer').toggle()
   end, { desc = 'Toggle file explorer', silent = true })
 end
 
 vscode_map('n', '<C-0>', function()
-  local ok = pcall(vim.cmd, 'Neotree focus filesystem right')
-  if not ok then pcall(vim.cmd, 'Neotree show filesystem right') end
+  require('core.explorer').focus()
 end, { desc = 'Focus Sidebar' })
 
 vscode_map('n', '<C-1>', function()
-  local wins = vim.api.nvim_list_wins()
-  for _, win in ipairs(wins) do
-    local buf = vim.api.nvim_win_get_buf(win)
-    local ft = vim.bo[buf].filetype
-    local bt = vim.bo[buf].buftype
-    if ft ~= 'neo-tree' and ft ~= 'toggleterm' and bt ~= 'nofile' and bt ~= 'terminal' then
-      vim.api.nvim_set_current_win(win)
-      return
-    end
-  end
-  vim.cmd 'wincmd p'
+  require('core.explorer').focus_editor()
 end, { desc = 'Focus Editor' })
 
 -- Source Control

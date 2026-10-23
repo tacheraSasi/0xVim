@@ -8,27 +8,9 @@ return {
     'MunifTanjim/nui.nvim',
   },
   keys = {
-    {
-      '<C-b>',
-      function()
-        local manager = require 'neo-tree.sources.manager'
-        local state = manager.get_state 'filesystem'
-        local visible = state and state.winid and vim.api.nvim_win_is_valid(state.winid)
-        if visible then
-          require('neo-tree.command').execute { action = 'close', source = 'filesystem' }
-          local target = _G.__nvim_last_editor_win and _G.__nvim_last_editor_win()
-          if target and vim.api.nvim_win_is_valid(target) then
-            vim.api.nvim_set_current_win(target)
-          end
-        else
-          require('neo-tree.command').execute { action = 'focus', source = 'filesystem', toggle = false }
-        end
-      end,
-      desc = 'Toggle file explorer',
-      silent = true,
-    },
-    { '<leader>e', '<cmd>Neotree toggle filesystem right<CR>', desc = 'Toggle file explorer', silent = true },
-    { '<C-S-e>', '<cmd>Neotree focus filesystem right<CR>', desc = 'Focus file explorer', silent = true },
+    { '<C-b>', function() require('core.explorer').toggle() end, desc = 'Toggle file explorer', silent = true },
+    { '<leader>e', function() require('core.explorer').toggle() end, desc = 'Toggle file explorer', silent = true },
+    { '<C-S-e>', function() require('core.explorer').focus() end, desc = 'Focus file explorer', silent = true },
   },
   opts = {
     close_if_last_window = false,
@@ -53,6 +35,10 @@ return {
       auto_expand_width = false,
       mapping_options = { noremap = true, nowait = true },
       mappings = {
+        -- neo-tree's default <C-b> is scroll_preview, which shadows the global
+        -- sidebar toggle while the tree is focused — pressing it inside the tree
+        -- did nothing. Match VS Code instead: Ctrl+B inside the tree closes it.
+        ['<C-b>'] = 'close_window',
         ['<space>'] = { 'toggle_node', nowait = false },
         ['<2-LeftMouse>'] = 'open',
         ['<cr>'] = 'open',
