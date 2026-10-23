@@ -1,5 +1,7 @@
 # Neovim Config — VS Code Experience on Neovim
 
+![preview](docs/preview.png)
+
 A modular Neovim configuration designed for developers coming from VS Code. Everything should feel familiar while embracing Neovim's strengths.
 
 > **New here?** Read **[HOW_TO.md](HOW_TO.md)** — a full walk-through guide from install to daily usage.
@@ -192,9 +194,59 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 
 ## Installation
 
+### 1. Install Neovim 0.10+
+
+Neovide / nightly users: install the latest Neovim release tree (the config is tested against Neovim 0.13 nightly — install the full release tree, not just the binary).
+
+**Arch Linux (AUR — recommended, keeps you on the latest stable/nightly):**
+
 ```sh
-git clone https://github.com/tacheraSasi/0xVim.git ~/.config/nvim
-nvim --headless "+Lazy! sync" +qa
+yay -S neovim-git          # or: sudo pacman -S neovim
 ```
 
-Requires: Neovim 0.10+, git, ripgrep, a Nerd Font, and language-specific tooling (go, rust, node, etc.) for LSP support.
+**Ubuntu / Debian (PPA):**
+
+```sh
+sudo add-apt-repository ppa:neovim-ppa/unstable && sudo apt update && sudo apt install neovim
+```
+
+**Any platform — official build (full tree into ~/.local):**
+
+```sh
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+mkdir -p ~/.local/nvim && tar -C ~/.local/nvim --strip-components=1 -xzf nvim-linux-x86_64.tar.gz
+ln -sfn ~/.local/nvim/bin/nvim ~/.local/bin/nvim
+```
+
+### 2. Clone the config
+
+```sh
+git clone https://github.com/tacheraSasi/0xVim.git ~/.config/nvim
+```
+
+### 3. Sync plugins + health check
+
+```sh
+nvim --headless "+Lazy! sync" +qa
+nvim --headless '+checkhealth' +qa   # optional: verify everything is green
+```
+
+### 4. Dependencies
+
+- `git`, `ripgrep` (`sudo pacman -S ripgrep`) — Telescope live grep
+- A [Nerd Font](https://www.nerdfonts.com/) and a terminal that supports it (icons)
+- Node.js ≥ 18 — Mason-installed LSP servers (ts/js, vue)
+- Language tooling as needed: `go`, `rust-analyzer` + `cargo`, `php` + `composer`, `zig` (zls), `gopls`, `stylua`, `prettierd` (Mason installs most of these on first run)
+
+### Optional: Neovide (GUI)
+
+Works out of the box — `lua/core/neovide.lua` applies cursor/scroll animation and
+performance tuning automatically when run inside Neovide. Use Neovide 0.16+ (it
+renamed `neovide_transparency` to `neovide_opacity`).
+
+```sh
+yay -S neovide        # or neovide-nightly-bin for matching a Neovim nightly
+```
+
+> The config is tuned for Neovim 0.13 nightly. On a Neovim 0.10/0.11 stable
+> everything should still work; if an option is missing, check the changelogs.
