@@ -99,6 +99,7 @@ local function is_editor_win(win)
     and ft ~= 'toggleterm'
     and ft ~= 'TelescopePrompt'
     and ft ~= 'Trouble'
+    and ft ~= 'zdiff'
     and bt ~= 'nofile'
     and bt ~= 'terminal'
     and bt ~= 'prompt'

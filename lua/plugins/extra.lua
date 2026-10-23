@@ -116,9 +116,11 @@ return {
   -- zdiff.nvim — Zed-style multi-buffer diff view (treesitter highlighted)
   -- :Zdiff        → uncommitted changes (vs HEAD)
   -- :Zdiff <ref>  → compare against a branch / tag / commit
+  -- setup() is deprecated upstream; mappings are configured per buffer via
+  -- a FileType autocmd (see https://github.com/martindur/zdiff.nvim).
   {
     'martindur/zdiff.nvim',
-    cmd = 'Zdiff',
+    cmd = { 'Zdiff', 'ZdiffToggle', 'ZdiffOpen', 'ZdiffRefresh' },
     keys = {
       { '<leader>zd', '<cmd>Zdiff<CR>', desc = 'Zdiff (uncommitted)' },
       {
@@ -132,7 +134,40 @@ return {
         desc = 'Zdiff (vs ref)',
       },
     },
-    opts = {},
+    config = function()
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'zdiff',
+        callback = function(event)
+          local o = { buffer = event.buf, silent = true }
+          vim.keymap.set('n', '<CR>', '<cmd>ZdiffOpen<cr>', o)
+          vim.keymap.set('n', '<Tab>', '<cmd>ZdiffToggle<cr>', o)
+          vim.keymap.set('n', 'R', '<cmd>ZdiffRefresh<cr>', o)
+          -- q closes every zdiff window, then returns focus to the file you
+          -- came from — otherwise, if the explorer was open, it would be the
+          -- last window standing and take over the screen.
+          vim.keymap.set('n', 'q', function()
+            local wins = vim.api.nvim_tabpage_list_wins(0)
+            for _, w in ipairs(wins) do
+              if vim.api.nvim_win_is_valid(w) then
+                local buf = vim.api.nvim_win_get_buf(w)
+                if vim.bo[buf].filetype == 'zdiff' then
+                  pcall(vim.api.nvim_win_close, w, false)
+                end
+              end
+            end
+            require('core.explorer').focus_editor()
+          end, o)
+          -- m: flip between uncommitted changes and comparison against main.
+          vim.keymap.set('n', 'm', function()
+            if vim.b[event.buf].zdiff.base == '' then
+              vim.cmd('Zdiff main')
+            else
+              vim.cmd('Zdiff')
+            end
+          end, o)
+        end,
+      })
+    end,
   },
   -- nvim-dap (debugger)
   {
