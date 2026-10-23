@@ -68,7 +68,7 @@ return {
         shortcut = {
           { desc = ' Find File', group = 'DiagnosticOk', action = 'Telescope find_files', key = 'f' },
           { desc = ' Recent Files', group = 'DiagnosticHint', action = 'Telescope oldfiles', key = 'r' },
-          { desc = ' Projects', group = 'DiagnosticWarn', action = 'Telescope projects', key = 'p' },
+          { desc = ' Projects', group = 'DiagnosticWarn', action = "lua require('core.projects').pick()", key = 'p' },
           { desc = ' Explorer', group = 'Label', action = 'Neotree toggle filesystem right', key = 'e' },
           { desc = ' Terminal', group = 'Number', action = 'ToggleTerm', key = 't' },
           { desc = ' Themes', group = 'Special', action = 'Telescope colorscheme', key = 's' },

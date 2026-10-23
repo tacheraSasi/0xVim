@@ -16,6 +16,7 @@ vim.opt.rtp:prepend(lazypath)
 require 'core.options'
 require 'core.keymaps'
 require 'core.autocmds'
+require 'core.projects'
 require 'core.neovide'
 require('lazy').setup('plugins', {
   ui = {

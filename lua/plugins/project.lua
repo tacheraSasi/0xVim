@@ -12,7 +12,7 @@ return {
     }
     pcall(require('telescope').load_extension, 'projects')
     vim.keymap.set('n', '<leader>pp', function()
-      require('telescope').extensions.projects.projects {}
+      require('core.projects').pick()
     end, { desc = 'Project switcher' })
   end,
 }
