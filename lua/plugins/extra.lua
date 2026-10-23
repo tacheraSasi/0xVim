@@ -145,17 +145,67 @@ return {
           -- q closes every zdiff window, then returns focus to the file you
           -- came from — otherwise, if the explorer was open, it would be the
           -- last window standing and take over the screen.
+          -- If zdiff is the ONLY window, closing it would fail with E444
+          -- (and ":q" from there would quit Neovim entirely) — so drop a
+          -- real file buffer into the window first, then wipe zdiff.
           vim.keymap.set('n', 'q', function()
             local wins = vim.api.nvim_tabpage_list_wins(0)
+            local zwins, others = {}, {}
             for _, w in ipairs(wins) do
               if vim.api.nvim_win_is_valid(w) then
                 local buf = vim.api.nvim_win_get_buf(w)
                 if vim.bo[buf].filetype == 'zdiff' then
-                  pcall(vim.api.nvim_win_close, w, false)
+                  zwins[#zwins + 1] = w
+                elseif
+                  vim.fn.win_gettype(w) == ''
+                  and vim.bo[buf].buftype == ''
+                  and vim.bo[buf].buflisted
+                then
+                  others[#others + 1] = w
                 end
               end
             end
-            require('core.explorer').focus_editor()
+
+            if #others == 0 then
+              -- zdiff owns every window: swap in a real buffer so the
+              -- window can't be the "last window" exit path.
+              local target
+              for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+                if
+                  vim.bo[buf].buftype == ''
+                  and vim.bo[buf].buflisted
+                  and vim.api.nvim_buf_is_loaded(buf)
+                  and vim.bo[buf].filetype ~= 'zdiff'
+                  and vim.api.nvim_buf_get_name(buf) ~= ''
+                then
+                  target = buf
+                  break
+                end
+              end
+              vim.api.nvim_win_set_buf(0, target or vim.api.nvim_create_buf(true, false))
+            end
+
+            for _, w in ipairs(zwins) do
+              -- in the "others==0" case the current window has already been
+              -- swapped to a real buffer, so check the filetype here too
+              if
+                vim.api.nvim_win_is_valid(w)
+                and vim.bo[vim.api.nvim_win_get_buf(w)].filetype == 'zdiff'
+              then
+                pcall(vim.api.nvim_win_close, w, false)
+              end
+            end
+
+            -- Wipe every zdiff session buffer (triggers their cleanup autocmds)
+            for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+              if vim.api.nvim_buf_is_valid(buf) and vim.b[buf].zdiff then
+                pcall(vim.cmd, 'bwipeout! ' .. buf)
+              end
+            end
+
+            if #others > 0 then
+              require('core.explorer').focus_editor()
+            end
           end, o)
           -- m: flip between uncommitted changes and comparison against main.
           vim.keymap.set('n', 'm', function()
