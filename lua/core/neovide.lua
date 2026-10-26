@@ -24,3 +24,21 @@ vim.g.neovide_confirm_quit = false
 -- Opacity: 1.0 = fully opaque. Transparency costs frame time, so keep it off.
 -- (Neovide 0.16 renamed neovide_transparency -> neovide_opacity.)
 vim.g.neovide_opacity = 1.0
+
+-- Inline images (snacks.image) need the Kitty graphics protocol, which
+-- Neovide does not implement. Instead of showing an unsupported-terminal
+-- placeholder, open images/videos with the system default app (imv for
+-- pictures, VLC for video). In Ghostty, snacks.image renders inline natively.
+vim.api.nvim_create_autocmd('BufReadCmd', {
+  group = vim.api.nvim_create_augroup('neovide.external-images', { clear = true }),
+  pattern = '*.png,*.jpg,*.jpeg,*.gif,*.bmp,*.webp,*.tiff,*.heic,*.avif,*.icns,*.pdf,*.mp4,*.mov,*.avi,*.mkv,*.webm',
+  callback = function(ev)
+    vim.ui.open(ev.match)
+    local buf = ev.buf
+    vim.schedule(function()
+      if vim.api.nvim_buf_is_valid(buf) then
+        vim.api.nvim_buf_delete(buf, { force = true })
+      end
+    end)
+  end,
+})

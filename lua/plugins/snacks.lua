@@ -5,7 +5,7 @@ return {
   opts = {
     bigfile = { enabled = true },
     dim = { enabled = true },
-    image = { enabled = true },
+    image = { enabled = not vim.g.neovide },
     indent = { enabled = true },
     input = { enabled = true },
     lazygit = { enabled = true },
