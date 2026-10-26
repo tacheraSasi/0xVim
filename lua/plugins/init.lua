@@ -10,6 +10,7 @@ return {
   { import = 'plugins.toggleterm' },
   { import = 'plugins.which-key' },
   { import = 'plugins.gitsigns' },
+  { import = 'plugins.octo' },
   { import = 'plugins.lualine' },
   { import = 'plugins.bufferline' },
   { import = 'plugins.trouble' },

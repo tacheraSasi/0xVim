@@ -102,12 +102,55 @@ function M.list()
   return out
 end
 
+-- Normal, listed file buffers (terminals and plugin UIs are left alone).
+local function file_buffers()
+  local out = {}
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if
+      vim.api.nvim_buf_is_valid(buf)
+      and vim.bo[buf].buflisted
+      and vim.bo[buf].buftype == ''
+      and vim.api.nvim_buf_get_name(buf) ~= ''
+    then
+      out[#out + 1] = buf
+    end
+  end
+  return out
+end
+
 function M.open(path)
   path = normalize(path)
   if vim.fn.isdirectory(path) == 0 then
     vim.notify('Project no longer exists: ' .. path, vim.log.levels.WARN)
     return
   end
+
+  local bufs = file_buffers()
+  local modified = 0
+  for _, buf in ipairs(bufs) do
+    if vim.bo[buf].modified then
+      modified = modified + 1
+    end
+  end
+  if
+    modified > 0
+    and vim.fn.confirm(('Switch project and discard %d unsaved buffer(s)?'):format(modified), '&Switch\n&Cancel', 2) ~= 1
+  then
+    return
+  end
+
+  -- Keep the current project's layout for when we come back.
+  pcall(function()
+    require('persistence').save()
+  end)
+
+  -- Close the previous project's file buffers so its state doesn't linger.
+  vim.cmd('silent! tabonly')
+  vim.cmd('silent! only')
+  for _, buf in ipairs(bufs) do
+    pcall(vim.api.nvim_buf_delete, buf, { force = true })
+  end
+
   M.add(path)
   vim.cmd('cd ' .. vim.fn.fnameescape(path))
   -- persistence keys sessions by cwd, so this restores this project's layout.
