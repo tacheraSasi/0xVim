@@ -17,8 +17,8 @@ return {
       inc_rename = true,
       lsp_doc_border = true,
     },
-    views = {
-      cmdline_popup = { position = { row = '50%', col = '50%' }, size = { width = 60, height = 'auto' }, border = { style = 'rounded' } },
+    cmdline = {
+      view = 'cmdline',
     },
   },
 }
