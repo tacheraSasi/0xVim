@@ -1,4 +1,19 @@
-# Neovim Config — VS Code Experience on Neovim
+# Neovim Config VS Code Experience on Neovim
+
+<!--toc:start-->
+- [Neovim Config VS Code Experience on Neovim](#neovim-config-vs-code-experience-on-neovim)
+  - [Structure](#structure)
+  - [VS Code Keybindings](#vs-code-keybindings)
+  - [Leader Keybindings](#leader-keybindings)
+  - [LSP Mappings](#lsp-mappings)
+  - [Theme Switching](#theme-switching)
+  - [Installation](#installation)
+    - [1. Install Neovim 0.10+](#1-install-neovim-010)
+    - [2. Clone the config](#2-clone-the-config)
+    - [3. Sync plugins + health check](#3-sync-plugins-health-check)
+    - [4. Dependencies](#4-dependencies)
+    - [Optional: Neovide (GUI)](#optional-neovide-gui)
+<!--toc:end-->
 
 ![preview](docs/preview.png)
 
