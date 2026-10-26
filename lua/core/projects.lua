@@ -118,6 +118,29 @@ local function file_buffers()
   return out
 end
 
+local function under_root(name, real_root)
+  if name == '' then
+    return true
+  end
+  local real = vim.uv.fs_realpath(name) or name
+  return real:sub(1, #real_root + 1) == real_root .. '/'
+end
+
+-- Sessions are saved with `sessionoptions=buffers`, so older sessions can
+-- still list files from other projects. Drop every listed file buffer that
+-- lives outside `root` so pickers, the explorer and :bnext stay scoped to
+-- the project that is actually open.
+function M.prune(root)
+  root = normalize(root)
+  local real_root = (vim.uv.fs_realpath(root) or root):gsub('/+$', '')
+  for _, buf in ipairs(file_buffers()) do
+    local name = vim.api.nvim_buf_get_name(buf)
+    if not under_root(name, real_root) then
+      pcall(vim.api.nvim_buf_delete, buf, { force = true })
+    end
+  end
+end
+
 function M.open(path)
   path = normalize(path)
   if vim.fn.isdirectory(path) == 0 then
@@ -139,6 +162,11 @@ function M.open(path)
     return
   end
 
+  local explorer_open = false
+  pcall(function()
+    explorer_open = require('core.explorer').is_open()
+  end)
+
   -- Keep the current project's layout for when we come back.
   pcall(function()
     require('persistence').save()
@@ -157,6 +185,21 @@ function M.open(path)
   pcall(function()
     require('persistence').load()
   end)
+
+  -- The session restores its own saved cwd and can re-add buffers that were
+  -- never pruned when it was written. Re-assert the project root and scrub
+  -- anything outside it so the whole editor really moves to the project.
+  vim.cmd('cd ' .. vim.fn.fnameescape(path))
+  M.prune(path)
+
+  -- The explorer caches its own root (bind_to_cwd = false), so re-root it
+  -- explicitly instead of letting it reopen on the previous project.
+  if explorer_open then
+    pcall(function()
+      require('neo-tree.command').execute { action = 'show', source = 'filesystem', dir = path, position = 'right' }
+    end)
+  end
+
   vim.notify('Project: ' .. vim.fn.fnamemodify(path, ':t'))
 end
 

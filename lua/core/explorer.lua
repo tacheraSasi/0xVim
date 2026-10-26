@@ -49,6 +49,9 @@ function M.focus()
     action = 'focus',
     source = 'filesystem',
     position = 'right',
+    -- neo-tree caches its own root (bind_to_cwd = false), so without an
+    -- explicit dir a fresh open reuses whatever project was open before.
+    dir = vim.fn.getcwd(),
     toggle = false,
   }
 end
