@@ -1,6 +1,10 @@
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.mouse = 'a'
+-- Single global statusline pinned to the bottom of the screen; windows
+-- (including the explorer) span the full height instead of each drawing
+-- their own status bar.
+vim.o.laststatus = 3
 vim.o.showmode = false
 vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
