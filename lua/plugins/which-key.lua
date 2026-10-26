@@ -32,6 +32,7 @@ return {
       { '<leader>go', desc = 'Octo: repo menu' },
       { '<leader>lg', desc = 'Lazygit' },
       { '<leader>uz', desc = 'Zen mode' },
+      { '<leader>uu', desc = 'Undo tree' },
       { '<leader>uy', desc = 'Yank history' },
       { '<leader>um', desc = 'Toggle markdown preview' },
       { '<leader>uD', desc = 'Toggle dim' },
