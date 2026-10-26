@@ -11,7 +11,8 @@ return {
     enable_builtin = true,
   },
   keys = {
-    { '<leader>gp', '<cmd>Octo pr list<CR>', desc = 'Octo: pull requests' },
+    -- gP, not gp: <leader>gp is taken by Neogit push (plugins/extra.lua)
+    { '<leader>gP', '<cmd>Octo pr list<CR>', desc = 'Octo: pull requests' },
     { '<leader>gi', '<cmd>Octo issue list<CR>', desc = 'Octo: issues' },
     { '<leader>go', '<cmd>Octo<CR>', desc = 'Octo: repo menu' },
   },

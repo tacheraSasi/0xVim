@@ -39,8 +39,19 @@ vim.api.nvim_create_autocmd('BufReadPost', {
   callback = function(args)
     if vim.api.nvim_buf_line_count(args.buf) > 300 then
       vim.b[args.buf].snacks_scroll = false
+      -- mousemoveevent is a global option, so only lower it while a heavy
+      -- buffer is focused and restore it on the next buffer/window switch.
+      vim.b[args.buf].heavy_file = true
       vim.o.mousemoveevent = false
     end
+  end,
+})
+
+vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
+  desc = 'Scope mousemoveevent to heavy buffers',
+  group = augroup,
+  callback = function()
+    vim.o.mousemoveevent = not vim.b[vim.api.nvim_get_current_buf()].heavy_file
   end,
 })
 
@@ -65,19 +76,36 @@ vim.api.nvim_create_autocmd('LspAttach', {
   group = augroup,
   callback = function(event)
     local bufnr = event.buf
-    local client = vim.lsp.get_client_by_id(event.data.client_id)
-    local offset_encoding = (client and client.offset_encoding) or 'utf-16'
+    if vim.b[bufnr]._organize_imports_attached then
+      return
+    end
+    vim.b[bufnr]._organize_imports_attached = true
     vim.api.nvim_create_autocmd('BufWritePre', {
       buffer = bufnr,
       group = augroup,
-      callback = function()
-        local params = vim.lsp.util.make_range_params(0, offset_encoding)
-        params.context = { only = { 'source.organizeImports' }, diagnostics = {} }
-        local results = vim.lsp.buf_request_sync(bufnr, 'textDocument/codeAction', params, 1000)
-        for _, res in pairs(results or {}) do
+      callback = function(args)
+        local buf = args.buf
+        if not vim.api.nvim_buf_is_valid(buf) then
+          return
+        end
+        -- Build the request for the buffer being written, not the window's
+        -- current buffer: BufWritePre also fires for background writes (:wa,
+        -- autosave) and must not organize imports in some other file.
+        local params = {
+          textDocument = { uri = vim.uri_from_bufnr(buf) },
+          range = {
+            start = { line = 0, character = 0 },
+            ['end'] = { line = vim.api.nvim_buf_line_count(buf), character = 0 },
+          },
+          context = { only = { 'source.organizeImports' }, diagnostics = {} },
+        }
+        local results = vim.lsp.buf_request_sync(buf, 'textDocument/codeAction', params, 1000)
+        for client_id, res in pairs(results or {}) do
+          local rclient = vim.lsp.get_client_by_id(client_id)
+          local enc = (rclient and rclient.offset_encoding) or 'utf-16'
           for _, action in pairs(res.result or {}) do
             if action.edit then
-              vim.lsp.util.apply_workspace_edit(action.edit, offset_encoding)
+              vim.lsp.util.apply_workspace_edit(action.edit, enc)
             end
           end
         end

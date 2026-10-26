@@ -27,7 +27,7 @@ return {
       { '<leader>gD', desc = 'Diffview: close' },
       { '<leader>gh', desc = 'Diffview: file history' },
       { '<leader>ga', desc = 'AI commit message' },
-      { '<leader>gp', desc = 'Octo: pull requests' },
+      { '<leader>gP', desc = 'Octo: pull requests' },
       { '<leader>gi', desc = 'Octo: issues' },
       { '<leader>go', desc = 'Octo: repo menu' },
       { '<leader>lg', desc = 'Lazygit' },
@@ -61,6 +61,7 @@ return {
       { '<leader>t', group = '[T]oggle/Terminal' },
       { '<leader>u', group = '[U]tility' },
       { '<leader>x', group = 'Diagnostics' },
+      { '<leader>xL', desc = 'Diagnostics to loclist' },
     },
   },
 }

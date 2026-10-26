@@ -234,7 +234,9 @@ vscode_map('n', '<C-S-m>', function()
 end, { desc = 'Show Problems' })
 vscode_map('n', '<A-S-f>', function() require('conform').format { async = true, lsp_format = 'fallback' } end, { desc = 'Format Document' })
 vscode_map('n', '<A-F12>', function()
-  local params = vim.lsp.util.make_position_params()
+  local clients = vim.lsp.get_clients { bufnr = 0, method = 'textDocument/definition' }
+  local offset_encoding = (clients[1] and clients[1].offset_encoding) or 'utf-16'
+  local params = vim.lsp.util.make_position_params(0, offset_encoding)
   vim.lsp.buf_request(0, 'textDocument/definition', params, function(err, result)
     if result and #result > 0 then vim.lsp.util.preview_location(result[1], { border = 'rounded' }) end
   end)

@@ -198,11 +198,6 @@ return {
         -- Fallback TS SDK for projects without their own node_modules/typescript
         typescript = {
           tsdk = vim.fn.stdpath('data') .. '/mason/packages/typescript-language-server/node_modules/typescript/lib',
-        },
-        javascript = {
-          tsdk = vim.fn.stdpath('data') .. '/mason/packages/typescript-language-server/node_modules/typescript/lib',
-        },
-        typescript = {
           suggest = { completeFunctionCalls = true },
           inlayHints = {
             includeInlayParameterNameHints = 'all',
@@ -215,6 +210,7 @@ return {
           },
         },
         javascript = {
+          tsdk = vim.fn.stdpath('data') .. '/mason/packages/typescript-language-server/node_modules/typescript/lib',
           suggest = { completeFunctionCalls = true },
           inlayHints = {
             includeInlayParameterNameHints = 'all',
