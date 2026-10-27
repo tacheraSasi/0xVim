@@ -17,6 +17,18 @@ for _, name in ipairs({ 'nvim_err_writeln', 'nvim_err_write' }) do
   end
 end
 
+-- Async plugins (laravel.nvim, linters, LSP helpers) sometimes call
+-- vim.diagnostic.set for a buffer that was deleted while their task was
+-- running — nvim throws "Invalid buffer id" inside a coroutine. Ignore
+-- diagnostics aimed at buffers that no longer exist instead of crashing.
+local diagnostic_set = vim.diagnostic.set
+vim.diagnostic.set = function(namespace, bufnr, diagnostics, opts)
+  if type(bufnr) == 'number' and bufnr ~= 0 and not vim.api.nvim_buf_is_valid(bufnr) then
+    return
+  end
+  return diagnostic_set(namespace, bufnr, diagnostics, opts)
+end
+
 local augroup = vim.api.nvim_create_augroup('nvim-general', { clear = true })
 
 -- Laravel Blade templates: *.blade.php
