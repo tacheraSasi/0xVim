@@ -258,7 +258,9 @@ if vim.g.is_mac then
   end, { desc = 'Toggle file explorer', silent = true })
 end
 
-vscode_map('n', '<C-0>', function()
+-- Ctrl+Shift+E, VS Code's "show explorer" (Ctrl+0 is taken by zoom reset and
+-- is swallowed by the terminal's own font-reset keybind anyway).
+vscode_map('n', '<C-S-e>', function()
   require('core.explorer').focus()
 end, { desc = 'Focus Sidebar' })
 
