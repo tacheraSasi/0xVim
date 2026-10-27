@@ -3,11 +3,11 @@ if not vim.g.neovide then
   return
 end
 
--- Start from a clean 1.0 scale. Zooming is handled in
+-- Start at zoom 1.2. Zooming is handled in
 -- core/vscode-keybindings.lua by changing this factor instead of guifont:
 -- resizing the font makes Neovide re-render glyphs with different
 -- hinting/spacing, so the font visibly "changes" as you zoom.
-vim.g.neovide_scale_factor = 1.0
+vim.g.neovide_scale_factor = 1.2
 
 -- Animations. The default scroll/cursor animations are what make long buffers
 -- feel like they "stick" on this machine, so keep them very short.

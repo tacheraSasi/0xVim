@@ -311,7 +311,7 @@ end
 
 local function zoom_reset()
   if vim.g.neovide then
-    vim.g.neovide_scale_factor = 1.0
+    vim.g.neovide_scale_factor = 1.2
   else
     vim.o.guifont = vim.o.guifont:gsub(':h%d+', ':h14')
   end
