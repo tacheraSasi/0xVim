@@ -21,8 +21,17 @@ local function omarchy_colorscheme()
   return nil
 end
 
+-- Neovide always opens with `aether`; the terminal keeps following the
+-- Omarchy theme.
+local function desired_colorscheme()
+  if vim.g.neovide then
+    return 'aether'
+  end
+  return omarchy_colorscheme()
+end
+
 local function apply_omarchy_theme()
-  local name = omarchy_colorscheme()
+  local name = desired_colorscheme()
   if not name then
     return
   end
