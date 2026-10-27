@@ -197,15 +197,17 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 
 ## Theme Switching
 
-| Key | Theme |
-|-----|-------|
-| `<space>tt` | Theme picker (Telescope) |
-| `<space>tc` | Catppuccin (Mocha) — **default** |
-| `<space>to` | Tokyo Night |
-| `<space>tv` | VSCode |
-| `<space>tg` | Gruvbox |
-| `<space>tD` | Dracula |
-| `<space>tn` | Nord |
+| Key | Action |
+|-----|--------|
+| `<space>tt` | Theme picker (Telescope, live preview) |
+| `<space>tr` | Re-apply the current Omarchy theme |
+
+Every colorscheme installed in `lua/plugins/colorscheme.lua` shows up in the
+picker: catppuccin, tokyonight, gruvbox, kanagawa, monokai-pro, sonokai,
+edge, nord, cyberdream, melange, gruvbox-material, github-*, zenbones,
+poimandres, ayu, nightfox, bamboo, rose-pine, dracula, material, vscode, ….
+`:colorscheme <name>` works directly too, but the Omarchy theme is re-applied
+on the next startup.
 
 ## Installation
 

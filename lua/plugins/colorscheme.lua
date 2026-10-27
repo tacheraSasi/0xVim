@@ -56,6 +56,19 @@ local themes = {
   { 'Mofiqul/dracula.nvim' },
   { 'navarasu/onedark.nvim' },
   { 'marko-cerovac/material.nvim' },
+  -- Popular extra themes (not tied to an Omarchy theme).
+  -- Monokai Pro (the polished Monokai, not the dated original).
+  { 'loctvl842/monokai-pro.nvim', opts = { filter = 'pro' } },
+  { 'sainnhe/sonokai' },
+  { 'sainnhe/edge' },
+  { 'shaunsingh/nord.nvim' },
+  { 'scottmckendry/cyberdream.nvim', opts = {} },
+  { 'savq/melange-nvim' },
+  { 'sainnhe/gruvbox-material' },
+  { 'projekt0n/github-nvim-theme' },
+  { 'zenbones-theme/zenbones.nvim', deps = { 'rktjmp/lush.nvim' } },
+  { 'olivercederborg/poimandres.nvim', opts = {} },
+  { 'Shatur/neovim-ayu' },
 }
 
 local specs = {}
@@ -65,6 +78,7 @@ for _, t in ipairs(themes) do
     name = t.name,
     priority = 1000,
     dependencies = t.deps,
+    opts = t.opts,
   }
 end
 
