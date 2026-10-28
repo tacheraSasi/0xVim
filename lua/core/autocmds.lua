@@ -68,7 +68,10 @@ local function install_notify_logger()
     if tag then
       append_error('[' .. tag .. '] ' .. (type(msg) == 'string' and msg or vim.inspect(msg)))
     end
-    return current(msg, level, opts)
+    local ret = current(msg, level, opts)
+    -- snacks.notifier swaps vim.notify on first use; re-attach the logger.
+    vim.schedule(install_notify_logger)
+    return ret
   end
   _G.__nvim_logged_notify = wrapped
   vim.notify = wrapped

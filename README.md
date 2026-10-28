@@ -46,8 +46,8 @@ A modular Neovim configuration designed for developers coming from VS Code. Ever
 │       ├── bufferline.lua      # Tab bar
 │       ├── which-key.lua       # Keybinding hints
 │       ├── trouble.lua         # Diagnostics panel
-│       ├── noice.lua           # Modern UI (cmdline, messages)
-│       ├── notify.lua          # Notification system
+│       ├── noice.lua           # Modern UI (cmdline, messages);
+│       │                       # notifications via snacks.notifier
 │       ├── dashboard.lua       # Welcome screen
 │       ├── persistence.lua     # Session management
 │       ├── todo-comments.lua   # TODO/FIXME highlighting

@@ -19,7 +19,6 @@ return {
   { import = 'plugins.colorscheme' },
   { import = 'plugins.todo-comments' },
   { import = 'plugins.noice' },
-  { import = 'plugins.notify' },
   { import = 'plugins.dashboard' },
   { import = 'plugins.persistence' },
   { import = 'plugins.project' },
