@@ -172,6 +172,13 @@ function M.open(path)
     require('persistence').save()
   end)
 
+  -- Close the explorer through neo-tree itself first; tearing windows down
+  -- under it leaves a stale state buffer that makes the post-switch re-root
+  -- race its debounced navigate (E95: buffer name already exists).
+  pcall(function()
+    require('neo-tree.command').execute { action = 'close', source = 'filesystem' }
+  end)
+
   -- Close the previous project's file buffers so its state doesn't linger.
   vim.cmd('silent! tabonly')
   vim.cmd('silent! only')
@@ -193,8 +200,15 @@ function M.open(path)
   M.prune(path)
 
   -- The explorer caches its own root (bind_to_cwd = false), so re-root it
-  -- explicitly instead of letting it reopen on the previous project.
+  -- explicitly instead of letting it reopen on the previous project. Drop any
+  -- orphaned tree buffers first so neo-tree can recreate its own cleanly.
   if explorer_open then
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+      local name = vim.api.nvim_buf_get_name(buf)
+      if name:match('^neo%-tree ') and #vim.fn.win_findbuf(buf) == 0 then
+        pcall(vim.api.nvim_buf_delete, buf, { force = true })
+      end
+    end
     pcall(function()
       require('neo-tree.command').execute { action = 'show', source = 'filesystem', dir = path, position = 'right' }
     end)
