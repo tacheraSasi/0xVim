@@ -141,10 +141,48 @@ function M.prune(root)
   end
 end
 
+-- Strip terminal buffers from the session being written: mksession stores
+-- term:// buffers, which come back as dead "[Process exited]" entries. We
+-- temporarily clear their names (mksession skips unnamed buffers) and restore
+-- them after saving, so running shells are untouched.
+local original_save
+local function save_session()
+  local ok, persistence = pcall(require, 'persistence')
+  if not ok then
+    return
+  end
+  if not original_save then
+    original_save = persistence.save
+    persistence.save = function(...)
+      local renamed = {}
+      for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        local name = vim.api.nvim_buf_get_name(buf)
+        if vim.bo[buf].buftype == 'terminal' and name ~= '' then
+          if pcall(vim.api.nvim_buf_set_name, buf, '') then
+            renamed[#renamed + 1] = { buf, name }
+          end
+        end
+      end
+      local res = { pcall(original_save, ...) }
+      for _, r in ipairs(renamed) do
+        pcall(vim.api.nvim_buf_set_name, r[1], r[2])
+      end
+      if not res[1] then
+        error(res[2])
+      end
+    end
+  end
+  pcall(persistence.save)
+end
+
 function M.open(path)
   path = normalize(path)
   if vim.fn.isdirectory(path) == 0 then
     vim.notify('Project no longer exists: ' .. path, vim.log.levels.WARN)
+    return
+  end
+  if normalize(vim.fn.getcwd()) == path then
+    vim.notify('Already in project: ' .. vim.fn.fnamemodify(path, ':t'))
     return
   end
 
@@ -176,9 +214,7 @@ function M.open(path)
 
   -- Keep the current project's layout for when we come back (the save hook
   -- strips neo-tree buffers so sessions never restore them).
-  pcall(function()
-    require('persistence').save()
-  end)
+  save_session()
 
   -- Close the previous project's file buffers so its state doesn't linger.
   vim.cmd('silent! tabonly')
@@ -266,6 +302,10 @@ vim.api.nvim_create_autocmd('User', {
     end
   end,
 })
+
+vim.api.nvim_create_user_command('ProjectOpen', function(args)
+  M.open(args.args)
+end, { nargs = 1, complete = 'dir', desc = 'Open a project (switch cwd + session)' })
 
 vim.keymap.set('n', '<leader>pp', M.pick, { desc = 'Open project' })
 vim.keymap.set('n', '<leader>pa', function()

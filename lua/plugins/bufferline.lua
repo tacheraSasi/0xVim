@@ -5,26 +5,7 @@ return {
   event = 'VimEnter',
   config = function()
     local function smart_close(bufnum)
-      bufnum = bufnum or vim.api.nvim_get_current_buf()
-      local real_buffers = 0
-      for _, b in ipairs(vim.api.nvim_list_bufs()) do
-        if vim.api.nvim_buf_is_loaded(b) and vim.bo[b].buftype == '' and vim.bo[b].filetype ~= '' then
-          real_buffers = real_buffers + 1
-        end
-      end
-      if real_buffers <= 1 then
-        vim.cmd('bd ' .. bufnum)
-        local ok = pcall(vim.cmd, 'Dashboard')
-        if not ok then vim.cmd('enew') end
-      else
-        local prev_buf = vim.fn.bufnr('#')
-        if prev_buf > 0 and vim.api.nvim_buf_is_loaded(prev_buf) and prev_buf ~= bufnum then
-          vim.cmd('buffer ' .. prev_buf)
-          vim.cmd('bd ' .. bufnum)
-        else
-          vim.cmd('bd ' .. bufnum)
-        end
-      end
+      require('core.buffers').close(bufnum)
     end
 
     require('bufferline').setup {

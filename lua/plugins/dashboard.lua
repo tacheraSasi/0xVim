@@ -61,7 +61,7 @@ return {
       theme = 'hyper',
       disable_move = false,
       shortcut_type = 'letter',
-      change_to_vcs_root = true,
+      change_to_vcs_root = false,
       config = {
         header = header(),
         footer = footer,
@@ -78,7 +78,7 @@ return {
           { desc = ' Mason', group = 'Type', action = 'Mason', key = 'm' },
           { desc = ' Quit', group = 'DiagnosticError', action = 'qa', key = 'q' },
         },
-        project = { enable = true, limit = 6, icon = '  ', label = 'Projects', action = 'Telescope find_files cwd=' },
+        project = { enable = true, limit = 6, icon = '  ', label = 'Projects', action = 'ProjectOpen ' },
         mru = { limit = 8, icon = '  ', label = 'Recent Files' },
       },
     }

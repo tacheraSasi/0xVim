@@ -80,7 +80,9 @@ return {
         hide_by_name = { 'node_modules' },
         never_show = { '.DS_Store', 'thumbs.db' },
       },
-      follow_current_file = { enabled = true, leave_dirs_open = true },
+      -- Do not re-root the tree to the active file's directory (it made the
+      -- sidebar silently change projects); use :Neotree reveal on demand.
+      follow_current_file = { enabled = false },
       hijack_netrw_behavior = 'open_default',
       window = {
         mappings = {
