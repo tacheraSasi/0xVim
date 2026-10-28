@@ -33,6 +33,7 @@ return {
       { '<leader>lg', desc = 'Lazygit' },
       { '<leader>uz', desc = 'Zen mode' },
       { '<leader>uu', desc = 'Undo tree' },
+      { '<leader>uE', desc = 'Open nvim error log' },
       { '<leader>uy', desc = 'Yank history' },
       { '<leader>um', desc = 'Toggle markdown preview' },
       { '<leader>uD', desc = 'Toggle dim' },

@@ -1,12 +1,43 @@
--- Error log: record every runtime error with a timestamp and the current
--- directory so nothing is lost between sessions.
+-- Central error/warning log: everything goes to one file with a timestamp
+-- and the current directory so nothing is lost between sessions.
+--   :NvimErrors   or   <leader>uE   opens it.
 local error_log_path = vim.fn.stdpath('state') .. '/errors.log'
+
+local function rotate_log()
+  local stat = (vim.uv or vim.loop).fs_stat(error_log_path)
+  if not stat or stat.size < 1024 * 1024 then
+    return
+  end
+  local ok, lines = pcall(vim.fn.readfile, error_log_path)
+  if not ok or type(lines) ~= 'table' then
+    return
+  end
+  vim.fn.writefile(vim.list_slice(lines, math.max(1, #lines - 500)), error_log_path)
+end
+
 local function append_error(msg)
-  if msg == nil or msg == '' then return end
+  if msg == nil or msg == '' then
+    return
+  end
+  if type(msg) ~= 'string' then
+    msg = vim.inspect(msg)
+  end
+  msg = msg:gsub('\n', ' ')
+  rotate_log()
   local ok, file = pcall(io.open, error_log_path, 'a')
-  if not ok or not file then return end
+  if not ok or not file then
+    return
+  end
   file:write(('%s [%s] %s\n'):format(os.date('%Y-%m-%d %H:%M:%S'), vim.fn.getcwd(), msg))
   file:close()
+end
+
+do
+  local ok, file = pcall(io.open, error_log_path, 'a')
+  if ok and file then
+    file:write(('\n===== %s — nvim %s @ %s =====\n'):format(os.date('%Y-%m-%d %H:%M:%S'), tostring(vim.version()), vim.fn.getcwd()))
+    file:close()
+  end
 end
 
 for _, name in ipairs({ 'nvim_err_writeln', 'nvim_err_write' }) do
@@ -16,6 +47,71 @@ for _, name in ipairs({ 'nvim_err_writeln', 'nvim_err_write' }) do
     return orig(msg, ...)
   end
 end
+
+-- Also capture warnings/errors emitted through vim.notify (plugins, LSP,
+-- Omarchy integrations) and deprecations. Note: nvim-notify replaces
+-- vim.notify during plugin setup, so the logger is re-installed on VimEnter
+-- and after VeryLazy, wrapping whatever implementation won.
+local level_tags = {
+  [vim.log.levels.WARN] = 'WARN',
+  [vim.log.levels.ERROR] = 'ERROR',
+}
+
+local function install_notify_logger()
+  local current = vim.notify
+  if current == _G.__nvim_logged_notify then
+    return
+  end
+  local wrapped = function(msg, level, opts)
+    level = level or vim.log.levels.INFO
+    local tag = level_tags[level]
+    if tag then
+      append_error('[' .. tag .. '] ' .. (type(msg) == 'string' and msg or vim.inspect(msg)))
+    end
+    return current(msg, level, opts)
+  end
+  _G.__nvim_logged_notify = wrapped
+  vim.notify = wrapped
+end
+
+install_notify_logger()
+local log_group = vim.api.nvim_create_augroup('nvim-notify-log', { clear = true })
+vim.api.nvim_create_autocmd('VimEnter', {
+  group = log_group,
+  once = true,
+  callback = function()
+    vim.schedule(install_notify_logger)
+  end,
+})
+vim.api.nvim_create_autocmd('User', {
+  group = log_group,
+  pattern = 'VeryLazy',
+  once = true,
+  callback = function()
+    vim.schedule(install_notify_logger)
+  end,
+})
+-- Safety net: lazy loads startup plugins around VimEnter, after which
+-- nvim-notify owns vim.notify. Re-wrap once everything has settled.
+vim.defer_fn(install_notify_logger, 500)
+
+local deprecate = vim.deprecate
+local logged_deprecations = {}
+vim.deprecate = function(name, alternative, version, plugin, backtrace)
+  local key = tostring(name) .. '->' .. tostring(alternative)
+  if not logged_deprecations[key] then
+    logged_deprecations[key] = true
+    append_error(('[DEPRECATED] %s -> %s'):format(tostring(name), tostring(alternative)))
+  end
+  return deprecate(name, alternative, version, plugin, backtrace)
+end
+
+vim.api.nvim_create_user_command('NvimErrors', function()
+  vim.cmd('edit ' .. vim.fn.fnameescape(error_log_path))
+  vim.cmd('normal! G')
+end, { desc = 'Open the Neovim error/warning log' })
+
+vim.keymap.set('n', '<leader>uE', '<cmd>NvimErrors<cr>', { desc = 'Open nvim error log' })
 
 -- Async plugins (laravel.nvim, linters, LSP helpers) sometimes call
 -- vim.diagnostic.set for a buffer that was deleted while their task was
