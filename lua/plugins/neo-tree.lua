@@ -14,6 +14,10 @@ return {
   },
   opts = {
     close_if_last_window = false,
+    -- Sessions can restore neo-tree's named nofile buffer; nvim canonicalizes
+    -- that relative name against the cwd, so the next navigate collides
+    -- (E95: Buffer with this name already exists). Let neo-tree clean them.
+    auto_clean_after_session_restore = true,
     popup_border_style = 'rounded',
     enable_git_status = true,
     enable_diagnostics = true,

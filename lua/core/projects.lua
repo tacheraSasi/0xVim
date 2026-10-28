@@ -167,16 +167,17 @@ function M.open(path)
     explorer_open = require('core.explorer').is_open()
   end)
 
-  -- Keep the current project's layout for when we come back.
-  pcall(function()
-    require('persistence').save()
-  end)
-
   -- Close the explorer through neo-tree itself first; tearing windows down
   -- under it leaves a stale state buffer that makes the post-switch re-root
   -- race its debounced navigate (E95: buffer name already exists).
   pcall(function()
     require('neo-tree.command').execute { action = 'close', source = 'filesystem' }
+  end)
+
+  -- Keep the current project's layout for when we come back (the save hook
+  -- strips neo-tree buffers so sessions never restore them).
+  pcall(function()
+    require('persistence').save()
   end)
 
   -- Close the previous project's file buffers so its state doesn't linger.
@@ -205,7 +206,8 @@ function M.open(path)
   if explorer_open then
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
       local name = vim.api.nvim_buf_get_name(buf)
-      if name:match('^neo%-tree ') and #vim.fn.win_findbuf(buf) == 0 then
+      -- names can carry an absolute-path prefix after a cwd change
+      if name:find('neo%-tree ') and #vim.fn.win_findbuf(buf) == 0 then
         pcall(vim.api.nvim_buf_delete, buf, { force = true })
       end
     end
@@ -245,6 +247,22 @@ vim.api.nvim_create_autocmd({ 'VimEnter', 'DirChanged' }, {
     local cwd = vim.fn.getcwd()
     if M.is_project(cwd) then
       M.add(cwd)
+    end
+  end,
+})
+
+-- Neo-tree's window buffer is a NAMED nofile buffer, so mksession writes it
+-- into the session; restoring it later makes neo-tree collide with itself
+-- (E95) whenever the cwd differs. Drop those buffers right before saving.
+vim.api.nvim_create_autocmd('User', {
+  group = vim.api.nvim_create_augroup('projects.session-clean', { clear = true }),
+  pattern = 'PersistenceSavePre',
+  callback = function()
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+      local name = vim.api.nvim_buf_get_name(buf)
+      if name:find('neo%-tree ') then
+        pcall(vim.api.nvim_buf_delete, buf, { force = true })
+      end
     end
   end,
 })
