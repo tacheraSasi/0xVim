@@ -100,11 +100,31 @@ vim.defer_fn(install_notify_logger, 500)
 
 local deprecate = vim.deprecate
 local logged_deprecations = {}
+
+-- Calls originating inside a lazy.nvim package are third-party plugin
+-- deprecations we cannot patch here. Record them once in errors.log, but do
+-- not forward them (keeps :checkhealth vim.deprecated and toast popups clean).
+local function from_plugin()
+  for level = 2, 12 do
+    local info = debug.getinfo(level, 'S')
+    if not info then
+      return false
+    end
+    if info.source and info.source:find('/lazy/', 1, true) then
+      return true
+    end
+  end
+  return false
+end
+
 vim.deprecate = function(name, alternative, version, plugin, backtrace)
   local key = tostring(name) .. '->' .. tostring(alternative)
   if not logged_deprecations[key] then
     logged_deprecations[key] = true
     append_error(('[DEPRECATED] %s -> %s'):format(tostring(name), tostring(alternative)))
+  end
+  if plugin or from_plugin() then
+    return
   end
   return deprecate(name, alternative, version, plugin, backtrace)
 end
@@ -137,7 +157,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking text',
   group = augroup,
   callback = function()
-    vim.hl.on_yank()
+    -- nvim 0.13 renamed on_yank -> hl_op
+    local hl_op = vim.hl.hl_op or vim.hl.on_yank
+    hl_op()
   end,
 })
 
