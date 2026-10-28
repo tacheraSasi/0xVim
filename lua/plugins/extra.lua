@@ -289,6 +289,16 @@ return {
         ['Find Subword Under'] = '<C-D>',
       }
     end,
+    config = function()
+      -- Neovim has a single real cursor; VM marks the other insert points
+      -- with VM_Insert (default: DiffChange, nearly invisible). Link it to
+      -- Cursor so every insert position shows a cursor-like cell.
+      local function style()
+        vim.api.nvim_set_hl(0, 'VM_Insert', { link = 'Cursor' })
+      end
+      style()
+      vim.api.nvim_create_autocmd('ColorScheme', { callback = style })
+    end,
     keys = {
       { '<C-D>', mode = { 'n', 'x' }, desc = 'Add next cursor (VSCode)' },
       { '<D-D>', mode = { 'n', 'x' }, desc = 'Add next cursor (macOS)' },
