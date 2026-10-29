@@ -115,14 +115,14 @@ if vim.g.is_mac then
 end
 
 -- Quick Open / Command Palette
-vscode_map('n', '<C-p>', function() require('telescope.builtin').find_files {} end, { desc = 'Quick Open' })
+vscode_map('n', '<C-p>', function() require('core.find').find_files() end, { desc = 'Quick Open' })
 vscode_map('n', '<C-S-p>', function() require('telescope.builtin').commands() end, { desc = 'Command Palette' })
 
 -- Find / Replace
 vscode_map({ 'n', 'v' }, '<C-f>', '/', { desc = 'Find in file' })
 vscode_map('n', '<C-r>', ':s/', { desc = 'Replace in file' })
 vscode_map('v', '<C-r>', ':s/', { desc = 'Replace in selection' })
-vscode_map('n', '<C-S-f>', function() require('telescope.builtin').live_grep() end, { desc = 'Find in Files' })
+vscode_map('n', '<C-S-f>', function() require('core.find').live_grep() end, { desc = 'Find in Files' })
 vscode_map('n', '<C-S-h>', function()
   local ok, spectre = pcall(require, 'spectre')
   if ok then spectre.open() else vim.notify('Spectre not available', vim.log.levels.WARN) end
@@ -184,7 +184,14 @@ vscode_map('n', '<C-S-w>', function()
   require('core.buffers').close()
 end, { desc = 'Close Editor (smart)' })
 vscode_map('n', '<C-S-n>', '<cmd>tabnew<CR>', { desc = 'New Window' })
-vscode_map('n', '<C-S-t>', '<cmd>e #<CR>', { desc = 'Reopen Closed Editor' })
+vscode_map('n', '<C-S-t>', function()
+  local alt = vim.fn.bufnr '#'
+  if alt > 0 and vim.fn.bufexists(alt) == 1 and vim.bo[alt].buftype == '' then
+    pcall(vim.cmd, 'buffer ' .. alt)
+  else
+    vim.notify('No closed editor to reopen', vim.log.levels.INFO)
+  end
+end, { desc = 'Reopen Closed Editor' })
 
 -- Terminal
 vscode_map('n', '<C-S-`>', function()

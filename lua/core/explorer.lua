@@ -64,6 +64,17 @@ function M.toggle()
   end
 end
 
+-- Reveal the current file in the tree (root changes to the project first).
+function M.reveal()
+  require('neo-tree.command').execute {
+    action = 'show',
+    source = 'filesystem',
+    position = 'right',
+    dir = vim.fn.getcwd(),
+    reveal = true,
+  }
+end
+
 -- Editor-only window (used by Ctrl+1 style "Focus Editor" mappings)
 function M.focus_editor()
   local target = _G.__nvim_last_editor_win and _G.__nvim_last_editor_win()

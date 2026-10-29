@@ -25,6 +25,8 @@ vim.o.updatetime = 250
 vim.o.timeoutlen = 300
 vim.o.splitright = true
 vim.o.splitbelow = true
+-- Jumping to a file reuses the last window instead of splitting/failing
+vim.o.switchbuf = 'uselast'
 vim.o.list = true
 vim.opt.listchars = { tab = '│ ', trail = '·', nbsp = '␣', extends = '›', precedes = '‹', space = '·' }
 vim.o.inccommand = 'split'

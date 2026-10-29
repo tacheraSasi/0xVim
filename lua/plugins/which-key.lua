@@ -56,6 +56,8 @@ return {
       { '<leader>no', desc = 'Test: output' },
       { '<leader>o', group = '[O]utline' },
       { '<leader>p', group = '[P]roject' },
+      { '<leader>pD', desc = 'Forget current project' },
+      { '<leader>E', desc = 'Reveal file in explorer' },
       { '<leader>q', group = '[Q]uit/Session' },
       { '<leader>s', group = '[S]earch' },
       { '<leader>S', group = 'Spectre' },

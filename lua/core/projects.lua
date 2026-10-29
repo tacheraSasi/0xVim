@@ -33,6 +33,10 @@ local function read_list()
 end
 
 local function write_list(list)
+  local dir = vim.fn.fnamemodify(store, ':h')
+  if vim.fn.isdirectory(dir) == 0 then
+    vim.fn.mkdir(dir, 'p')
+  end
   local ok, f = pcall(io.open, store, 'w')
   if not ok or not f then
     return
@@ -58,31 +62,51 @@ local function normalize(dir)
   return dir
 end
 
+local function identity(path)
+  return (vim.uv.fs_realpath(path) or path):gsub('/+$', '')
+end
+
 function M.add(dir)
   dir = normalize(dir or vim.fn.getcwd())
   if vim.fn.isdirectory(dir) == 0 then
     return
   end
+  local key = identity(dir)
   local out = {
     {
       name = vim.fn.fnamemodify(dir, ':t'),
       dir = vim.fn.fnamemodify(dir, ':~'),
       path = dir,
+      time = os.time(),
     },
   }
-  local seen = { [dir] = true }
+  local seen = { [key] = true }
   for _, p in ipairs(read_list()) do
     local path = p.path and normalize(p.path)
-    if path and not seen[path] then
-      seen[path] = true
+    if path and not seen[identity(path)] then
+      seen[identity(path)] = true
       out[#out + 1] = {
         name = (p.name ~= nil and p.name ~= '') and p.name or vim.fn.fnamemodify(path, ':t'),
         dir = vim.fn.fnamemodify(path, ':~'),
         path = path,
+        time = p.time,
       }
     end
   end
   write_list(vim.list_slice(out, 1, 20))
+end
+
+function M.forget(dir)
+  dir = normalize(dir or vim.fn.getcwd())
+  local key = identity(dir)
+  local out = {}
+  for _, p in ipairs(read_list()) do
+    local path = p.path and normalize(p.path)
+    if path and identity(path) ~= key then
+      out[#out + 1] = p
+    end
+  end
+  write_list(out)
 end
 
 function M.list()
@@ -90,12 +114,13 @@ function M.list()
   local seen = {}
   for _, p in ipairs(read_list()) do
     local path = p.path and normalize(p.path)
-    if path and not seen[path] and vim.fn.isdirectory(path) == 1 then
-      seen[path] = true
+    if path and not seen[identity(path)] and vim.fn.isdirectory(path) == 1 then
+      seen[identity(path)] = true
       out[#out + 1] = {
         name = (p.name ~= nil and p.name ~= '') and p.name or vim.fn.fnamemodify(path, ':t'),
         dir = vim.fn.fnamemodify(path, ':~'),
         path = path,
+        time = p.time,
       }
     end
   end
@@ -157,7 +182,7 @@ local function save_session()
       local renamed = {}
       for _, buf in ipairs(vim.api.nvim_list_bufs()) do
         local name = vim.api.nvim_buf_get_name(buf)
-        if vim.bo[buf].buftype == 'terminal' and name ~= '' then
+        if vim.bo[buf].buftype ~= '' and name ~= '' then
           if pcall(vim.api.nvim_buf_set_name, buf, '') then
             renamed[#renamed + 1] = { buf, name }
           end
@@ -268,7 +293,8 @@ function M.pick()
   vim.ui.select(items, {
     prompt = 'Open project',
     format_item = function(p)
-      return string.format('%s  %s', p.name, p.dir)
+      local when = p.time and ('  (' .. os.date('%b %d %H:%M', p.time) .. ')') or ''
+      return string.format('%s  %s%s', p.name, p.dir, when)
     end,
   }, function(choice)
     if choice then
@@ -308,6 +334,11 @@ vim.api.nvim_create_user_command('ProjectOpen', function(args)
 end, { nargs = 1, complete = 'dir', desc = 'Open a project (switch cwd + session)' })
 
 vim.keymap.set('n', '<leader>pp', M.pick, { desc = 'Open project' })
+vim.keymap.set('n', '<leader>pD', function()
+  local name = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
+  M.forget()
+  vim.notify('Forgot project: ' .. name)
+end, { desc = 'Forget current project' })
 vim.keymap.set('n', '<leader>pa', function()
   M.add()
   vim.notify('Added to projects: ' .. vim.fn.fnamemodify(vim.fn.getcwd(), ':t'))

@@ -19,7 +19,6 @@ return {
           local icon = level:match('error') and ' ' or ' '
           return ' ' .. icon .. count
         end,
-        offsets = { { filetype = 'neo-tree', text = 'Explorer', text_align = 'left' } },
         show_buffer_close_icons = true,
         show_tab_indicators = true,
         separator_style = 'thin',

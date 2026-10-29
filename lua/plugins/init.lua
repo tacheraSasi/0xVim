@@ -21,7 +21,6 @@ return {
   { import = 'plugins.noice' },
   { import = 'plugins.dashboard' },
   { import = 'plugins.persistence' },
-  { import = 'plugins.project' },
   { import = 'plugins.spectre' },
   { import = 'plugins.comment' },
   { import = 'plugins.aicommits' },

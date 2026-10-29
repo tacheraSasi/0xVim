@@ -11,6 +11,7 @@ return {
     { '<C-b>', function() require('core.explorer').toggle() end, desc = 'Toggle file explorer', silent = true },
     { '<leader>e', function() require('core.explorer').toggle() end, desc = 'Toggle file explorer', silent = true },
     { '<C-S-e>', function() require('core.explorer').focus() end, desc = 'Focus file explorer', silent = true },
+    { '<leader>E', function() require('core.explorer').reveal() end, desc = 'Reveal current file in explorer' },
   },
   opts = {
     close_if_last_window = false,
