@@ -12,6 +12,10 @@ return {
     'folke/lazydev.nvim',
   },
   opts = {
+    -- Typr is a typing test: completion popups would fight the words you type.
+    enabled = function()
+      return vim.bo.filetype ~= 'typr'
+    end,
     keymap = {
       preset = 'super-tab',
       ['<C-Space>'] = { 'show', 'show_documentation', 'hide_documentation' },

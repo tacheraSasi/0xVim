@@ -10,6 +10,11 @@ return {
     picker = 'telescope',
     enable_builtin = true,
   },
+  config = function(_, opts)
+    require('octo').setup(opts)
+    -- Show a "Fetching from GitHub…" spinner while requests are in flight.
+    require('core.octo_loader').setup()
+  end,
   keys = {
     -- gP, not gp: <leader>gp is taken by Neogit push (plugins/extra.lua)
     { '<leader>gP', '<cmd>Octo pr list<CR>', desc = 'Octo: pull requests' },

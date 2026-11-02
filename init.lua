@@ -18,6 +18,7 @@ require 'core.keymaps'
 require 'core.autocmds'
 require 'core.projects'
 require 'core.neovide'
+require 'core.octo_zdiff'.setup()
 require('lazy').setup('plugins', {
   ui = {
     icons = vim.g.have_nerd_font and {} or {
