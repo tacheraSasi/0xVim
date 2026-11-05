@@ -238,16 +238,17 @@ return {
       }
 
       -- TS/JS (pwa-node): js-debug-adapter has no mason-nvim-dap mapping yet
+      local mason_bin = vim.fn.stdpath 'data' .. '/mason/bin/'
       dap.adapters['pwa-node'] = {
         type = 'server',
         host = '127.0.0.1',
         port = '${port}',
-        executable = { command = 'js-debug-adapter', args = { '${port}' } },
+        executable = { command = mason_bin .. 'js-debug-adapter', args = { '${port}' } },
       }
       -- PHP / Laravel (Xdebug) — listens on port 9003 by default
       dap.adapters.php = {
         type = 'executable',
-        command = 'php-debug-adapter',
+        command = mason_bin .. 'php-debug-adapter',
       }
 
       dapui.setup {

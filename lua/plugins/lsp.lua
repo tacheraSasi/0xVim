@@ -340,7 +340,9 @@ return {
       'php-cs-fixer', 'phpstan', 'phpcs', 'phpcbf',
       'golangci-lint', 'revive', 'staticcheck',
       'markdownlint-cli2', 'jsonlint', 'yamllint',
-      'codelldb', 'delve',
+      -- codelldb/delve are installed by mason-nvim-dap (above). Listing them
+      -- here as well makes both installers race on a fresh setup
+      -- ("Package is already installing") and aborts the install.
       'tailwindcss-language-server',
       'gomodifytags', 'gotests', 'impl', 'iferr',
     })

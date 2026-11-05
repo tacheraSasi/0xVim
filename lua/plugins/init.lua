@@ -31,7 +31,6 @@ return {
   { import = 'plugins.ufo' },
   { import = 'plugins.lsp-file-operations' },
   
-  { import = 'plugins.markview' },
   { import = 'plugins.yanky' },
   { import = 'plugins.undotree' },
   { import = 'plugins.scrollbar' },
