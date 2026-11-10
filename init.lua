@@ -3,6 +3,12 @@ vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 vim.g.scrollbar_v2_notice = false
 
+-- neo-tree is the file explorer; keep netrw from loading (its VimLeave handler
+-- was the one erroring after an EMFILE) and raise the open-file limit early.
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+require('core.limits').raise_nofile()
+
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'

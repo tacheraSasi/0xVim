@@ -8,7 +8,6 @@ return {
     image = { enabled = not vim.g.neovide },
     indent = { enabled = true },
     input = { enabled = true },
-    lazygit = { enabled = true },
     notifier = { enabled = true, timeout = 3000 },
     quickfile = { enabled = true },
     scope = { enabled = true },
@@ -20,7 +19,6 @@ return {
     zen = { enabled = true },
   },
   keys = {
-    { '<leader>lg', function() Snacks.lazygit() end, desc = 'Lazygit' },
     { '<leader>un', function() Snacks.notifier.show_history() end, desc = 'Notification history' },
     { '<leader>uN', function() Snacks.notifier.hide() end, desc = 'Dismiss notifications' },
     { '<leader>uz', function() Snacks.zen() end, desc = 'Zen mode' },
