@@ -340,6 +340,9 @@ return {
       'php-cs-fixer', 'phpstan', 'phpcs', 'phpcbf',
       'golangci-lint', 'revive', 'staticcheck',
       'markdownlint-cli2', 'jsonlint', 'yamllint',
+      -- Debug adapters with no mason-nvim-dap mapping; install them here so
+      -- the DAP config never points at a missing binary.
+      'js-debug-adapter', 'php-debug-adapter',
       -- codelldb/delve are installed by mason-nvim-dap (above). Listing them
       -- here as well makes both installers race on a fresh setup
       -- ("Package is already installing") and aborts the install.

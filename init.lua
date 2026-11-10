@@ -20,6 +20,9 @@ require 'core.projects'
 require 'core.neovide'
 require 'core.octo_zdiff'.setup()
 require('lazy').setup('plugins', {
+  -- No plugin here needs luarocks; disabling it avoids hererocks/luarocks
+  -- health errors on fresh machines that have no LuaRocks installed.
+  rocks = { enabled = false },
   ui = {
     icons = vim.g.have_nerd_font and {} or {
       cmd = '⌘',

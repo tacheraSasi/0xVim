@@ -234,7 +234,9 @@ return {
 
       require('mason-nvim-dap').setup {
         automatic_setup = true, handlers = {},
-        ensure_installed = { 'delve', 'codelldb', 'js-debug-adapter', 'php-debug-adapter' },
+        -- js/php adapters are installed by mason-tool-installer (see lsp.lua)
+        -- so they exist even before the debugger is first opened.
+        ensure_installed = { 'delve', 'codelldb' },
       }
 
       -- TS/JS (pwa-node): js-debug-adapter has no mason-nvim-dap mapping yet
