@@ -6,7 +6,12 @@ return {
     {
       'L3MON4D3/LuaSnip',
       version = '2.*',
-      build = vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 and nil or 'make install_jsregexp',
+      build = (function()
+        if vim.fn.has 'win32' == 1 then
+          return nil
+        end
+        return require('core.toolchain').has_make() and 'make install_jsregexp' or nil
+      end)(),
       dependencies = { 'rafamadriz/friendly-snippets' },
     },
     'folke/lazydev.nvim',
