@@ -7,6 +7,8 @@ local parsers = {
   'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'go', 'rust', 'python',
   'typescript', 'tsx', 'javascript', 'php', 'blade', 'vue', 'yaml', 'zig', 'ruby',
   'toml', 'dockerfile', 'proto',
+  -- Snacks.image doc rendering (LaTeX math, Svelte, Typst).
+  'latex', 'svelte', 'typst',
 }
 
 return {
