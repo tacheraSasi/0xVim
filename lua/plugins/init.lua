@@ -34,7 +34,6 @@ return {
   { import = 'plugins.yanky' },
   { import = 'plugins.undotree' },
   { import = 'plugins.scrollbar' },
-  { import = 'plugins.smear-cursor' },
   { import = 'plugins.eyeliner' },
   { import = 'plugins.dressing' },
   { import = 'plugins.lint' },
