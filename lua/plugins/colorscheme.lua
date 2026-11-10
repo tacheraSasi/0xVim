@@ -23,8 +23,8 @@ end
 
 -- On Omarchy, Neovide always opens with `aether` and the terminal follows the
 -- active Omarchy theme. On any other system (macOS, plain Linux, a fresh
--- machine without Omarchy) there is no Omarchy state to read, so fall back to
--- Catppuccin Mocha instead of silently leaving Neovim on its default theme.
+-- machine without Omarchy) there is no Omarchy state to read, so default to
+-- `aether` everywhere instead of silently leaving Neovim on its default theme.
 local function desired_colorscheme()
   local omarchy = omarchy_colorscheme()
   if omarchy then
@@ -33,7 +33,7 @@ local function desired_colorscheme()
     end
     return omarchy
   end
-  return 'catppuccin'
+  return 'aether'
 end
 
 local function apply_omarchy_theme()
