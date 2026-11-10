@@ -10,8 +10,25 @@ vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
 end)
 
--- Make Mason-installed binaries (formatters, linters, debug adapters,
--- Go tools) resolvable from Neovim.
+-- Make local toolchain + Mason binaries resolvable from Neovim.
+--
+-- GUI launches (Neovide, Zed, Finder) do not inherit the shell PATH, so
+-- `rg`/`fd`/`git`/`node` can be missing even though they are installed. Add
+-- the standard local prefixes explicitly, then Mason's bin directory.
+local local_bins = {
+  '~/.local/bin',
+  '~/.local/opt/node/bin',
+  '~/.local/opt/go/bin',
+  '~/.zvm/bin',
+}
+local prefix = {}
+for _, dir in ipairs(local_bins) do
+  local path = vim.fn.expand(dir)
+  if vim.fn.isdirectory(path) == 1 then
+    prefix[#prefix + 1] = path
+  end
+end
+vim.env.PATH = table.concat(prefix, ':') .. ':' .. (vim.env.PATH or '')
 vim.env.PATH = vim.fn.stdpath('data') .. '/mason/bin:' .. vim.env.PATH
 vim.o.breakindent = true
 vim.o.undofile = true
