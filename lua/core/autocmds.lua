@@ -292,6 +292,22 @@ function _G.is_large_file(bufnr)
   return ok and stats ~= nil and stats.size > LARGE_FILE_BYTES
 end
 
+-- "Long" files: many lines but modest size (e.g. a 3k-line TS file at ~100KB).
+-- These slipped past the byte check and got the full decoration stack, which is
+-- what made long files lag while Zed/VSCode stayed smooth. Usable from
+-- FileType/BufReadPost/LspAttach on, when the buffer is already loaded.
+local LONG_FILE_LINES = 1500
+
+function _G.is_long_file(bufnr)
+  bufnr = (bufnr == nil or bufnr == 0) and vim.api.nvim_get_current_buf() or bufnr
+  local ok, n = pcall(vim.api.nvim_buf_line_count, bufnr)
+  return ok and n > LONG_FILE_LINES
+end
+
+function _G.is_heavy_file(bufnr)
+  return _G.is_large_file(bufnr) or _G.is_long_file(bufnr)
+end
+
 vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileReadPre' }, {
   group = large_file_augroup,
   callback = function(args)
@@ -311,17 +327,32 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileReadPre' }, {
 })
 
 -- Treesitter is the biggest scrolling bottleneck on huge files. The plugin
--- starts it on FileType, so stop it right after that has run.
+-- starts it on FileType, so stop it right after that has run. On merely-LONG
+-- files (many lines, small size) treesitter highlighting stays on — it is
+-- incremental and fast — but the per-scroll/per-cursor decoration stack goes.
 vim.api.nvim_create_autocmd('FileType', {
   group = large_file_augroup,
   callback = function(args)
-    if not _G.is_large_file(args.buf) then
+    local buf = args.buf
+    if not _G.is_heavy_file(buf) then
       return
     end
+    -- snacks re-renders these over the visible region on every scroll and
+    -- cursor move (verified: each module checks these buffer-locals).
+    vim.b[buf].snacks_indent = false
+    vim.b[buf].snacks_scope = false
+    vim.b[buf].snacks_dim = false
+    vim.b[buf].snacks_words = false
     vim.schedule(function()
-      if vim.api.nvim_buf_is_valid(args.buf) then
-        pcall(vim.treesitter.stop, args.buf)
+      if not vim.api.nvim_buf_is_valid(buf) then
+        return
       end
+      -- Huge/minified: no treesitter at all (highlighting + folding).
+      if _G.is_large_file(buf) then
+        pcall(vim.treesitter.stop, buf)
+      end
+      -- Colorizer scans colors per buffer; detach it on heavy buffers.
+      pcall(function() require('colorizer').detach_from_buffer(buf) end)
     end)
   end,
 })

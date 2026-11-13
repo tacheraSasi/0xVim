@@ -18,7 +18,9 @@ return {
       css = true,
       css_fn = true,
       mode = 'background',
-      tailwind = true,
+      -- tailwind-tools already colors Tailwind classes; colorizer's own
+      -- tailwind matcher is the expensive one and duplicated that work.
+      tailwind = false,
       sass = { enable = false, parsers = { css = false } },
       always_update = false,
     },

@@ -25,8 +25,14 @@ return {
     event = 'BufReadPost',
     config = function()
       require('rainbow-delimiters.setup').setup {
+        -- Whole-buffer work on open + per-scroll recompute; skip on heavy buffers.
         strategy = {
-          [''] = 'rainbow-delimiters.strategy.local',
+          [''] = function(bufnr)
+            if _G.is_heavy_file and _G.is_heavy_file(bufnr) then
+              return require('rainbow-delimiters').strategy.noop
+            end
+            return 'rainbow-delimiters.strategy.local'
+          end,
           vim = 'rainbow-delimiters.strategy.local',
           query = { [''] = 'rainbow-delimiters', latex = 'rainbow-blocks' },
         },
