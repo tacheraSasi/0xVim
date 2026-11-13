@@ -133,7 +133,12 @@ return {
           end
         end
 
-        if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
+        -- Full-document highlight requests spike on heavy buffers (thousands
+        -- of ranges -> extmarks); skip attaching there.
+        if client
+          and not _G.is_heavy_file(event.buf)
+          and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf)
+        then
           local hl_augroup = vim.api.nvim_create_augroup('lsp-highlight', { clear = false })
           vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
             buffer = event.buf, group = hl_augroup, callback = vim.lsp.buf.document_highlight,

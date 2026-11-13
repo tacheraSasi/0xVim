@@ -26,7 +26,8 @@ return {
   { import = 'plugins.aicommits' },
   { import = 'plugins.snacks' },
   { import = 'plugins.tailwind-tools' },
-  { import = 'plugins.illuminate' },
+  -- vim-illuminate removed: duplicated the native documentHighlight in lsp.lua
+  -- (double full-document LSP highlight requests = cursor-pause lag spikes).
   { import = 'plugins.goto-preview' },
   -- nvim-ufo removed: computed folds for the whole buffer on open AND
   -- duplicated the native treesitter foldexpr (foldmethod=expr in options.lua).
