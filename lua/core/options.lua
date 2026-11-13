@@ -80,7 +80,8 @@ vim.o.mousescroll = 'ver:1,hor:1'
 vim.o.foldmethod = 'expr'
 vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 vim.o.foldlevelstart = 99
-vim.o.foldcolumn = '0'
+-- Native treesitter folding owns the fold column now (nvim-ufo was removed).
+vim.o.foldcolumn = '1'
 vim.opt.fillchars = {
   eob = ' ',
   fold = ' ',

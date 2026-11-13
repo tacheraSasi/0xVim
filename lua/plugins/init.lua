@@ -28,9 +28,11 @@ return {
   { import = 'plugins.tailwind-tools' },
   { import = 'plugins.illuminate' },
   { import = 'plugins.goto-preview' },
-  { import = 'plugins.ufo' },
+  -- nvim-ufo removed: computed folds for the whole buffer on open AND
+  -- duplicated the native treesitter foldexpr (foldmethod=expr in options.lua).
+  -- Native folding stays; it is single-system and incremental.
   { import = 'plugins.lsp-file-operations' },
-  
+
   { import = 'plugins.yanky' },
   { import = 'plugins.undotree' },
   { import = 'plugins.scrollbar' },
