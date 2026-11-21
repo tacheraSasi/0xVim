@@ -4,7 +4,28 @@
 --   ~/.local/state/omarchy/current/theme/neovim.lua
 -- on every theme change (including Darky's light/dark switching), so we read the
 -- colorscheme name from there and apply it at startup.
+local function omarchy_theme_name()
+  local path = vim.fn.expand '~/.local/state/omarchy/current/theme.name'
+  if vim.fn.filereadable(path) == 0 then
+    return nil
+  end
+  local lines = vim.fn.readfile(path)
+  return lines[1] and vim.trim(lines[1]) or nil
+end
+
+-- Colorscheme overrides for specific Omarchy themes. `solitude` is the dark
+-- theme, so terminal Neovim uses Cyberdream's muted variant while the light
+-- theme keeps its own colorscheme.
+local theme_colorschemes = {
+  solitude = 'cyberdream',
+}
+
 local function omarchy_colorscheme()
+  local theme = omarchy_theme_name()
+  if theme and theme_colorschemes[theme] then
+    return theme_colorschemes[theme]
+  end
+
   local path = vim.fn.expand '~/.local/state/omarchy/current/theme/neovim.lua'
   if vim.fn.filereadable(path) == 0 then
     return nil
@@ -77,7 +98,7 @@ local themes = {
   { 'sainnhe/sonokai' },
   { 'sainnhe/edge' },
   { 'shaunsingh/nord.nvim' },
-  { 'scottmckendry/cyberdream.nvim', opts = {} },
+  { 'scottmckendry/cyberdream.nvim', opts = { variant = 'muted' } },
   { 'savq/melange-nvim' },
   { 'sainnhe/gruvbox-material' },
   { 'projekt0n/github-nvim-theme' },
