@@ -186,12 +186,7 @@ vscode_map('n', '<C-S-w>', function()
 end, { desc = 'Close Editor (smart)' })
 vscode_map('n', '<C-S-n>', '<cmd>tabnew<CR>', { desc = 'New Window' })
 vscode_map('n', '<C-S-t>', function()
-  local alt = vim.fn.bufnr '#'
-  if alt > 0 and vim.fn.bufexists(alt) == 1 and vim.bo[alt].buftype == '' then
-    pcall(vim.cmd, 'buffer ' .. alt)
-  else
-    vim.notify('No closed editor to reopen', vim.log.levels.INFO)
-  end
+  require('core.buffers').reopen()
 end, { desc = 'Reopen Closed Editor' })
 
 -- Terminal

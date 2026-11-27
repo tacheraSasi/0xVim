@@ -27,6 +27,47 @@ local function real_buffer_count(exclude)
   return n
 end
 
+-- Closed-buffer history so <C-S-t> ("Reopen Closed Editor") can actually
+-- reopen something. :bd deletes the buffer, so the alternate buffer can
+-- never point at it. NOTE: :bd unloads + unlists the buffer but the buffer
+-- object itself survives (nvim_buf_is_valid stays true), so closure is
+-- detected via bufloaded() — and only then recorded. The cursor position
+-- must be captured BEFORE the bd (getbufinfo reports lnum=0 once unloaded).
+-- Session-local by design (a restored session already restores its files).
+local closed_stack = {}
+local MAX_CLOSED = 20
+
+local function delete_buf(bufnum)
+  local name = vim.api.nvim_buf_get_name(bufnum)
+  local lnum = 1
+  for _, info in ipairs(vim.fn.getbufinfo(bufnum)) do
+    if info.bufnr == bufnum then
+      lnum = info.lnum > 0 and info.lnum or 1
+    end
+  end
+  pcall(vim.cmd, 'bd ' .. bufnum)
+  if name ~= '' and not vim.api.nvim_buf_is_loaded(bufnum) then
+    closed_stack[#closed_stack + 1] = { name = name, lnum = lnum }
+    if #closed_stack > MAX_CLOSED then
+      table.remove(closed_stack, 1)
+    end
+  end
+end
+
+function M.reopen()
+  while #closed_stack > 0 do
+    local entry = table.remove(closed_stack)
+    if vim.fn.filereadable(entry.name) == 1 then
+      vim.cmd('edit ' .. vim.fn.fnameescape(entry.name))
+      if entry.lnum > 1 then
+        pcall(vim.api.nvim_win_set_cursor, 0, { entry.lnum, 0 })
+      end
+      return entry.name
+    end
+  end
+  vim.notify('No closed editor to reopen', vim.log.levels.INFO)
+end
+
 function M.close(bufnum)
   bufnum = bufnum or vim.api.nvim_get_current_buf()
 
@@ -48,12 +89,12 @@ function M.close(bufnum)
 
   -- Closing a background (bufferline click) must not force-discard edits.
   if not closing_current then
-    pcall(vim.cmd, 'bd ' .. bufnum)
+    delete_buf(bufnum)
     return
   end
 
   if real_buffer_count(bufnum) == 0 then
-    pcall(vim.cmd, 'bd ' .. bufnum)
+    delete_buf(bufnum)
     if not pcall(vim.cmd, 'Dashboard') then
       vim.cmd('enew')
     end
@@ -70,7 +111,7 @@ function M.close(bufnum)
   then
     vim.cmd('buffer ' .. prev_buf)
   end
-  pcall(vim.cmd, 'bd ' .. bufnum)
+  delete_buf(bufnum)
 end
 
 return M
