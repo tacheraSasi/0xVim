@@ -21,7 +21,6 @@ return {
 
     vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { desc = 'Exit terminal mode' })
     vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], { desc = 'Terminal: left window' })
-    vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], { desc = 'Terminal: lower window' })
     vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], { desc = 'Terminal: upper window' })
     vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], { desc = 'Terminal: right window' })
     vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], { desc = 'Terminal: window prefix' })
@@ -34,7 +33,9 @@ return {
     -- Cmd+J. Press once to open, press again to close. Works from normal mode
     -- AND from inside the terminal itself, so the same key opens and closes it.
     -- This intentionally overrides the "move to lower window" <C-j> mapping in
-    -- core/keymaps.lua (use <C-w>j if you need that).
+    -- core/keymaps.lua and makes the terminal-mode nav set asymmetric on
+    -- purpose: C-h/C-k/C-l navigate windows, C-j is the terminal toggle
+    -- (use <C-w>j if you need to move down).
     vim.keymap.set({ 'n', 't' }, '<C-j>', '<Cmd>ToggleTerm<CR>', { desc = 'Toggle terminal (Ctrl+J)', silent = true })
     if vim.g.is_mac then
       vim.keymap.set({ 'n', 't' }, '<D-j>', '<Cmd>ToggleTerm<CR>', { desc = 'Toggle terminal (Cmd+J)', silent = true })
