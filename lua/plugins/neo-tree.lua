@@ -61,7 +61,7 @@ return {
         ['d'] = 'delete',
         ['r'] = 'rename',
         ['y'] = 'copy_to_clipboard',
-        ['x'] = 'open',
+        ['x'] = 'cut_to_clipboard',
         ['p'] = 'paste_from_clipboard',
         ['c'] = 'copy',
         ['m'] = 'move',
