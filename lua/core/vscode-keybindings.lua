@@ -44,20 +44,19 @@ vscode_map('n', '<C-a>', 'ggVG', { desc = 'Select all' })
 -- Cursor movement (Zed / VSCode-style with Option + arrows)
 -- <M-Left>  = back a word       (Zed: Opt-←)
 -- <M-Right> = forward a word    (Zed: Opt-→)
--- <M-Up>    = start of paragraph / block  (Zed: Opt-↑)
--- <M-Down>  = end of paragraph / block    (Zed: Opt-↓)
+-- <M-Up>    = move line up      (VSCode: Alt-↑)   — all modes
+-- <M-Down>  = move line down    (VSCode: Alt-↓)   — all modes
 -- <D-Left>  = start of line     (Zed: Cmd-←)
 -- <D-Right> = end of line       (Zed: Cmd-→)
 -- <D-Up>    = top of file       (Zed: Cmd-↑)
 -- <D-Down>  = bottom of file    (Zed: Cmd-↓)
+-- Paragraph motion stays on the native `{` / `}` keys.
 -- Normal mode: use native motions. Insert mode: use <C-o> to run one
 -- normal command then return to insert, so cursor stays fluid while typing.
 vim.keymap.set({ 'n', 'v' }, '<M-Left>', 'b', { desc = 'Word back' })
 vim.keymap.set({ 'n', 'v' }, '<M-Right>', 'w', { desc = 'Word forward' })
 vim.keymap.set('i', '<M-Left>', '<C-o>b', { desc = 'Word back (insert)' })
 vim.keymap.set('i', '<M-Right>', '<C-o>w', { desc = 'Word forward (insert)' })
-vim.keymap.set({ 'n', 'v', 'i' }, '<M-Up>', '{', { desc = 'Paragraph back' })
-vim.keymap.set({ 'n', 'v', 'i' }, '<M-Down>', '}', { desc = 'Paragraph forward' })
 
 -- Terminal.app sends <M-b>/<M-f> for Opt+Left/Opt+Right (not arrow keys).
 -- Map those too so word-motion works regardless of which terminal encoding.
@@ -71,14 +70,16 @@ vim.keymap.set('i', '<M-f>', '<C-o>w', { desc = 'Word forward (insert)' })
 -- explicitly so Opt+arrows work no matter which terminal you use.
 -- We map every common variant of the sequence to cover terminal quirks.
 local esc = string.char(27)
+-- Only left/right are mapped from raw CSI: those match <M-Left>/<M-Right>.
+-- Up/down raw sequences are intentionally NOT mapped — Option+Up/Down are
+-- move-line keys, and the raw forms would otherwise shadow the modifier
+-- mappings depending on how the terminal encodes the key.
 local seqs = {
   right = { '[1;3C', '[1;5C', '[5C', '[3C', 'OC' },
   left  = { '[1;3D', '[1;5D', '[5D', '[3D', 'OD' },
-  up    = { '[1;3A', '[1;5A', '[5A', '[3A', 'OA' },
-  down  = { '[1;3B', '[1;5B', '[5B', '[3B', 'OB' },
 }
-local motion = { right = 'w', left = 'b', up = '{', down = '}' }
-local motion_i = { right = '<C-o>w', left = '<C-o>b', up = '<C-o>{', down = '<C-o>}' }
+local motion = { right = 'w', left = 'b' }
+local motion_i = { right = '<C-o>w', left = '<C-o>b' }
 for dir, list in pairs(seqs) do
   for _, body in ipairs(list) do
     local key = esc .. body
@@ -257,11 +258,17 @@ vscode_map('n', '<C-S-g>', function()
   if not ok then vim.notify('Neogit not available', vim.log.levels.WARN) end
 end, { desc = 'Source Control' })
 
--- Move line / selection
-vscode_map('n', '<A-Up>', ':m .-2<CR>==', { desc = 'Move Line Up' })
-vscode_map('n', '<A-Down>', ':m .+1<CR>==', { desc = 'Move Line Down' })
-vscode_map('v', '<A-Up>', ":m '<-2<CR>gv=gv", { desc = 'Move Selection Up' })
-vscode_map('v', '<A-Down>', ":m '>+1<CR>gv=gv", { desc = 'Move Selection Down' })
+-- Move line / selection (VSCode Alt+Up/Down). Plain keymap.set, NOT
+-- vscode_map: <D-Up>/<D-Down> stay "top/bottom of file" (macOS convention)
+-- instead of being silently overridden by a Cmd mirror of move-line.
+vim.keymap.set('n', '<A-Up>', ':m .-2<CR>==', { desc = 'Move Line Up' })
+vim.keymap.set('n', '<A-Down>', ':m .+1<CR>==', { desc = 'Move Line Down' })
+vim.keymap.set('v', '<A-Up>', ":m '<-2<CR>gv=gv", { desc = 'Move Selection Up' })
+vim.keymap.set('v', '<A-Down>', ":m '>+1<CR>gv=gv", { desc = 'Move Selection Down' })
+-- Insert mode: commit the pending insert, move the line, re-indent it and
+-- return to insert where you were (gi).
+vim.keymap.set('i', '<M-Up>', '<Esc>:m .-2<CR>==gi', { desc = 'Move Line Up (insert)' })
+vim.keymap.set('i', '<M-Down>', '<Esc>:m .+1<CR>==gi', { desc = 'Move Line Down (insert)' })
 
 -- Toggle word wrap
 vscode_map('n', '<A-z>', function()
